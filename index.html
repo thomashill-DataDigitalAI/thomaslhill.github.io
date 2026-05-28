@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thomas Hill · Enterprise AI Strategy</title>
+<meta name="description" content="Decision frameworks and tools for Fortune 500 leaders navigating AI strategy, adoption, and organizational readiness.">
+<meta name="author" content="Thomas Hill">
+<meta property="og:title" content="Thomas Hill · Enterprise AI Strategy">
+<meta property="og:description" content="Decision frameworks and tools for Fortune 500 leaders navigating AI strategy, adoption, and organizational readiness.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://thomaslhill.github.io">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --bg3: #181818;
+    --border: rgba(255,255,255,0.07);
+    --border-accent: rgba(212,175,98,0.3);
+    --gold: #d4af62;
+    --gold-light: #e8c97a;
+    --gold-dim: rgba(212,175,98,0.15);
+    --text: #f0ece4;
+    --text-mid: #a09a8e;
+    --text-dim: #5a554e;
+    --white: #ffffff;
+    --mono: 'DM Mono', monospace;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Instrument Sans', sans-serif;
+    --radius: 2px;
+    --transition: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* GRID BACKGROUND */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(212,175,98,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,175,98,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── LAYOUT ─── */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(180deg, rgba(10,10,10,0.95) 0%, transparent 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-mid);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color var(--transition);
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 0 80px;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+    vertical-align: middle;
+    margin-right: 16px;
+    opacity: 0.6;
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(52px, 7vw, 96px);
+    font-weight: 300;
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+    color: var(--white);
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.35s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 300;
+  }
+
+  .hero-subtitle {
+    font-family: var(--serif);
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 300;
+    color: var(--text-mid);
+    line-height: 1.1;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+
+  .hero-desc {
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--text-mid);
+    max-width: 560px;
+    line-height: 1.75;
+    margin-bottom: 52px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.65s forwards;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: var(--gold);
+    color: #0a0a0a;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: white;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .btn-primary:hover::after { opacity: 0.15; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(212,175,98,0.3); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 28px;
+    background: transparent;
+    color: var(--text-mid);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    transform: translateY(-1px);
+  }
+
+  /* HERO DECORATION */
+  .hero-decoration {
+    position: absolute;
+    right: -60px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 480px;
+    height: 480px;
+    opacity: 0;
+    animation: fadeIn 1.5s 1s forwards;
+    pointer-events: none;
+  }
+
+  /* ─── SECTION HEADERS ─── */
+  .section {
+    padding: 100px 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.4;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 16px;
+  }
+
+  .section-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .section-desc {
+    font-size: 15px;
+    color: var(--text-mid);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 56px;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ─── TOOLS GRID ─── */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .tool-card {
+    background: var(--bg);
+    padding: 40px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: background var(--transition);
+    cursor: pointer;
+  }
+
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition);
+  }
+
+  .tool-card:hover { background: var(--bg3); }
+  .tool-card:hover::before { transform: scaleX(1); }
+
+  .tool-card-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .status-live { color: #5ec98a; }
+  .status-soon { color: var(--text-dim); }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  .status-live .status-dot {
+    animation: pulse 2s infinite;
+  }
+
+  .tool-card-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .tool-card-title {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.2;
+    transition: color var(--transition);
+  }
+
+  .tool-card:hover .tool-card-title { color: var(--gold-light); }
+
+  .tool-card-desc {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.65;
+    flex: 1;
+  }
+
+  .tool-card-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .tab-chip {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 8px;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    transition: all var(--transition);
+  }
+
+  .tool-card:hover .tab-chip {
+    border-color: var(--border-accent);
+    color: var(--gold);
+  }
+
+  .tool-card-cta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    transition: gap var(--transition);
+  }
+
+  .tool-card:hover .tool-card-cta { gap: 14px; }
+
+  /* COMING SOON CARD */
+  .tool-card.coming-soon {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  .tool-card.coming-soon:hover { background: var(--bg); }
+  .tool-card.coming-soon:hover::before { transform: scaleX(0); }
+  .tool-card.coming-soon .tool-card-title { color: var(--text-mid); }
+
+  /* ─── CHANGELOG ─── */
+  .changelog {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+
+  .changelog-item {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 40px;
+    padding: 28px 36px;
+    border-bottom: 1px solid var(--border);
+    transition: background var(--transition);
+  }
+
+  .changelog-item:last-child { border-bottom: none; }
+  .changelog-item:hover { background: var(--bg3); }
+
+  .changelog-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    padding-top: 2px;
+  }
+
+  .changelog-tool {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  .changelog-text {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.6;
+  }
+
+  .changelog-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* ─── ABOUT ─── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .about-text {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--text-mid);
+    line-height: 1.7;
+  }
+
+  .about-text strong {
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  .about-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .meta-item {
+    padding: 24px;
+    border: 1px solid var(--border);
+    transition: border-color var(--transition);
+  }
+
+  .meta-item:hover { border-color: var(--border-accent); }
+
+  .meta-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .meta-value {
+    font-size: 14px;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 48px 0;
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-brand {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.12em;
+  }
+
+  .footer-brand span { color: var(--gold); }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color var(--transition);
+  }
+
+  .footer-links a:hover { color: var(--gold); }
+
+  .footer-version {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  @keyframes rotate {
+    from { transform: translateY(-50%) rotate(0deg); }
+    to { transform: translateY(-50%) rotate(360deg); }
+  }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .container { padding: 0 24px; }
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero-decoration { display: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .changelog-item { grid-template-columns: 1fr; gap: 8px; }
+    .footer-inner { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#"><span>T</span>HOMAS HILL</a>
+  <ul class="nav-links">
+    <li><a href="#tools">Tools</a></li>
+    <li><a href="#changelog">Updates</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="https://linkedin.com/in/thomaslhill" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <p class="hero-eyebrow">Enterprise AI Strategy</p>
+    <h1 class="hero-title">Thomas <em>Hill</em></h1>
+    <p class="hero-subtitle">Frameworks for the<br>AI-Native Enterprise</p>
+    <p class="hero-desc">
+      Decision tools for Fortune 500 leaders navigating AI strategy, 
+      vendor selection, organizational readiness, and the emerging 
+      agentic era — built for practitioners, not theorists.
+    </p>
+    <div class="hero-ctas">
+      <a href="#tools" class="btn-primary">
+        <span>Explore Tools</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="https://linkedin.com/in/thomaslhill" target="_blank" rel="noopener" class="btn-secondary">
+        <span>Connect on LinkedIn</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H4M11 1v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- DECORATIVE SVG -->
+  <svg class="hero-decoration" viewBox="0 0 480 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="240" cy="240" r="200" stroke="rgba(212,175,98,0.06)" stroke-width="1"/>
+    <circle cx="240" cy="240" r="160" stroke="rgba(212,175,98,0.05)" stroke-width="1"/>
+    <circle cx="240" cy="240" r="120" stroke="rgba(212,175,98,0.08)" stroke-width="1"/>
+    <circle cx="240" cy="240" r="80" stroke="rgba(212,175,98,0.06)" stroke-width="1"/>
+    <!-- Radial lines -->
+    <line x1="240" y1="40" x2="240" y2="440" stroke="rgba(212,175,98,0.04)" stroke-width="1"/>
+    <line x1="40" y1="240" x2="440" y2="240" stroke="rgba(212,175,98,0.04)" stroke-width="1"/>
+    <line x1="98" y1="98" x2="382" y2="382" stroke="rgba(212,175,98,0.04)" stroke-width="1"/>
+    <line x1="382" y1="98" x2="98" y2="382" stroke="rgba(212,175,98,0.04)" stroke-width="1"/>
+    <!-- Dots at intersections -->
+    <circle cx="240" cy="40" r="3" fill="rgba(212,175,98,0.3)"/>
+    <circle cx="240" cy="440" r="3" fill="rgba(212,175,98,0.3)"/>
+    <circle cx="40" cy="240" r="3" fill="rgba(212,175,98,0.3)"/>
+    <circle cx="440" cy="240" r="3" fill="rgba(212,175,98,0.3)"/>
+    <circle cx="240" cy="240" r="6" fill="rgba(212,175,98,0.2)"/>
+    <circle cx="240" cy="240" r="3" fill="rgba(212,175,98,0.6)"/>
+    <!-- Outer markers -->
+    <path d="M240 20 L244 32 L236 32 Z" fill="rgba(212,175,98,0.4)"/>
+    <path d="M240 460 L244 448 L236 448 Z" fill="rgba(212,175,98,0.4)"/>
+    <path d="M20 240 L32 244 L32 236 Z" fill="rgba(212,175,98,0.4)"/>
+    <path d="M460 240 L448 244 L448 236 Z" fill="rgba(212,175,98,0.4)"/>
+  </svg>
+</section>
+
+<div class="divider"></div>
+
+<!-- TOOLS -->
+<section class="section" id="tools">
+  <div class="container">
+    <p class="section-label reveal">Tools & Frameworks</p>
+    <h2 class="section-title reveal">Built for <em>decisions,</em><br>not decks</h2>
+    <p class="section-desc reveal">
+      Each tool is a self-contained framework designed for hands-on use — 
+      not a slide to screenshot, but an instrument to work with.
+      Updated on a regular cadence as the landscape evolves.
+    </p>
+
+    <div class="tools-grid reveal">
+
+      <!-- TOOL 01: AI LANDSCAPE — LIVE -->
+      <a class="tool-card" href="./ai-landscape/" aria-label="Open Enterprise AI Landscape tool">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span class="tool-card-number">01</span>
+          <span class="tool-card-status status-live">
+            <span class="status-dot"></span>
+            Live · Updated May 2026
+          </span>
+        </div>
+        <div>
+          <div class="tool-card-title">Enterprise AI<br>Landscape</div>
+        </div>
+        <p class="tool-card-desc">
+          An end-to-end decision framework covering AI stack architecture, 
+          agentic playbooks, use case mapping, build vs. buy analysis, 
+          data foundations, org design, vendor costs, and a full AI glossary.
+          Built for Fortune 500 strategy teams.
+        </p>
+        <div class="tool-card-tabs">
+          <span class="tab-chip">AI Stack</span>
+          <span class="tab-chip">Agentic AI</span>
+          <span class="tab-chip">Use Cases</span>
+          <span class="tab-chip">Build vs Buy</span>
+          <span class="tab-chip">Data Readiness</span>
+          <span class="tab-chip">Architecture</span>
+          <span class="tab-chip">AI Org & Talent</span>
+          <span class="tab-chip">Costs</span>
+          <span class="tab-chip">Glossary</span>
+        </div>
+        <div class="tool-card-cta">
+          Open Framework
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </a>
+
+      <!-- TOOL 02: COMING SOON PLACEHOLDER -->
+      <div class="tool-card coming-soon" aria-label="Coming soon">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span class="tool-card-number">02</span>
+          <span class="tool-card-status status-soon">
+            <span class="status-dot"></span>
+            Coming Soon
+          </span>
+        </div>
+        <div>
+          <div class="tool-card-title">Next Framework</div>
+        </div>
+        <p class="tool-card-desc">
+          A second tool is in development. 
+          Follow on LinkedIn for updates when it launches.
+        </p>
+        <div class="tool-card-tabs">
+          <span class="tab-chip">TBD</span>
+        </div>
+        <div class="tool-card-cta" style="color: var(--text-dim);">
+          In Development
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CHANGELOG -->
+<section class="section" id="changelog">
+  <div class="container">
+    <p class="section-label reveal">Changelog</p>
+    <h2 class="section-title reveal">What's <em>new</em></h2>
+    <p class="section-desc reveal">
+      Tools are updated on a regular cadence. Bookmark this page — 
+      your link to the latest version never changes.
+    </p>
+
+    <div class="changelog reveal">
+      <div class="changelog-item">
+        <div class="changelog-date">May 2026</div>
+        <div>
+          <div class="changelog-tool">Enterprise AI Landscape · v2.0</div>
+          <p class="changelog-text">
+            <strong>Major refresh.</strong> Adoption Insights tab rebuilt from 
+            Anthropic's 2026 State of AI Agents Report data. Agentic Playbook 
+            expanded with new enterprise patterns. Power Block Partnerships section 
+            added to AI Stack. Data Readiness Assessment launched with scored 
+            dimensions and tiered results.
+          </p>
+        </div>
+      </div>
+      <div class="changelog-item">
+        <div class="changelog-date">Add your<br>prior updates</div>
+        <div>
+          <div class="changelog-tool">Enterprise AI Landscape · v1.x</div>
+          <p class="changelog-text" style="font-style:italic; opacity:0.5;">
+            Replace this row with your previous update notes. Each row represents 
+            a release cycle — delete this placeholder when ready.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="container">
+    <p class="section-label reveal">About</p>
+    <div class="about-grid">
+      <div>
+        <h2 class="section-title reveal">Built by a<br><em>practitioner</em></h2>
+        <p class="about-text reveal" style="margin-top: 32px;">
+          These tools exist because <strong>enterprise AI decisions are hard</strong> — 
+          and the frameworks available are often too theoretical, too vendor-biased, 
+          or too far removed from the realities of large-organization change.
+          <br><br>
+          Each framework is designed to help <strong>senior leaders and their teams</strong> 
+          move from ambiguity to action — with the rigor that Fortune 500 
+          strategy demands.
+        </p>
+        <div style="margin-top: 40px;" class="reveal">
+          <a href="https://linkedin.com/in/thomaslhill" target="_blank" rel="noopener" class="btn-secondary">
+            <span>Connect on LinkedIn</span>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H4M11 1v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="about-meta reveal">
+        <div class="meta-item">
+          <div class="meta-label">Audience</div>
+          <div class="meta-value">Fortune 500 executives, enterprise strategy teams, AI program leads, and technology decision-makers</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Update Cadence</div>
+          <div class="meta-value">Tools are refreshed regularly as the AI landscape evolves — your bookmark always points to the latest version</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Reference Frameworks</div>
+          <div class="meta-value">a16z enterprise AI research · Anthropic State of AI Agents · Salesforce Architect · McKinsey AI</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Author</div>
+          <div class="meta-value">Thomas Hill · linkedin.com/in/thomaslhill</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand"><span>Thomas Hill</span> · Enterprise AI Strategy</div>
+      <ul class="footer-links">
+        <li><a href="#tools">Tools</a></li>
+        <li><a href="#changelog">Updates</a></li>
+        <li><a href="https://linkedin.com/in/thomaslhill" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+      </ul>
+      <div class="footer-version">Last updated May 2026</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => observer.observe(el));
+
+  // Smooth nav highlight
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => {
+          a.style.color = a.getAttribute('href') === `#${entry.target.id}` 
+            ? 'var(--gold)' : '';
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+  sections.forEach(s => sectionObserver.observe(s));
+</script>
+</body>
+</html>
