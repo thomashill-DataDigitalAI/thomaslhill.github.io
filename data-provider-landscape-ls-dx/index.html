@@ -1,1 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Data Provider Framework — Life Sciences, Healthcare & Diagnostics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#F6F7F9; --paper:#FFFFFF; --ink:#0D1422; --ink-2:#28324A; --slate:#5A6679;
+  --slate-2:#8A93A6; --line:#E2E6EC; --line-2:#EDF0F4;
+  --signal:#1E50FF; --signal-2:#1741D6; --signal-wash:#EAF0FF;
+  --gold:#C8922B; --gold-wash:#FBF3E2;
+  --good:#1F8A5B; --warn:#C2553B; --warn-wash:#FBEDE9;
+  --r:14px; --r-sm:9px;
+  --L1:#1E50FF;--L2:#5B43E6;--L3:#9032C8;--L4:#0E8F8C;--L5:#0B7BD1;--L6:#5A6679;
+  --L7:#1F8A5B;--L8:#C2553B;--L9:#C8922B;--L10:#B5641E;--L11:#8A6D1F;--L12:#454F66;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--canvas);color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:"Space Grotesk",Inter,sans-serif;margin:0;line-height:1.12;letter-spacing:-.01em;font-weight:600}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+a{color:var(--signal);text-decoration:none}
+button{font-family:inherit;cursor:pointer}
 
+/* ---- shell ---- */
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+.nav{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--ink);color:#C9D2E2;
+  padding:22px 16px;border-right:1px solid #000;display:flex;flex-direction:column}
+.nav .navspacer{flex:1 1 auto;min-height:18px}
+.sig{margin:0 6px;padding-top:16px;border-top:1px solid #232C3F}
+.sig .signame{color:#fff;font-family:"Space Grotesk";font-weight:600;font-size:13px;letter-spacing:-.01em}
+.sig .sigrole{font-size:10.5px;color:#7C879E;line-height:1.45;margin:3px 0 11px}
+.li-btn{display:inline-flex;align-items:center;gap:7px;width:100%;justify-content:center;
+  background:#0A66C2;color:#fff;border-radius:9px;padding:9px 12px;font-size:12.5px;font-weight:600;
+  transition:.13s;border:1px solid #0A66C2}
+.li-btn:hover{background:#0954A0;border-color:#0954A0}
+.li-btn svg{flex:0 0 auto}
+.appfoot{border-top:1px solid var(--line);background:var(--paper);margin-top:10px}
+.appfoot .fin{max-width:1140px;margin:0 auto;padding:26px 44px;display:flex;align-items:center;
+  justify-content:space-between;gap:20px;flex-wrap:wrap}
+.appfoot .fname{font-family:"Space Grotesk";font-weight:600;font-size:15px;color:var(--ink);letter-spacing:-.01em}
+.appfoot .frole{font-size:12.5px;color:var(--slate);margin-top:2px}
+.appfoot .fnote{font-size:11px;color:var(--slate-2);margin-top:9px;font-family:"IBM Plex Mono"}
+@media(max-width:760px){.appfoot .fin{padding:22px 18px}}
+.brand{display:flex;gap:11px;align-items:flex-start;margin-bottom:6px;padding:0 6px}
+.brand .glyph{flex:0 0 auto;margin-top:2px}
+.brand b{color:#fff;font-family:"Space Grotesk";font-weight:600;font-size:15.5px;display:block;letter-spacing:-.01em}
+.brand span{font-size:11px;color:#7C879E;font-family:"IBM Plex Mono"}
+.navlab{font-family:"IBM Plex Mono";font-size:10.5px;letter-spacing:.13em;color:#6B7793;
+  text-transform:uppercase;margin:22px 8px 7px}
+.navbtn{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;
+  color:#AEB9CE;padding:9px 11px;border-radius:9px;font-size:13.5px;font-weight:500;transition:.13s}
+.navbtn:hover{background:#18202F;color:#fff}
+.navbtn.on{background:var(--signal);color:#fff}
+.navbtn .nb-n{font-family:"IBM Plex Mono";font-size:10px;opacity:.6;width:18px}
+.navbtn.on .nb-n{opacity:.85}
+
+.main{min-width:0}
+.wrap{max-width:1140px;margin:0 auto;padding:40px 44px 90px}
+.view{display:none;animation:fade .35s ease}
+.view.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ---- type helpers ---- */
+.eyebrow{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--signal);font-weight:500;margin-bottom:14px}
+.lede{font-size:17px;color:var(--ink-2);max-width:70ch;line-height:1.6}
+h2.big{font-size:34px;font-weight:600;letter-spacing:-.02em;margin-bottom:10px}
+.section-h{font-size:13px;font-family:"IBM Plex Mono";letter-spacing:.04em;color:var(--slate);
+  text-transform:uppercase;margin:40px 0 16px;padding-bottom:8px;border-bottom:1px solid var(--line);font-weight:500}
+.muted{color:var(--slate)}
+
+/* ---- cards / panels ---- */
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:980px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+.chip{display:inline-flex;align-items:center;gap:6px;font-family:"IBM Plex Mono";font-size:10.5px;
+  font-weight:500;padding:3px 9px;border-radius:999px;background:var(--line-2);color:var(--ink-2);
+  letter-spacing:.02em;white-space:nowrap}
+.chip.layer{color:#fff}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* hero stack */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;margin-bottom:8px}
+@media(max-width:860px){.hero{grid-template-columns:1fr}}
+.stackviz{display:flex;flex-direction:column;gap:5px}
+.stratum{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;
+  background:var(--paper);border:1px solid var(--line);transition:.16s;cursor:default}
+.stratum:hover{transform:translateX(4px);border-color:var(--slate-2)}
+.stratum{cursor:pointer}
+.stratum .cnt{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:20px;
+  padding:0 6px;border-radius:6px;background:var(--line-2);color:var(--slate);
+  font-family:"IBM Plex Mono";font-size:11px;font-weight:600}
+.stratum .arrow{color:var(--slate-2);font-size:13px;margin-left:2px;transition:.13s}
+.stratum:hover .arrow{color:var(--signal);transform:translateX(2px)}
+.stack-note{font-size:12px;color:var(--slate);margin:10px 2px 0;line-height:1.5}
+.stack-note b{color:var(--ink-2)}
+/* layer modal */
+.lm-prov{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.lm-chip{display:inline-flex;align-items:center;gap:6px;background:var(--paper);border:1px solid var(--line);
+  border-radius:8px;padding:6px 10px;font-size:12.5px;cursor:pointer;transition:.12s}
+.lm-chip:hover{border-color:var(--signal);background:var(--signal-wash)}
+.lm-chip .d{width:7px;height:7px;border-radius:2px;flex:0 0 auto}
+.lm-chip .x{font-family:"IBM Plex Mono";font-size:9px;color:var(--slate-2);background:var(--line-2);
+  padding:1px 4px;border-radius:4px}
+/* website link in modal */
+.mlink{display:inline-flex;align-items:center;gap:7px;color:var(--signal);font-weight:600;font-size:13.5px;
+  border:1px solid var(--line);border-radius:9px;padding:8px 12px;transition:.12s;word-break:break-all}
+.mlink:hover{border-color:var(--signal);background:var(--signal-wash)}
+.mlink svg{flex:0 0 auto}
+.xlay{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-family:"IBM Plex Mono";
+  padding:3px 7px;border-radius:6px;border:1px dashed var(--line);color:var(--slate);background:var(--paper)}
+.xlay .d{width:7px;height:7px;border-radius:2px}
+/* glossary */
+.gloss-search{margin:18px 0 6px}
+.gloss-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:880px){.gloss-grid{grid-template-columns:1fr}}
+.gterm{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:15px 17px}
+.gterm h4{font-size:15px;display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
+.gterm .abbr{font-family:"IBM Plex Mono";color:var(--signal);font-weight:600}
+.gterm .full{font-size:12.5px;color:var(--slate);font-weight:500;font-family:Inter}
+.gterm p{margin:7px 0 0;font-size:13px;color:var(--ink-2);line-height:1.5}
+.gloss-letter{font-family:"Space Grotesk";font-weight:600;font-size:13px;color:var(--slate-2);
+  grid-column:1/-1;margin:8px 2px 0;letter-spacing:.05em}
+/* ---- compare: card button + tray ---- */
+.pcard{position:relative}
+.cmpbtn{position:absolute;top:10px;right:10px;z-index:2;font-family:"IBM Plex Mono";font-size:9.5px;
+  font-weight:600;letter-spacing:.04em;padding:3px 7px;border-radius:6px;border:1px solid var(--line);
+  background:var(--paper);color:var(--slate);transition:.12s;text-transform:uppercase}
+.cmpbtn:hover{border-color:var(--signal);color:var(--signal);background:var(--signal-wash)}
+.cmpbtn.on{background:var(--signal);border-color:var(--signal);color:#fff}
+.cmptray{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(140%);
+  z-index:45;background:var(--ink);color:#fff;border-radius:14px;padding:12px 14px;
+  display:flex;align-items:center;gap:14px;max-width:min(940px,calc(100vw - 32px));
+  box-shadow:0 14px 44px rgba(8,12,22,.4);transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+.cmptray.show{transform:translateX(-50%) translateY(0)}
+.cmptray.full{animation:traypulse .9s}
+@keyframes traypulse{0%,100%{box-shadow:0 14px 44px rgba(8,12,22,.4)}40%{box-shadow:0 0 0 3px var(--warn)}}
+.ct-label{font-size:10px;letter-spacing:.1em;color:#8FA0C0;flex:0 0 auto}
+.ct-chips{display:flex;gap:7px;flex-wrap:wrap;flex:1;min-width:0;overflow:hidden}
+.ct-chip{display:inline-flex;align-items:center;gap:6px;background:#1B2333;border:1px solid #2A3650;
+  border-radius:8px;padding:5px 7px 5px 9px;font-size:12px;white-space:nowrap}
+.ct-chip .d{width:7px;height:7px;border-radius:2px}
+.ct-chip button{background:none;border:0;color:#8FA0C0;font-size:15px;line-height:1;padding:0 0 0 2px}
+.ct-chip button:hover{color:#fff}
+.ct-actions{display:flex;gap:8px;flex:0 0 auto}
+.ct-clear{background:none;border:1px solid #2A3650;color:#C9D2E2;border-radius:8px;padding:7px 11px;font-size:12.5px}
+.ct-clear:hover{border-color:#46557A}
+.ct-go{background:var(--signal);border:0;color:#fff;border-radius:8px;padding:7px 13px;font-size:12.5px;font-weight:600}
+.ct-go:disabled{opacity:.4;cursor:not-allowed}
+.btn-ghost{background:var(--paper);border:1px solid var(--line);border-radius:9px;padding:9px 13px;
+  font-size:13px;color:var(--slate);font-weight:500}
+.btn-ghost:hover{border-color:var(--slate-2);color:var(--ink)}
+/* ---- compare table ---- */
+.cmp-table{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--paper);margin-top:4px}
+.cmp-row{display:grid;border-bottom:1px solid var(--line-2);align-items:start}
+.cmp-row:last-child{border-bottom:0}
+.cmp-k{padding:13px 14px;font-family:"IBM Plex Mono";font-size:10.5px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--slate);background:var(--canvas);border-right:1px solid var(--line-2);
+  position:sticky;left:0}
+.cmp-cell{padding:13px 14px;font-size:13px;color:var(--ink-2);border-right:1px solid var(--line-2);line-height:1.5}
+.cmp-cell:last-child{border-right:0}
+.cmp-head{position:sticky;top:0;z-index:3;background:var(--ink)}
+.cmp-head .cmp-k{background:var(--ink);border-right-color:#243049}
+.cmp-name{background:var(--ink);color:#fff;position:relative;border-right-color:#243049}
+.cmp-name .cn{display:flex;align-items:center;gap:8px;font-family:"Space Grotesk";font-weight:600;font-size:14px}
+.cmp-name .cn .d{width:9px;height:9px;border-radius:3px;flex:0 0 auto}
+.cmp-rm{position:absolute;top:9px;right:10px;background:#1B2333;border:1px solid #2A3650;color:#9FB0CE;
+  width:22px;height:22px;border-radius:6px;font-size:14px;line-height:1}
+.cmp-rm:hover{color:#fff;border-color:#46557A}
+.cmp-comprow .cmp-cell{font-size:12.5px}
+.cmp-comp{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px}
+.ctag{font-family:"IBM Plex Mono";font-size:10px;padding:3px 7px;border-radius:6px;
+  background:var(--signal-wash);color:var(--signal-2);border:1px solid #D4E0FF;white-space:nowrap}
+.cmp-compnote{font-size:11.5px;color:var(--slate);line-height:1.45}
+.muted-d{color:var(--slate-2)}
+.cmp-cell .dv{margin:0 4px 4px 0}
+@media(max-width:720px){.cmp-k{font-size:9.5px;padding:10px 9px}.cmp-cell{padding:10px 9px;font-size:12px}}
+/* ---- goal-first builder ---- */
+.mode-toggle{display:inline-flex;gap:4px;background:var(--line-2);border-radius:11px;padding:4px;margin:0 0 18px}
+.modebtn{border:0;background:none;padding:9px 16px;border-radius:8px;font-size:13.5px;font-weight:500;color:var(--slate)}
+.modebtn.on{background:var(--paper);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(13,20,34,.08)}
+.obj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.objcard{text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:13px;
+  padding:15px 16px;transition:.13s;border-left:4px solid var(--line)}
+.objcard:hover{border-color:var(--slate-2);transform:translateY(-2px)}
+.objcard.on{border-color:var(--signal);border-left-color:var(--signal);background:var(--signal-wash);
+  box-shadow:0 6px 18px rgba(30,80,255,.1)}
+.objtitle{font-family:"Space Grotesk";font-weight:600;font-size:14.5px;color:var(--ink);line-height:1.25}
+.objvert{font-size:10.5px;color:var(--slate-2);margin:5px 0 7px;letter-spacing:.04em}
+.objdesc{font-size:12.5px;color:var(--ink-2);line-height:1.45}
+.goal-actions{display:flex;align-items:center;gap:14px;margin:16px 0 4px;flex-wrap:wrap}
+.btn-primary{background:var(--signal);border:0;color:#fff;border-radius:10px;padding:11px 18px;font-size:14px;font-weight:600;transition:.13s}
+.btn-primary:hover{background:var(--signal-2)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.goal-hint{font-size:12px;color:var(--slate)}
+.gc-row{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line-2)}
+.gc-row:last-child{border-bottom:0}
+.gc-bar{flex:0 0 6px;align-self:stretch;border-radius:4px;background:var(--line);position:relative;overflow:hidden;min-height:34px}
+.gc-bar i{position:absolute;bottom:0;left:0;right:0;display:block;background:var(--good)}
+.gc-bar.full i{background:var(--good)}.gc-bar.part i{background:var(--gold)}.gc-bar.none i{background:var(--line)}
+.gc-t{font-size:12.5px;font-weight:600;color:var(--ink);line-height:1.25}
+.gc-sub{font-size:11px;color:var(--slate);margin-top:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.uc-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.uc-dot.ok{background:var(--good)}.uc-dot.no{background:var(--line);border:1px solid var(--slate-2)}
+.trim-chip{display:inline-block;background:var(--paper);border:1px dashed var(--line);border-radius:8px;
+  padding:5px 9px;margin:0 6px 6px 0;font-size:12.5px;cursor:pointer}
+.trim-chip:hover{border-color:var(--signal);background:var(--signal-wash)}
+.stratum .bar{width:5px;align-self:stretch;border-radius:3px;flex:0 0 auto}
+.stratum .lt{font-family:"IBM Plex Mono";font-size:10px;color:var(--slate-2);width:24px;flex:0 0 auto}
+.stratum b{font-size:12.5px;font-family:"Space Grotesk";font-weight:600}
+.stratum small{display:block;color:var(--slate);font-size:11px;line-height:1.35}
+
+.statrow{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 20px;flex:1;min-width:130px}
+.stat .v{font-family:"Space Grotesk";font-size:30px;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+.stat .k{font-size:11.5px;color:var(--slate);font-family:"IBM Plex Mono";letter-spacing:.03em;margin-top:2px}
+.stat .v .u{font-size:15px;color:var(--signal);font-weight:600}
+
+.qbox{background:var(--ink);color:#D7DEEB;border-radius:var(--r);padding:24px 26px;margin-top:18px}
+.qbox h3{color:#fff;font-size:15px;margin-bottom:12px}
+.qlist{display:grid;grid-template-columns:1fr 1fr;gap:8px 26px}
+@media(max-width:760px){.qlist{grid-template-columns:1fr}}
+.qlist div{font-size:13.5px;padding:6px 0;border-bottom:1px solid #1E2738;display:flex;gap:10px}
+.qlist .qn{color:var(--signal);font-family:"IBM Plex Mono";font-size:11px;flex:0 0 auto}
+
+/* ---- explorer ---- */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.search{flex:1;min-width:220px;position:relative}
+.search input{width:100%;padding:11px 14px 11px 38px;border:1px solid var(--line);border-radius:10px;
+  font-size:14px;background:var(--paper);font-family:inherit}
+.search input:focus{outline:2px solid var(--signal-wash);border-color:var(--signal)}
+.search svg{position:absolute;left:13px;top:12px;color:var(--slate-2)}
+.sel{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper);font-size:13px;color:var(--ink-2)}
+.count{font-family:"IBM Plex Mono";font-size:12px;color:var(--slate);margin-left:auto}
+
+.pcard{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  cursor:pointer;transition:.15s;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.pcard:hover{border-color:var(--slate-2);box-shadow:0 8px 24px -16px rgba(13,20,34,.4);transform:translateY(-2px)}
+.pcard .edge{position:absolute;left:0;top:0;bottom:0;width:4px}
+.pcard .ph{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px}
+.pcard h4{font-size:15.5px;letter-spacing:-.01em}
+.pcard .psum{font-size:12.8px;color:var(--slate);line-height:1.45;flex:1}
+.pcard .pf{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px;align-items:center}
+.tier-pill{font-family:"IBM Plex Mono";font-size:9.5px;font-weight:600;padding:2px 7px;border-radius:5px;letter-spacing:.04em}
+.t1{background:#E7F4EC;color:#1F7A50}.t2{background:#FBF3E2;color:#A4761E}.t3{background:#EAEDFB;color:#4536C2}
+.cost{font-family:"IBM Plex Mono";font-size:11px;color:var(--slate-2);letter-spacing:1px}
+.cost b{color:var(--ink)}
+.newpill{font-family:"IBM Plex Mono";font-size:9px;font-weight:600;padding:2px 6px;border-radius:5px;
+  background:var(--signal-wash);color:var(--signal-2);letter-spacing:.04em}
+.explorer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:980px){.explorer-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){.explorer-grid{grid-template-columns:1fr}}
+
+/* ---- modal ---- */
+.scrim{position:fixed;inset:0;background:rgba(8,12,22,.55);backdrop-filter:blur(3px);z-index:50;
+  display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto}
+.scrim.on{display:flex}
+.modal{background:var(--paper);border-radius:16px;max-width:720px;width:100%;
+  box-shadow:0 40px 80px -30px rgba(0,0,0,.5);animation:pop .25s ease}
+@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.modal .mhead{padding:26px 30px 18px;border-bottom:1px solid var(--line);position:relative}
+.modal .medge{position:absolute;left:0;top:0;width:6px;height:100%;border-radius:16px 0 0 0}
+.modal h3{font-size:23px;letter-spacing:-.02em}
+.modal .mhead .mmeta{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.mclose{position:absolute;top:18px;right:18px;width:32px;height:32px;border-radius:8px;border:1px solid var(--line);
+  background:var(--paper);font-size:17px;color:var(--slate);display:flex;align-items:center;justify-content:center}
+.mclose:hover{background:var(--line-2);color:var(--ink)}
+.mbody{padding:8px 30px 28px}
+.mrow{padding:16px 0;border-bottom:1px solid var(--line-2)}
+.mrow:last-child{border-bottom:0}
+.mrow .ml{font-family:"IBM Plex Mono";font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--signal);margin-bottom:5px}
+.mrow p{margin:0;font-size:14px;color:var(--ink-2);line-height:1.55}
+.deliv{display:flex;gap:7px;flex-wrap:wrap}
+.dv{font-size:11.5px;font-family:"IBM Plex Mono";padding:4px 10px;border-radius:7px;background:var(--line-2);color:var(--ink-2)}
+.overlap-box{background:var(--gold-wash);border:1px solid #EBD9B0;border-radius:10px;padding:13px 15px;margin-top:4px}
+.overlap-box .ml{color:var(--gold)}
+
+/* ---- overlap view ---- */
+.cluster{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.cluster.redund{border-left:4px solid var(--warn)}
+.cluster.compl{border-left:4px solid var(--good)}
+.cluster .ch{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
+.cluster h4{font-size:16px}
+.verdict{font-family:"IBM Plex Mono";font-size:10px;font-weight:600;padding:3px 9px;border-radius:6px;letter-spacing:.05em;white-space:nowrap}
+.verdict.r{background:var(--warn-wash);color:var(--warn)}
+.verdict.c{background:#E7F4EC;color:var(--good)}
+.cluster .members{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.memchip{font-size:12px;padding:4px 11px;border-radius:7px;background:var(--line-2);color:var(--ink-2);cursor:pointer;border:1px solid transparent}
+.memchip:hover{border-color:var(--signal);color:var(--signal)}
+
+/* ---- stack builder ---- */
+.builder{display:grid;grid-template-columns:1fr 320px;gap:22px;align-items:start}
+@media(max-width:980px){.builder{grid-template-columns:1fr}}
+.tier-tabs{display:flex;gap:8px;margin-bottom:16px}
+.ttab{flex:1;border:1px solid var(--line);background:var(--paper);border-radius:10px;padding:12px;text-align:left}
+.ttab.on{border-color:var(--signal);background:var(--signal-wash)}
+.ttab b{display:block;font-family:"Space Grotesk";font-size:14px}
+.ttab small{font-size:11px;color:var(--slate)}
+.ttab .tnum{font-family:"IBM Plex Mono";font-size:10px;color:var(--signal)}
+.brow{display:flex;align-items:center;gap:12px;padding:9px 12px;border:1px solid var(--line-2);border-radius:9px;margin-bottom:6px;background:var(--paper)}
+.brow .bbar{width:4px;align-self:stretch;border-radius:2px}
+.brow .bn{font-weight:600;font-size:13.5px;flex:1}
+.brow .blay{font-family:"IBM Plex Mono";font-size:10px;color:var(--slate)}
+.toggle{width:42px;height:24px;border-radius:13px;background:var(--line);border:0;position:relative;transition:.16s;flex:0 0 auto}
+.toggle.on{background:var(--signal)}
+.toggle::after{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:.16s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.toggle.on::after{left:21px}
+.bsum{position:sticky;top:20px}
+.bsum .panel{margin-bottom:14px}
+.gauge{height:10px;border-radius:6px;background:var(--line-2);overflow:hidden;margin:8px 0 4px}
+.gauge i{display:block;height:100%;background:linear-gradient(90deg,var(--signal),var(--signal-2));border-radius:6px;transition:.3s}
+.cov-list{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.cov-list .ci{display:flex;align-items:center;gap:8px;font-size:11.5px}
+.cov-list .ci .cn{flex:1;color:var(--ink-2)}
+.cov-list .ci .cv{font-family:"IBM Plex Mono";font-size:10px}
+.ci.has .cn{font-weight:500}.ci.miss{opacity:.45}
+
+/* ---- use cases ---- */
+.theme-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.thtab{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:7px 15px;font-size:13px;color:var(--ink-2);font-weight:500}
+.thtab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.uc{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:16px}
+.uc .uch{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;margin-bottom:6px}
+.uc h4{font-size:18px;letter-spacing:-.01em}
+.uc .uwhat{color:var(--ink-2);font-size:14px;margin:4px 0 14px}
+.uc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+@media(max-width:720px){.uc-grid{grid-template-columns:1fr}}
+.ucell{border:1px solid var(--line-2);border-radius:10px;padding:13px 15px}
+.ucell.kpi{background:var(--signal-wash);border-color:#D4E0FF}
+.ucell.roi{background:var(--gold-wash);border-color:#EBD9B0}
+.ucell .ucl{font-family:"IBM Plex Mono";font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--slate);margin-bottom:6px}
+.ucell.kpi .ucl{color:var(--signal-2)}.ucell.roi .ucl{color:var(--gold)}
+.ucell p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.5}
+.srcs{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.src{font-size:11.5px;font-family:"IBM Plex Mono";padding:3px 9px;border-radius:6px;background:var(--line-2);color:var(--ink-2);cursor:pointer;border:1px solid transparent}
+.src:hover{border-color:var(--signal);color:var(--signal)}
+
+/* ---- lifecycle ---- */
+.lc-toggle{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:24px}
+.lc-toggle button{padding:10px 20px;border:0;background:var(--paper);font-size:13.5px;font-weight:500;color:var(--ink-2)}
+.lc-toggle button.on{background:var(--signal);color:#fff}
+.spine{position:relative;padding-left:34px}
+.spine::before{content:"";position:absolute;left:12px;top:8px;bottom:8px;width:2px;background:var(--line)}
+.stage{position:relative;margin-bottom:14px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 20px}
+.stage::before{content:"";position:absolute;left:-28px;top:22px;width:14px;height:14px;border-radius:50%;background:var(--signal);border:3px solid var(--canvas)}
+.stage .sn{font-family:"IBM Plex Mono";font-size:11px;color:var(--signal);font-weight:600}
+.stage h4{font-size:16px;margin:2px 0 4px}
+.stage p{margin:0 0 11px;font-size:13.5px;color:var(--slate)}
+.stage .slay{display:flex;gap:7px;flex-wrap:wrap}
+
+/* ---- governance / minimization ---- */
+.acc{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;background:var(--paper);overflow:hidden}
+.acc>button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:17px 22px;background:none;border:0;text-align:left;font-family:"Space Grotesk";font-weight:600;font-size:16px;color:var(--ink)}
+.acc>button:hover{background:var(--line-2)}
+.acc .aw{font-family:"IBM Plex Mono";font-size:11px;color:var(--slate);font-weight:500;display:flex;gap:10px;align-items:center}
+.acc .caret{transition:.2s;color:var(--slate-2)}
+.acc.open .caret{transform:rotate(90deg)}
+.acc .abody{display:none;padding:0 22px 20px}
+.acc.open .abody{display:block}
+.acc .abody p{font-size:14px;color:var(--ink-2);margin:0 0 12px}
+.check{display:flex;gap:11px;padding:10px 0;border-bottom:1px solid var(--line-2);align-items:flex-start}
+.check:last-child{border-bottom:0}
+.check .cbox{flex:0 0 auto;width:18px;height:18px;border:2px solid var(--slate-2);border-radius:5px;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;transition:.12s}
+.check.done .cbox{background:var(--good);border-color:var(--good)}
+.check .ct b{font-size:13.5px;font-weight:600;display:block}
+.check .ct small{font-size:12.5px;color:var(--slate);line-height:1.45}
+.check.done .ct b{text-decoration:line-through;color:var(--slate-2)}
+.prog-wrap{display:flex;align-items:center;gap:12px;margin:6px 0 18px}
+.prog{flex:1;height:8px;border-radius:5px;background:var(--line-2);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--good);transition:.3s}
+.note{background:var(--signal-wash);border-left:3px solid var(--signal);border-radius:0 8px 8px 0;padding:13px 16px;font-size:13.5px;color:var(--ink-2);margin:14px 0}
+.note b{color:var(--signal-2)}
+
+.flag{display:inline-block;font-family:"IBM Plex Mono";font-size:10px;padding:2px 7px;border-radius:5px;
+  background:var(--warn-wash);color:var(--warn);font-weight:600}
+.disclaimer{font-size:12px;color:var(--slate-2);font-style:italic;margin-top:20px;max-width:75ch}
+.kicker{font-size:13.5px;color:var(--slate);max-width:72ch;margin:0 0 20px}
+
+@media(max-width:760px){
+  .app{grid-template-columns:1fr}
+  .nav{position:fixed;z-index:60;width:248px;transform:translateX(-100%);transition:.25s;box-shadow:8px 0 40px rgba(0,0,0,.4)}
+  .nav.open{transform:none}
+  .wrap{padding:24px 18px 80px}
+  .menubtn{display:flex !important}
+}
+.menubtn{display:none;position:fixed;top:14px;left:14px;z-index:55;width:42px;height:42px;border-radius:10px;
+  background:var(--ink);color:#fff;border:0;align-items:center;justify-content:center}
+:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<button class="menubtn" id="menubtn" aria-label="Menu">☰</button>
+<div class="app">
+  <aside class="nav" id="nav">
+    <div class="brand">
+      <svg class="glyph" width="26" height="26" viewBox="0 0 26 26" fill="none">
+        <rect x="2" y="2" width="22" height="4.2" rx="1.4" fill="#1E50FF"/>
+        <rect x="2" y="8" width="22" height="4.2" rx="1.4" fill="#0B7BD1"/>
+        <rect x="2" y="14" width="22" height="4.2" rx="1.4" fill="#1F8A5B"/>
+        <rect x="2" y="20" width="22" height="4.2" rx="1.4" fill="#C8922B"/>
+      </svg>
+      <div><b>Data Provider Framework</b><span class="mono">LS · Healthcare · Dx</span></div>
+    </div>
+    <div id="navitems"></div>
+    <div class="navlab" style="margin-top:26px">Coverage</div>
+    <div style="padding:0 8px;font-size:12px;color:#8A93A6;line-height:1.6">
+      <span class="mono" style="color:#fff">60</span> providers ·
+      <span class="mono" style="color:#fff">12</span> layers<br>
+      <span class="mono" style="color:#fff">16</span> use cases ·
+      <span class="mono" style="color:#fff">2</span> lifecycles
+    </div>
+    <div class="navspacer"></div>
+    <div class="sig">
+      <div class="signame">Thomas Hill</div>
+      <div class="sigrole">Enterprise Data, AI &amp; Digital Strategy Leader</div>
+      <a class="li-btn" href="https://www.linkedin.com/in/thomaslhill/" target="_blank" rel="noopener noreferrer">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+        Connect on LinkedIn</a>
+    </div>
+  </aside>
+  <main class="main"><div class="wrap" id="wrap"></div>
+    <footer class="appfoot">
+      <div class="fin">
+        <div>
+          <div class="fname">Thomas Hill</div>
+          <div class="frole">Enterprise Data, AI &amp; Digital Strategy Leader</div>
+          <div class="fnote">Enterprise B2B Third-Party Data Provider Framework · LS · Healthcare · Dx</div>
+        </div>
+        <a class="li-btn" style="width:auto;padding:10px 16px" href="https://www.linkedin.com/in/thomaslhill/" target="_blank" rel="noopener noreferrer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+          Connect on LinkedIn</a>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<div class="scrim" id="scrim"><div class="modal" id="modal"></div></div>
+<div class="scrim" id="scrim2"><div class="modal" id="lmodal"></div></div>
+
+<script>
+const DATA = {"layers": [{"id": "market", "name": "Market & Industry Intelligence", "tag": "L1", "blurb": "Sizing, forecasts, syndicated research, competitive landscapes.", "desc": "Syndicated and AI-curated research that sizes markets, forecasts demand and maps competitive landscapes. It feeds corporate strategy, BD and investor relations — the 'where should we play' layer, upstream of operational GTM."}, {"id": "pipeline", "name": "Pipeline, Trials & BD Intelligence", "tag": "L2", "blurb": "Drug/device pipelines, trial feasibility, patents, deal & partnering scouting.", "desc": "Structured intelligence on drug/device pipelines, clinical trials, patents and funding/M&A. Used by R&D, corporate development and BD&L to track assets, catalysts, IP and partnering or outsourcing opportunities."}, {"id": "competitive", "name": "Competitive Signal Intelligence", "tag": "L3", "blurb": "Web/product/pricing change tracking and competitive enablement.", "desc": "Continuous tracking of competitor websites, product pages, pricing, messaging and win-loss outcomes, packaged as battlecards and enablement for product marketing and sellers."}, {"id": "scientific", "name": "Scientific & Lab Prospecting", "tag": "L4", "blurb": "Grants, publications, conferences, reagent usage → the scientist/lab graph.", "desc": "The scientist/lab graph: grants, publications, conferences and reagent-usage signals that identify researchers, PIs and labs. Powers academic/lab prospecting and KOL discovery for tools, reagents and CRO services."}, {"id": "gtm", "name": "Contact, Firmographic & GTM", "tag": "L5", "blurb": "Company & contact data, intent, ABM orchestration, enrichment.", "desc": "Horizontal company and contact data, buying intent and ABM orchestration. The top-of-funnel discovery, enrichment and prioritization layer that feeds CRM and outbound across industries."}, {"id": "hygiene", "name": "Data Quality, Enrichment & Verify", "tag": "L6", "blurb": "Email validation, deliverability, record completeness.", "desc": "Operational data quality: email verification, deliverability and record completeness. Unglamorous but protects every downstream campaign and keeps the CRM/MDM trustworthy."}, {"id": "provider", "name": "HCP / HCO Provider Master", "tag": "L7", "blurb": "NPI-level identity, affiliations, facility & technology data.", "desc": "The HCP/HCO master: NPI-level identity, affiliations, facility characteristics and technology installs. The reference spine for healthcare targeting, territory design and MDM."}, {"id": "rwd", "name": "Clinical Real-World Data & Evidence", "tag": "L8", "blurb": "EHR, claims, longitudinal patient-level data for RWE & analytics.", "desc": "Longitudinal, patient-level real-world data — EHR, claims, labs and registries — used to define cohorts, generate evidence and map patient journeys. The clinical backbone for HEOR, medical affairs and commercial analytics."}, {"id": "linking", "name": "Tokenization & Data Linking", "tag": "L9", "blurb": "Privacy-preserving linkage layer across siloed datasets.", "desc": "Privacy-preserving tokenization and record linkage that connects siloed datasets (claims + EHR + labs + devices) without exposing identity. Infrastructure rather than a dataset — it makes the other layers interoperable."}, {"id": "lab", "name": "Lab & Diagnostic Test Data", "tag": "L10", "blurb": "Lab orders/results, test utilization, diagnostic pathways.", "desc": "Laboratory test orders, results and utilization that reveal diagnostic pathways and where tests are ordered. Specialized fuel for diagnostics commercial analytics and adoption modeling."}, {"id": "econ", "name": "Reimbursement, Payer & Economics", "tag": "L11", "blurb": "Claims economics, pricing/reimbursement modeling, VBC analytics.", "desc": "Reimbursement, payer and cost/utilization economics: pricing and reimbursement modeling, value-based-care and network-performance analytics that inform access and pricing strategy."}, {"id": "reg", "name": "Regulatory, Legal & Reference", "tag": "L12", "blurb": "Case law, enforcement, adverse-event & compliance signals.", "desc": "Legal, regulatory and reference intelligence — case law, enforcement actions, adverse-event and compliance signals — used by legal, regulatory and risk teams for monitoring and due diligence."}], "clusters": {"syndicated": {"label": "Syndicated market research", "note": "Heavily overlapping report libraries. Most orgs need only 1–2; choose by therapeutic/device fit and refresh cadence."}, "contact": {"label": "Horizontal contact & firmographic", "note": "Substantial overlap in coverage. Usually one primary system of record; others become redundant seats."}, "verify": {"label": "Email verification", "note": "Near-interchangeable. Standardize on one; running two is pure redundancy."}, "enrich": {"label": "Enrichment / orchestration", "note": "Overlap with contact vendors. Clay can orchestrate the others — watch for double-paying for the same waterfall sources."}, "labprospect": {"label": "Lab / PI prospecting", "note": "Direct competitors over the same scientist/lab graph. Pick the one with better coverage in your segments."}, "providermaster": {"label": "HCP / HCO provider master", "note": "Overlap on NPI identity & affiliations. Complementary on claims volumes vs. pure master/enrichment — define one master of record."}, "rwd": {"label": "Broad clinical RWD", "note": "Overlap on broad EHR/claims; become complementary when chosen for specific specialties, depth, or linkage. Avoid two broad RWD spines."}, "pipelineci": {"label": "Pipeline & trial intelligence", "note": "Overlapping drug/trial pipeline coverage. Differentiate by modality depth (e.g. ADCs/bispecifics) and AI workflow vs. reference library."}, "compweb": {"label": "Competitive web signals", "note": "Direct competitors. One is sufficient for product-marketing battlecards."}, "deals": {"label": "Funding & deal intelligence", "note": "PitchBook is the deal spine; funding signals in BioIntelli/Zymewire are a GTM trigger, not a substitute."}, "none": {"label": "Distinct role", "note": "Largely non-overlapping in a typical stack."}}, "deliveryLabel": {"ui": "Front-end UI seats", "api": "Data API / feed", "file": "Flat-file / SFTP", "crm": "CRM / Salesforce integration", "cloud": "Cloud data share (Snowflake/Databricks)", "ext": "Browser extension", "export": "Excel / PPT export", "env": "Secure analytics environment"}, "providers": [{"name": "AlphaSense", "vertical": "both", "layer": "market", "cats": ["Firmographic", "Publications", "Citations"], "tier": 2, "cost": 3, "sheet": true, "cluster": "none", "delivery": ["ui", "api", "export"], "summary": "AI-driven market & research intelligence that semantically indexes broker research, expert transcripts, filings, trial docs and news into one searchable corpus.", "specialty": "Market & competitive intelligence for biopharma, healthcare and diagnostics strategists and investors.", "datasets": "Broker/analyst research, expert-call transcripts, SEC/EDGAR filings, clinical-trial documents, company docs, news, industry reports.", "problems": "Compresses time-to-insight for market landscaping, pipeline surveillance and competitive monitoring; collapses fragmented sources into one intelligence layer.", "overlap": "Horizontal market-intelligence layer feeding strategy, BD and IR — complements, not replaces, structured pipeline tools like Cortellis.", "id": "p00", "xlayers": [], "website": "https://www.alpha-sense.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "GlobalData", "vertical": "both", "layer": "market", "cats": ["Drug Pipeline", "Firmographic"], "tier": 2, "cost": 3, "sheet": true, "cluster": "syndicated", "delivery": ["ui", "api", "export"], "summary": "Sector research and intelligence across pharma, medtech, diagnostics and healthcare services.", "specialty": "Market sizing, competitor landscapes, drug & device pipelines, epidemiology and forecasts.", "datasets": "Company profiles, drug/device pipelines, epidemiology models, market forecasts, news.", "problems": "TAM/SAM sizing, portfolio strategy, market-entry analysis.", "overlap": "Overlaps Cortellis on pipeline and the syndicated houses on market sizing — consolidate where coverage duplicates.", "id": "p01", "xlayers": [], "website": "https://www.globaldata.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "Frost & Sullivan", "vertical": "both", "layer": "market", "cats": ["Firmographic"], "tier": 2, "cost": 3, "sheet": true, "cluster": "syndicated", "delivery": ["ui", "export"], "summary": "Growth advisory and research firm with strong healthcare & life-sciences coverage.", "specialty": "Strategic market research, technology roadmaps, competitive benchmarking.", "datasets": "Market studies, forecasts, technology-trend analyses, competitive benchmarking.", "problems": "Strategic planning, innovation roadmapping, market positioning.", "overlap": "Overlaps other syndicated houses; differentiate on advisory/roadmapping depth.", "id": "p02", "xlayers": [], "website": "https://www.frost.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "MarketsandMarkets", "vertical": "both", "layer": "market", "cats": ["Firmographic"], "tier": 1, "cost": 2, "sheet": true, "cluster": "syndicated", "delivery": ["ui", "export"], "summary": "Syndicated market research across healthcare, diagnostics and life sciences.", "specialty": "Market size, segmentation and trend reports in niche device/diagnostic areas.", "datasets": "Market reports, segment forecasts, company profiles, M&A analysis.", "problems": "Sizing niche markets, justifying investment, understanding competitive density.", "overlap": "Strong overlap with Kalorama & BCC — buy reports a la carte rather than stacking subscriptions.", "id": "p03", "xlayers": [], "website": "https://www.marketsandmarkets.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "Kalorama", "vertical": "hd", "layer": "market", "cats": ["Firmographic"], "tier": 1, "cost": 2, "sheet": true, "cluster": "syndicated", "delivery": ["ui", "export"], "summary": "Syndicated research with a diagnostics and IVD specialty.", "specialty": "Diagnostics and in-vitro device market sizing and segmentation.", "datasets": "Diagnostics market reports, segment forecasts, company profiles.", "problems": "Sizing diagnostic niches and competitive density.", "overlap": "Diagnostics-leaning sibling of MarketsandMarkets/BCC — redundant if you already license one for IVD.", "id": "p04", "xlayers": [], "website": "https://www.kaloramainformation.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "BCC Research", "vertical": "both", "layer": "market", "cats": ["Firmographic"], "tier": 1, "cost": 2, "sheet": true, "cluster": "syndicated", "delivery": ["ui", "export"], "summary": "Syndicated market research across healthcare, diagnostics and life sciences.", "specialty": "Segment forecasts and technology market reports.", "datasets": "Market reports, segment forecasts, company profiles.", "problems": "Niche market sizing and investment justification.", "overlap": "Interchangeable with the other syndicated houses for most sizing needs.", "id": "p05", "xlayers": [], "website": "https://www.bccresearch.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "PharmaCircle", "vertical": "ls", "layer": "market", "cats": ["Drug Pipeline", "Therapeutic Modalities"], "tier": 3, "cost": 3, "sheet": false, "cluster": "pipelineci", "delivery": ["ui", "export"], "summary": "Life-sciences intelligence platform with a strong drug-delivery and formulation-technology emphasis.", "specialty": "Product, formulation and device/delivery-technology data.", "datasets": "Product pipelines, dosage forms, delivery technologies, related company data.", "problems": "Technology landscaping for drug delivery, formulation strategy, BD scanning.", "overlap": "Complements Cortellis/GlobalData with delivery-tech depth they lack.", "id": "p06", "xlayers": [], "website": "https://www.pharmacircle.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "Clarivate Cortellis", "vertical": "ls", "layer": "pipeline", "cats": ["Drug Pipeline", "Clinical Trials", "Patents"], "tier": 2, "cost": 4, "sheet": true, "cluster": "pipelineci", "delivery": ["ui", "api", "export"], "summary": "Life-sciences intelligence suite for drug, clinical-trial and patent data.", "specialty": "Drug pipeline, patents, clinical trials and competitive intelligence.", "datasets": "Pipeline status, trial design & outcomes, IP/patent landscapes, company linkages.", "problems": "Portfolio strategy, BD&L, competitive and IP analysis.", "overlap": "The structured pipeline/IP backbone; overlaps GlobalData on pipeline — keep one as system of record.", "id": "p07", "xlayers": ["market"], "website": "https://www.clarivate.com/cortellis", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "PitchBook", "vertical": "both", "layer": "pipeline", "cats": ["Firmographic"], "tier": 2, "cost": 3, "sheet": true, "cluster": "deals", "delivery": ["ui", "api", "export"], "summary": "Private-market intelligence covering venture, PE and M&A.", "specialty": "Biotech & healthtech funding and deal landscape.", "datasets": "Company financings, investors, valuations, M&A transactions.", "problems": "BD pipeline building, partnership scouting, competitor funding analysis.", "overlap": "The deal spine; funding signals elsewhere (BioIntelli, Zymewire) are GTM triggers, not substitutes.", "id": "p08", "xlayers": [], "website": "https://pitchbook.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "Hanson Wade (Beacon)", "vertical": "ls", "layer": "pipeline", "cats": ["Drug Pipeline", "Clinical Trials", "Therapeutic Modalities"], "tier": 3, "cost": 3, "sheet": true, "cluster": "pipelineci", "delivery": ["ui", "export"], "summary": "Curated deep datasets (Beacon) for cutting-edge development modalities.", "specialty": "Niche modality data — bispecifics, ADCs, cell & gene therapy.", "datasets": "Structured trial and pipeline data with scientific context for specific modalities.", "problems": "Scenario planning and BD/portfolio analysis in emerging modalities.", "overlap": "Complements broad pipeline tools with modality depth they don't reach.", "id": "p09", "xlayers": [], "website": "https://www.hansonwade.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "Roots Analysis", "vertical": "both", "layer": "pipeline", "cats": ["Reimbursement", "Firmographic"], "tier": 2, "cost": 2, "sheet": true, "cluster": "syndicated", "delivery": ["ui", "export"], "summary": "Healthcare/medtech consulting & analytics that also ships structured data products.", "specialty": "Market analysis, pricing & reimbursement modeling, strategy tooling.", "datasets": "Tailored market, pricing and reimbursement models.", "problems": "Commercial and pricing strategy in devices and diagnostics.", "overlap": "Report/analytics overlap with syndicated houses; complements on bespoke modeling.", "id": "p10", "xlayers": [], "website": "https://www.rootsanalysis.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "OZMOSI", "vertical": "ls", "layer": "pipeline", "cats": ["Drug Pipeline", "Clinical Trials"], "tier": 3, "cost": 2, "sheet": false, "cluster": "pipelineci", "delivery": ["ui", "api"], "summary": "Pharma forecasting and pipeline analytics focused on trial & catalyst intelligence.", "specialty": "Clinical-trial and pipeline intelligence for portfolio and BD planning.", "datasets": "Trial timelines, catalysts, pipeline events, forecasts.", "problems": "Pipeline forecasting, catalyst tracking, portfolio/BD planning.", "overlap": "Agentic alternative to Cortellis-style libraries for trial catalysts.", "id": "p11", "xlayers": [], "website": "https://ozmosi.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "Kognitic", "vertical": "ls", "layer": "pipeline", "cats": ["Clinical Trials", "Drug Pipeline"], "tier": 3, "cost": 2, "sheet": false, "cluster": "pipelineci", "delivery": ["ui", "api"], "summary": "AI-powered clinical-trial and competitive intelligence platform.", "specialty": "Indication selection, trial benchmarking, competitive landscaping.", "datasets": "Clinical-trial data, enrollment, competitive trial activity.", "problems": "Indication strategy, trial design benchmarking, competitive monitoring.", "overlap": "Sits near IQVIA/Cortellis as an agentic trial-analytics layer.", "id": "p12", "xlayers": [], "website": "https://www.kognitic.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "Argon AI", "vertical": "ls", "layer": "pipeline", "cats": ["Clinical Trials", "Drug Pipeline", "Publications"], "tier": 3, "cost": 2, "sheet": false, "cluster": "pipelineci", "delivery": ["ui", "api"], "summary": "AI platform for pharma competitive & clinical-trial intelligence.", "specialty": "Agentic competitive intelligence and market landscaping for pharma.", "datasets": "Trials, publications, conference and competitive signals.", "problems": "Competitive monitoring and landscaping with less manual curation.", "overlap": "Overlaps Cortellis/AlphaSense conceptually; differentiated by AI workflow.", "id": "p13", "xlayers": [], "website": "https://www.argon.ai", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "Customer Insights AI", "vertical": "ls", "layer": "pipeline", "cats": ["Clinical Trials", "Publications"], "tier": 3, "cost": 2, "sheet": false, "cluster": "pipelineci", "delivery": ["ui", "api"], "summary": "AI-powered platform for clinical-trial intelligence and indication/market landscaping.", "specialty": "Indication selection and competitive landscaping for biopharma.", "datasets": "Trial, publication and competitive datasets.", "problems": "Indication and market landscape analysis.", "overlap": "Part of the agentic-analytics cluster near IQVIA/Cortellis.", "id": "p14", "xlayers": [], "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "Ngram", "vertical": "ls", "layer": "pipeline", "cats": ["Clinical Trials", "Publications", "Citations"], "tier": 3, "cost": 2, "sheet": false, "cluster": "pipelineci", "delivery": ["ui", "api"], "summary": "Life-sciences analytics combining clinical-trial and publication data for market & competitive intelligence.", "specialty": "Trials + literature analytics for competitive intelligence.", "datasets": "Clinical trials, PubMed-style publication data.", "problems": "Market and competitive intelligence from combined trial+literature signals.", "overlap": "Overlaps publication-graph and trial tools; niche analytics layer.", "id": "p15", "xlayers": [], "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "Zymewire", "vertical": "ls", "layer": "pipeline", "cats": ["Contact", "Clinical Trials", "Firmographic"], "tier": 2, "cost": 2, "sheet": true, "cluster": "deals", "delivery": ["ui", "crm", "ext"], "summary": "Sales intelligence for the pharma/biotech services ecosystem (CROs, CDMOs).", "specialty": "Detecting outsourcing & partnering opportunities from biotech/pharma programs.", "datasets": "Company financing, clinical pipeline, partnership news, R&D initiatives.", "problems": "Answers 'which accounts will need my services next?'; territory & pipeline generation for services vendors.", "overlap": "Deal-intent layer for services teams; complements (not replaces) firmographic contact data.", "id": "p16", "xlayers": [], "website": "https://zymewire.com", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "Crayon", "vertical": "both", "layer": "competitive", "cats": ["Technographic", "Firmographic"], "tier": 1, "cost": 2, "sheet": true, "cluster": "compweb", "delivery": ["ui", "crm"], "summary": "Competitive-intelligence platform ingesting digital signals across the web.", "specialty": "Tracking competitor moves, pricing, messaging and positioning.", "datasets": "Web changes, marketing materials, sales collateral, announcements.", "problems": "Product-marketing battlecards and competitive enablement.", "overlap": "Direct competitor of CompeteIQ — one is enough.", "id": "p17", "xlayers": [], "website": "https://www.crayon.co", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "CompeteIQ", "vertical": "both", "layer": "competitive", "cats": ["Technographic", "Firmographic"], "tier": 1, "cost": 2, "sheet": true, "cluster": "compweb", "delivery": ["ui", "crm"], "summary": "Competitive-intelligence platform tracking competitor digital signals.", "specialty": "Competitor moves, pricing and messaging tracking.", "datasets": "Web/product-page changes, marketing materials, announcements.", "problems": "Competitive enablement and battlecards.", "overlap": "Redundant alongside Crayon; choose on coverage and workflow fit.", "id": "p18", "xlayers": [], "website": "https://www.competeiq.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "BioIntelli", "vertical": "ls", "layer": "scientific", "cats": ["Contact", "Publications", "Citations"], "tier": 2, "cost": 2, "sheet": true, "cluster": "labprospect", "delivery": ["ui", "crm", "export"], "summary": "Life-science lead-gen & market intelligence built on research and funding signals rather than generic firmographics.", "specialty": "Lab/PI prospecting via grants, publications and conference activity.", "datasets": "Government & non-profit grants, venture funding, PubMed publications, conference attendees/abstracts, NIH purchasing data linked to contacts.", "problems": "Identifies high-propensity labs and PIs by funding & purchasing behavior; ties research-area targeting into GTM.", "overlap": "Direct competitor of SciLeads over the scientist/lab graph.", "id": "p19", "xlayers": [], "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "SciLeads", "vertical": "ls", "layer": "scientific", "cats": ["Contact", "Publications", "Citations"], "tier": 2, "cost": 2, "sheet": true, "cluster": "labprospect", "delivery": ["ui", "crm", "export"], "summary": "Prospecting & intelligence tool for scientists, labs and organizations.", "specialty": "Academic & industry-lab prospecting for instruments, reagents and CRO services.", "datasets": "Publications, conferences, authors and funding mapped to contacts and accounts.", "problems": "Targeted lists of scientists/labs by research area and technique; territory planning.", "overlap": "Direct competitor of BioIntelli — pick one as the lab graph.", "id": "p20", "xlayers": [], "website": "https://www.scileads.com", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "Academic Labs", "vertical": "ls", "layer": "scientific", "cats": ["Contact", "Publications"], "tier": 1, "cost": 1, "sheet": true, "cluster": "labprospect", "delivery": ["ui", "export"], "summary": "Data on academic & research labs — projects, grants and equipment — used for targeting and collaboration.", "specialty": "Academic lab profiles for outreach and collaboration insight.", "datasets": "Lab projects, grants, equipment, profiles.", "problems": "Identify labs for targeting and partnership.", "overlap": "Lighter-weight sibling of BioIntelli/SciLeads.", "id": "p21", "xlayers": [], "website": "https://www.academiclabs.com", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "CiteAb", "vertical": "ls", "layer": "scientific", "cats": ["Citations", "Publications"], "tier": 1, "cost": 1, "sheet": true, "cluster": "none", "delivery": ["ui", "api"], "summary": "Antibody and reagent search engine with usage metadata across publications.", "specialty": "Reagent/antibody usage intelligence from the literature.", "datasets": "Antibody/reagent catalog with citation & usage data across papers.", "problems": "Track product usage in literature; competitive reagent intelligence; KOL/product-fit signals.", "overlap": "Distinct reagent-usage signal; complements publication graphs.", "id": "p22", "xlayers": [], "website": "https://www.citeab.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "Semantic Scholar", "vertical": "ls", "layer": "scientific", "cats": ["Publications", "Citations"], "tier": 1, "cost": 1, "sheet": true, "cluster": "none", "delivery": ["ui", "api"], "summary": "AI-powered scholarly search over publications across domains.", "specialty": "Open scholarly search and citation graph.", "datasets": "Publications, citations, authors, abstracts.", "problems": "KOL identification, emerging-research detection, literature surveillance.", "overlap": "Free/low-cost publication graph; complements paid lab-prospecting tools.", "id": "p23", "xlayers": [], "website": "https://www.semanticscholar.org", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "InfoNGen", "vertical": "both", "layer": "scientific", "cats": ["Publications", "Firmographic"], "tier": 2, "cost": 2, "sheet": true, "cluster": "none", "delivery": ["ui", "api"], "summary": "Text-analytics / content-intelligence tool aggregating scientific & business content.", "specialty": "Content intelligence over scientific and business sources.", "datasets": "Publications, news, business content with text-analytics.", "problems": "Emerging-topic and competitive-signal detection from unstructured content.", "overlap": "Overlaps AlphaSense on content monitoring; lighter, more niche.", "id": "p24", "xlayers": [], "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "Salesmotion", "vertical": "ls", "layer": "scientific", "cats": ["Contact", "Firmographic"], "tier": 2, "cost": 2, "sheet": false, "cluster": "none", "delivery": ["api", "crm"], "summary": "Signal-based monitoring of life-sciences account & contact changes (a signal layer, not a raw data vendor).", "specialty": "Leadership changes, hiring patterns, earnings commentary and strategic initiatives across pharma/biotech.", "datasets": "Aggregated signals from filings, news, hiring and digital exhaust mapped to companies and execs.", "problems": "Keeps account/contact intelligence fresh and detects buying signals earlier than static databases.", "overlap": "Refresh/trigger layer on top of static contact databases — complementary.", "id": "p25", "xlayers": [], "website": "https://salesmotion.io", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "ZoomInfo", "vertical": "both", "layer": "gtm", "cats": ["Contact", "Firmographic", "Technographic"], "tier": 1, "cost": 3, "sheet": true, "cluster": "contact", "delivery": ["ui", "api", "crm", "ext"], "summary": "Horizontal B2B contact, company and intent platform used across industries.", "specialty": "Firmographics, contacts, technographics and website intent at scale.", "datasets": "Company firmographics, contacts, technographics, web intent, digital signals.", "problems": "Top-of-funnel account & contact discovery, enrichment and prioritization.", "overlap": "Heavy overlap with Apollo/Seamless/Clearbit — typically one primary system of record.", "id": "p26", "xlayers": [], "website": "https://www.zoominfo.com", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "Apollo", "vertical": "both", "layer": "gtm", "cats": ["Contact", "Firmographic"], "tier": 1, "cost": 1, "sheet": true, "cluster": "contact", "delivery": ["ui", "api", "crm", "ext"], "summary": "Contact & company database with built-in outbound engagement.", "specialty": "Lower-cost contact/firmographic data plus sequencing.", "datasets": "Company firmographics, contacts, email/phone, basic intent.", "problems": "Affordable prospecting and outreach for earlier-stage teams.", "overlap": "Redundant alongside ZoomInfo for many teams; common beginner alternative.", "id": "p27", "xlayers": [], "website": "https://www.apollo.io", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "Seamless.AI", "vertical": "both", "layer": "gtm", "cats": ["Contact", "Firmographic"], "tier": 1, "cost": 1, "sheet": true, "cluster": "contact", "delivery": ["ui", "ext", "crm"], "summary": "Real-time contact search engine for B2B prospecting.", "specialty": "On-demand contact discovery and verification.", "datasets": "Contacts, emails, phone numbers, basic firmographics.", "problems": "Quick contact discovery for outbound.", "overlap": "Overlaps the contact cluster; coverage/quality varies by segment.", "id": "p28", "xlayers": [], "website": "https://seamless.ai", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "LinkedIn Sales Navigator", "vertical": "both", "layer": "gtm", "cats": ["Contact", "Firmographic"], "tier": 1, "cost": 2, "sheet": true, "cluster": "none", "delivery": ["ui", "crm", "ext"], "summary": "Relationship and context layer on top of the LinkedIn graph.", "specialty": "People/relationship context, role changes, warm-path mapping.", "datasets": "Professional profiles, roles, connections, company updates.", "problems": "Account research, warm intros, buying-committee mapping.", "overlap": "Complementary relationship layer; not a bulk-export contact database.", "id": "p29", "xlayers": [], "website": "https://business.linkedin.com/sales-solutions/sales-navigator", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "Clearbit", "vertical": "both", "layer": "gtm", "cats": ["Contact", "Firmographic", "Technographic"], "tier": 1, "cost": 2, "sheet": true, "cluster": "enrich", "delivery": ["api", "crm"], "summary": "Real-time enrichment and firmographic data (now part of HubSpot).", "specialty": "API-first enrichment of company & contact records.", "datasets": "Firmographics, technographics, contact attributes.", "problems": "Inbound enrichment, form shortening, routing and scoring.", "overlap": "Overlaps ZoomInfo on data and Clay on orchestration — pick a primary enrichment source.", "id": "p30", "xlayers": [], "website": "https://clearbit.com", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "6sense", "vertical": "both", "layer": "gtm", "cats": ["Technographic", "Firmographic"], "tier": 2, "cost": 3, "sheet": true, "cluster": "none", "delivery": ["ui", "api", "crm"], "summary": "Account-based orchestration and intent-prediction platform.", "specialty": "Detecting buying stage and topics at the account level for ABM.", "datasets": "Web intent, ad engagement, CRM signals, third-party intent feeds.", "problems": "Prioritize in-market accounts and orchestrate outreach.", "overlap": "Distinct ABM/intent role; complements contact databases rather than replacing them.", "id": "p31", "xlayers": [], "website": "https://6sense.com", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "Clay", "vertical": "both", "layer": "gtm", "cats": ["Contact", "Firmographic"], "tier": 2, "cost": 2, "sheet": true, "cluster": "enrich", "delivery": ["ui", "api", "crm"], "summary": "Workflow-automation and enrichment orchestration that chains many data sources into one waterfall.", "specialty": "Enrichment orchestration, waterfalling and GTM automation.", "datasets": "Aggregates 50+ enrichment providers; firmographic/contact enrichment.", "problems": "Fill CRM gaps efficiently; avoid single-source coverage holes; automate research.", "overlap": "Can orchestrate FullEnrich/Clearbit — watch for paying for the same underlying sources twice.", "id": "p32", "xlayers": [], "website": "https://www.clay.com", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "FullEnrich", "vertical": "both", "layer": "hygiene", "cats": ["Contact"], "tier": 1, "cost": 1, "sheet": true, "cluster": "enrich", "delivery": ["api", "crm"], "summary": "Waterfall enrichment provider to fill gaps in contact & account records.", "specialty": "Multi-source contact/firmographic enrichment at scale.", "datasets": "Enriched emails, phones, firmographics from chained sources.", "problems": "Complete CRM/MDM records for segmentation and routing.", "overlap": "Overlaps Clay's waterfall; often consumed through Clay.", "id": "p33", "xlayers": [], "website": "https://www.fullenrich.com", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "BriteVerify", "vertical": "both", "layer": "hygiene", "cats": ["Contact"], "tier": 1, "cost": 1, "sheet": true, "cluster": "verify", "delivery": ["api", "crm"], "summary": "Email verification and list-hygiene service.", "specialty": "Deliverability improvement for outbound and marketing.", "datasets": "Email verification signals and risk scores.", "problems": "Reduce bounces and spam flags; improve campaign performance.", "overlap": "Near-interchangeable with NeverBounce/ZeroBounce — standardize on one.", "id": "p34", "xlayers": [], "website": "https://www.validity.com/briteverify", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "NeverBounce", "vertical": "both", "layer": "hygiene", "cats": ["Contact"], "tier": 1, "cost": 1, "sheet": true, "cluster": "verify", "delivery": ["api", "crm"], "summary": "Email verification and hygiene platform.", "specialty": "Real-time and bulk email validation.", "datasets": "Email verification signals, deliverability metadata.", "problems": "Cut bounce rates and protect sender reputation.", "overlap": "Redundant alongside BriteVerify/ZeroBounce.", "id": "p35", "xlayers": [], "website": "https://neverbounce.com", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "ZeroBounce", "vertical": "both", "layer": "hygiene", "cats": ["Contact"], "tier": 1, "cost": 1, "sheet": true, "cluster": "verify", "delivery": ["api", "crm"], "summary": "Email verification and deliverability platform.", "specialty": "Validation plus activity-data and scoring add-ons.", "datasets": "Email verification, abuse/risk flags, activity signals.", "problems": "Improve deliverability and segmentation.", "overlap": "Redundant alongside the other two verifiers.", "id": "p36", "xlayers": [], "website": "https://www.zerobounce.net", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "Definitive Healthcare", "vertical": "hd", "layer": "provider", "cats": ["IDN / Health Networks", "Physicians", "Claims", "Technographic"], "tier": 2, "cost": 3, "sheet": true, "cluster": "providermaster", "delivery": ["ui", "api", "crm", "cloud", "export"], "summary": "Provider-intelligence platform with deep coverage of hospitals, IDNs, clinics and physicians.", "specialty": "Healthcare provider market intelligence for medtech, pharma and health IT.", "datasets": "Provider/facility reference on 8,800+ hospitals & IDNs, 3M+ physicians and allied professionals; Atlas all-payer & prescription claims (210M+ de-identified patients) with procedure/diagnosis volumes; affiliations; technology-install data (EHR, imaging) across 15+ categories; executive contacts.", "problems": "Territory design, TAM/SAM sizing, account prioritization, competitive placement, whitespace.", "overlap": "Core provider intelligence + claims; overlaps Salutary/Ampliz on master data, complements on volumes.", "id": "p37", "xlayers": ["rwd", "market"], "website": "https://www.definitivehc.com", "comp": ["PHI · HIPAA", "De-identification", "BAA may apply", "SOC 2 / ISO 27001 (verify)"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "Salutary Data", "vertical": "hd", "layer": "provider", "cats": ["Physicians", "Contact"], "tier": 2, "cost": 2, "sheet": true, "cluster": "providermaster", "delivery": ["api", "file", "crm"], "summary": "Healthcare data provider focused on compliant HCP/HCO master data and enrichment.", "specialty": "NPI-level identity resolution, affiliations and contact enrichment.", "datasets": "Provider master data, practice/facility relationships, contact info, enrichment services.", "problems": "Clean & enrich provider data in CRM/MDM; compliant targeting.", "overlap": "HCP/HCO enrichment layer; complements Definitive's market intelligence.", "id": "p38", "xlayers": [], "website": "https://salutarydata.com", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "Ampliz", "vertical": "hd", "layer": "provider", "cats": ["Physicians", "Contact"], "tier": 1, "cost": 1, "sheet": false, "cluster": "providermaster", "delivery": ["api", "file", "crm"], "summary": "B2B healthcare database for US physicians, hospitals and organizations.", "specialty": "Healthcare-specific contact database for targeted outreach.", "datasets": "Physician & hospital reference data — specialties, locations, contact information.", "problems": "Build targeted HCP/facility outreach lists; healthcare CRM segmentation.", "overlap": "Lower-cost master/contact source; overlaps Salutary; thinner than Definitive.", "id": "p39", "xlayers": [], "website": "https://www.ampliz.com", "comp": ["GDPR / CCPA / CPRA", "Consent / sourcing", "Data-broker registration", "SOC 2 / ISO 27001 (verify)"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "Dun & Bradstreet (D&B)", "vertical": "both", "layer": "provider", "cats": ["Firmographic"], "tier": 1, "cost": 3, "sheet": true, "cluster": "providermaster", "delivery": ["api", "file", "crm", "cloud"], "summary": "Horizontal business-data provider (DUNS) used across industries.", "specialty": "Firmographics, corporate hierarchy and risk profiles.", "datasets": "Company identities (DUNS), hierarchies, financials, risk scores.", "problems": "Enterprise account master, credit/compliance checks, dedupe and hierarchy mapping.", "overlap": "Horizontal master; complements healthcare-specific masters with hierarchy/risk.", "id": "p40", "xlayers": [], "website": "https://www.dnb.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "IQVIA", "vertical": "both", "layer": "rwd", "cats": ["Claims", "Physicians", "Drug Pipeline", "Pharma Workflows"], "tier": 2, "cost": 4, "sheet": true, "cluster": "rwd", "delivery": ["ui", "api", "file", "cloud", "env"], "summary": "One of the largest life-sciences data & analytics providers, spanning real-world data, the OneKey provider reference master, prescription/sales data and clinical-trial services.", "specialty": "RWD, prescription/claims, the OneKey HCP/HCO reference master, patient & provider analytics, and clinical-trial services.", "datasets": "Prescription/claims (Xponent, National Prescription Audit, DDD), EHR/clinical RWD and longitudinal patient data (e.g. PharMetrics Plus), OneKey reference data on 25M+ HCPs and 6M+ HCOs across 100+ countries, promotional activity and sales data.", "problems": "Evidence generation, commercial analytics, market measurement, trial optimization.", "overlap": "Broad RWD + commercial spine; overlaps Truveta/Komodo on RWD — avoid two broad spines.", "id": "p41", "xlayers": ["provider", "econ"], "website": "https://www.iqvia.com", "comp": ["PHI · HIPAA", "De-identification", "ISO-certified", "Secure analytics environment"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "Truveta", "vertical": "hd", "layer": "rwd", "cats": ["Claims", "Physicians"], "tier": 3, "cost": 4, "sheet": true, "cluster": "rwd", "delivery": ["env", "cloud", "api"], "summary": "Consortium of major US health systems aggregating de-identified EHR data.", "specialty": "RWE & clinical analytics with 130M+ patient records, refreshed daily.", "datasets": "Longitudinal EHR (dx, procedures, meds, labs, vitals), plus deaths, SDOH, devices, images, multiomics, mother-child linkages.", "problems": "RWE studies, safety/effectiveness, population health, regulatory-grade cohort analytics.", "overlap": "EHR-sourced RWD spine; complementary to claims-led IQVIA but overlapping if both bought broadly.", "id": "p42", "xlayers": [], "website": "https://www.truveta.com", "comp": ["PHI · HIPAA", "De-identification", "Secure analytics environment"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "Komodo Health", "vertical": "hd", "layer": "rwd", "cats": ["Claims", "Physicians"], "tier": 3, "cost": 4, "sheet": false, "cluster": "rwd", "delivery": ["ui", "api", "env", "cloud"], "summary": "US 'patient journey' platform built on a massive claims-and-encounter dataset.", "specialty": "Longitudinal tokenized claims & encounters for RWE and commercial analytics.", "datasets": "Medical & pharmacy claims, encounters, provider linkages, patient-journey graphs.", "problems": "Cohort identification, treatment-pattern & switch analysis, market access & payer impact.", "overlap": "Claims-led RWD; overlaps IQVIA on claims, complements EHR-led Truveta.", "id": "p43", "xlayers": [], "website": "https://www.komodohealth.com", "comp": ["PHI · HIPAA", "De-identification / tokenization", "Secure analytics environment"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "Veradigm", "vertical": "hd", "layer": "rwd", "cats": ["Claims", "Physicians"], "tier": 3, "cost": 3, "sheet": false, "cluster": "rwd", "delivery": ["api", "file", "env"], "summary": "RWE & analytics built on ambulatory EHR plus pharmacy data (formerly Allscripts RWE).", "specialty": "Ambulatory EHR–sourced structured & unstructured data across 150M+ records.", "datasets": "Diagnoses, medications, labs, clinical notes from outpatient EHR networks plus claims/demographic linkages.", "problems": "Outcomes research, safety/effectiveness, real-world uptake tracking.", "overlap": "Ambulatory-EHR RWD; complements inpatient-heavy or claims-led sources.", "id": "p44", "xlayers": ["provider"], "website": "https://veradigm.com", "comp": ["PHI · HIPAA", "De-identification", "BAA may apply", "SOC 2 / ISO 27001 (verify)"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "TriNetX", "vertical": "hd", "layer": "rwd", "cats": ["Claims", "Clinical Trials"], "tier": 3, "cost": 3, "sheet": false, "cluster": "rwd", "delivery": ["ui", "env", "api"], "summary": "Federated EHR network for clinical-trial feasibility and RWE.", "specialty": "Real-time cohort access across global provider networks without centralizing data.", "datasets": "De-identified EHR data from hospitals/health systems across multiple countries.", "problems": "Trial feasibility, site selection, retrospective RWE studies.", "overlap": "Federated trial-feasibility RWD; complements owned-data RWD spines.", "id": "p45", "xlayers": [], "website": "https://trinetx.com", "comp": ["PHI · HIPAA", "De-identification", "Federated (data stays local)"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "HealthVerity", "vertical": "hd", "layer": "rwd", "cats": ["Claims", "Physicians"], "tier": 3, "cost": 3, "sheet": false, "cluster": "rwd", "delivery": ["api", "cloud", "env", "file"], "summary": "Healthcare data ecosystem & marketplace linking diverse RWD sources.", "specialty": "Tokenization and linkage of claims, labs, EHR, devices and consumer data into privacy-preserving profiles.", "datasets": "Multi-source linked data: claims, EHR, labs, pharmacy, consumer attributes.", "problems": "Build custom RWD cohorts, link siloed datasets, support regulatory-grade evidence.", "overlap": "Overlaps Datavant on linkage and IQVIA on claims; sits between linking and RWD.", "id": "p46", "xlayers": ["linking"], "website": "https://healthverity.com", "comp": ["PHI · HIPAA", "De-identification / tokenization", "Privacy-preserving linkage"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "Verana Health", "vertical": "hd", "layer": "rwd", "cats": ["Claims", "Physicians"], "tier": 3, "cost": 3, "sheet": false, "cluster": "rwd", "delivery": ["env", "api"], "summary": "Specialty registry-based RWD for ophthalmology, neurology and urology.", "specialty": "Deep clinical detail in select specialties via society registries (AAO, AAN, AUA).", "datasets": "Structured registry data, EHR extracts, specialty outcomes.", "problems": "Indication-specific outcomes research, safety monitoring, physician segmentation.", "overlap": "Specialty-deep, narrow — complements broad RWD spines, not a replacement.", "id": "p47", "xlayers": [], "website": "https://veranahealth.com", "comp": ["PHI · HIPAA", "De-identification", "BAA may apply", "SOC 2 / ISO 27001 (verify)"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "ConcertAI", "vertical": "hd", "layer": "rwd", "cats": ["Claims", "Physicians"], "tier": 3, "cost": 4, "sheet": false, "cluster": "rwd", "delivery": ["env", "cloud", "api"], "summary": "Oncology-focused RWD and AI analytics for pharma and providers.", "specialty": "Cancer-specific data combining EHR, genomics and oncology sources.", "datasets": "Oncology EHRs, structured/unstructured notes, genomic test results, treatment patterns.", "problems": "Oncology RWE, comparative effectiveness, clinical-development optimization.", "overlap": "Oncology depth; complements broad RWD when oncology is a focus.", "id": "p48", "xlayers": [], "website": "https://www.concertai.com", "comp": ["PHI · HIPAA", "De-identification", "BAA may apply", "SOC 2 / ISO 27001 (verify)"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "Holmusk", "vertical": "hd", "layer": "rwd", "cats": ["Claims", "Physicians"], "tier": 3, "cost": 3, "sheet": false, "cluster": "rwd", "delivery": ["env", "api"], "summary": "Mental & behavioral-health RWD with longitudinal data and analytics.", "specialty": "Psychiatry/behavioral health, where claims-only views are weak.", "datasets": "Behavioral-health EHR data, outcomes metrics, longitudinal follow-up.", "problems": "Mental-health evidence/outcomes studies, program evaluation, VBC design.", "overlap": "Behavioral-health depth; complementary specialty source.", "id": "p49", "xlayers": [], "website": "https://www.holmusk.com", "comp": ["PHI · HIPAA", "De-identification", "BAA may apply", "SOC 2 / ISO 27001 (verify)"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "Atropos Health", "vertical": "hd", "layer": "rwd", "cats": ["Claims", "Physicians"], "tier": 3, "cost": 3, "sheet": false, "cluster": "rwd", "delivery": ["env", "api"], "summary": "On-demand real-world evidence generation from networked clinical data.", "specialty": "Rapid 'evidence on demand' studies answering point-of-care/clinical questions.", "datasets": "Networked EHR/clinical data for rapid observational study generation.", "problems": "Fast comparative-effectiveness and clinical-question answers without bespoke study builds.", "overlap": "Evidence-generation service layer atop RWD; complements raw-data spines.", "id": "p50", "xlayers": [], "website": "https://www.atroposhealth.com", "comp": ["PHI · HIPAA", "De-identification", "BAA may apply", "SOC 2 / ISO 27001 (verify)"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "SDI Group", "vertical": "hd", "layer": "rwd", "cats": ["Claims", "Drug Pipeline"], "tier": 2, "cost": 3, "sheet": true, "cluster": "rwd", "delivery": ["api", "file", "env"], "summary": "Historic drug/claims data source feeding healthcare master + utilization views.", "specialty": "Drug and claims data for utilization analysis.", "datasets": "Drug/claims data, utilization signals.", "problems": "Utilization and prescribing analysis; pairs with master/clinical detail.", "overlap": "Claims/utilization slice; overlaps IQVIA/Komodo on claims.", "id": "p51", "xlayers": [], "comp": ["PHI · HIPAA", "De-identification", "BAA may apply", "SOC 2 / ISO 27001 (verify)"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "Datavant", "vertical": "hd", "layer": "linking", "cats": ["Claims", "Physicians"], "tier": 3, "cost": 3, "sheet": false, "cluster": "none", "delivery": ["api", "cloud", "env", "file"], "summary": "Tokenization and data-connectivity infrastructure for healthcare data.", "specialty": "Privacy-preserving tokenization to link de-identified records across sources and partners.", "datasets": "Not primarily a data owner — the tokenization/linking layer plus the largest US health-data exchange (350+ RWD partners, 80,000+ hospitals/clinics, 75% of the 100 largest health systems) and record-retrieval / release-of-information services.", "problems": "Enable multi-source RWD linkage and clinical-trial tokenization while maintaining compliance and privacy; retrieve and exchange records across the ecosystem. SOC 2-certified and FedRAMP-authorized.", "overlap": "Infrastructure, not a dataset — complements every RWD source; overlaps HealthVerity's linkage role.", "id": "p52", "xlayers": ["rwd"], "website": "https://www.datavant.com", "comp": ["PHI · HIPAA", "De-identification / tokenization", "SOC 2", "FedRAMP authorized"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "Techsalerator (Lab Test Data)", "vertical": "hd", "layer": "lab", "cats": ["Claims"], "tier": 2, "cost": 2, "sheet": false, "cluster": "none", "delivery": ["api", "file"], "summary": "Aggregates and sells lab-test data for research and diagnostic analytics.", "specialty": "Lab-test data at scale for research, health analytics and diagnostic insight.", "datasets": "Lab test orders/results and related metadata (partner-feed dependent).", "problems": "Understand test utilization, diagnostic pathways; predictive models around lab data.", "overlap": "Lab/test slice complementing claims and provider data.", "id": "p53", "xlayers": [], "website": "https://www.techsalerator.com", "comp": ["PHI · HIPAA", "De-identification", "BAA may apply", "SOC 2 / ISO 27001 (verify)"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "Clarify Health", "vertical": "hd", "layer": "econ", "cats": ["Claims", "Reimbursement", "Physicians"], "tier": 2, "cost": 3, "sheet": true, "cluster": "none", "delivery": ["ui", "api", "cloud"], "summary": "Analytics platform blending claims and other data for performance and network optimization.", "specialty": "Payer & provider performance analytics.", "datasets": "Claims and cost/utilization data; provider and patient journeys.", "problems": "Value-based-care analytics, referral-pattern analysis, contract structuring.", "overlap": "Economics/performance layer atop claims; complements raw RWD.", "id": "p54", "xlayers": [], "website": "https://www.clarifyhealth.com", "comp": ["PHI · HIPAA", "De-identification", "BAA may apply", "SOC 2 / ISO 27001 (verify)"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "S2N Health", "vertical": "hd", "layer": "econ", "cats": ["Reimbursement", "Firmographic"], "tier": 2, "cost": 2, "sheet": true, "cluster": "none", "delivery": ["ui", "export"], "summary": "Healthcare/medtech analytics and consulting delivering structured economic models.", "specialty": "Pricing, reimbursement modeling and commercial strategy tooling.", "datasets": "Tailored market, pricing and reimbursement models.", "problems": "Commercial and pricing decisions in devices and diagnostics.", "overlap": "Economic-modeling layer; complements claims/RWD with strategy outputs.", "id": "p55", "xlayers": [], "website": "https://www.s2nhealth.com", "comp": ["PHI · HIPAA", "De-identification", "BAA may apply", "SOC 2 / ISO 27001 (verify)"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "LexisNexis", "vertical": "both", "layer": "reg", "cats": ["Patents", "Firmographic", "Claims", "Physicians", "Contact"], "tier": 2, "cost": 3, "sheet": true, "cluster": "none", "delivery": ["ui", "api", "file", "crm", "export"], "summary": "A multi-division data and analytics provider. LexisNexis spans both its legal/regulatory heritage and a substantial LexisNexis Risk Solutions Healthcare division covering provider, claims, clinical and social-determinants data.", "specialty": "Legal, regulatory and news intelligence (case law, enforcement, adverse-event/legal-risk) AND healthcare data: HCP/HCO provider master, de-identified medical claims, clinical/EHR linkage, identity verification and SDOH.", "datasets": "Legal/regulatory: court cases, regulatory actions, news, public records, patents. Healthcare: provider reference & affiliations (ProviderPoint, Master Provider Referential Database), de-identified all-payer medical claims (~5 decades of provider curation), clinically validated social determinants of health, patient/provider identity resolution, and FHIR interoperability / tokenized linkage across 240+ payers.", "problems": "Compliance monitoring, due diligence and reputational-risk analysis; plus HCP/HCO master-data cleansing, claims-based market intelligence and HCP targeting, identity verification, SDOH-informed care, and privacy-preserving record linkage.", "overlap": "Genuinely multi-layer: legal/regulatory reference PLUS provider master (overlaps Definitive / Salutary / IQVIA OneKey), claims/RWD (overlaps IQVIA / Komodo) and tokenization/linking (overlaps Datavant). Scope it to one or two roles rather than buying the whole estate.", "id": "p56", "xlayers": ["provider", "rwd", "linking", "econ"], "website": "https://risk.lexisnexis.com/healthcare", "comp": ["PHI · HIPAA", "De-identification", "Identity verification", "Data-broker registration"], "compnote": "Patient-level / claims data: confirm de-identification method (HIPAA Safe Harbor vs. Expert Determination), whether a BAA is required, data-residency and a secure analytics environment."}, {"name": "Cognism", "vertical": "both", "layer": "gtm", "cats": ["Contact", "Firmographic", "Technographic"], "tier": 2, "cost": 3, "sheet": false, "cluster": "contact", "delivery": ["ui", "api", "crm", "ext"], "summary": "GTM sales-intelligence and B2B contact-data platform, strongest in EMEA, known for phone-verified mobile numbers (Diamond Data) and GDPR-compliant data.", "specialty": "Compliant European/EMEA contact and company data with mobile-verified phone numbers and Bombora-powered intent.", "datasets": "Verified business emails and phone-verified mobiles, firmographics, technographics, and Bombora Company Surge intent across 11,000+ topics; screened against do-not-call lists in 15+ countries.", "problems": "Higher connect-rate outbound in EMEA/UK, GDPR-compliant prospecting, CRM enrichment, and intent-triggered outreach.", "overlap": "Direct overlap with ZoomInfo/Apollo/Seamless on contact data — differentiated by EMEA depth and compliance; usually one primary contact source.", "id": "p57", "xlayers": [], "website": "https://www.cognism.com", "comp": ["GDPR / CCPA", "SOC 2 Type II", "ISO 27001 / 27701", "DNC screening (15+ ctries)", "Data-broker registration"], "compnote": "Personal contact data: confirm GDPR/CCPA/CPRA posture, lawful sourcing & notification, suppression/opt-out handling, and registered-data-broker status (CA/VT/TX/OR)."}, {"name": "Klue", "vertical": "both", "layer": "competitive", "cats": ["Technographic", "Firmographic"], "tier": 2, "cost": 3, "sheet": false, "cluster": "compweb", "delivery": ["ui", "crm", "ext"], "summary": "AI-powered competitive-intelligence and win-loss platform that collects competitor signals and delivers battlecards to sellers.", "specialty": "Competitive enablement: battlecard creation/distribution and win-loss analysis, surfaced in CRM, Slack, Teams and Gong.", "datasets": "Aggregated competitor signals from web/news/review sites, internal CRM and call-recording data, and win-loss interview feedback.", "problems": "Improve competitive win-rates, keep battlecards current, and tie competitive programs to revenue impact.", "overlap": "Direct competitor of Crayon/CompeteIQ over competitive web signals — differentiated by integrated win-loss; one CI platform is usually enough.", "id": "p58", "xlayers": [], "website": "https://klue.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}, {"name": "Crunchbase", "vertical": "both", "layer": "pipeline", "cats": ["Firmographic"], "tier": 1, "cost": 2, "sheet": false, "cluster": "deals", "delivery": ["ui", "api", "file", "crm"], "summary": "Private-market company and funding intelligence with predictive signals, accessible via platform, API or bulk export.", "specialty": "Private-company firmographics, round-by-round funding and AI-driven predictions on funding, growth, M&A and closures.", "datasets": "Company profiles, funding rounds, investors, acquisitions, leadership and 600+ API endpoints of firmographic and predictive data.", "problems": "BD/partnership scouting, funding-signal prospecting, market mapping and CRM enrichment with forward-looking signals.", "overlap": "Overlaps PitchBook on deal/funding data (broader, lighter, lower-cost) and contact tools on firmographics — a funding-signal layer, not a full deal database.", "id": "p59", "xlayers": [], "website": "https://www.crunchbase.com", "comp": ["Limited personal data", "Licensing / IP terms", "SOC 2 / ISO 27001 (verify)"], "compnote": "Mostly aggregated market / company / regulatory content: lower personal-data burden; focus review on usage rights, redistribution limits and source licensing."}], "themes": ["Strategic Intelligence", "Demand & Pipeline", "Customer Understanding", "Revenue", "Competitiveness", "Market Penetration"], "useCases": [{"title": "Market sizing & entry (TAM / SAM / SOM)", "theme": "Strategic Intelligence", "vertical": "both", "what": "Quantify addressable market and prioritize entry for a therapy area, device or diagnostic.", "sources": ["GlobalData", "MarketsandMarkets", "Kalorama", "Definitive Healthcare", "IQVIA"], "who": "Corporate strategy & market access build the model; deployed downstream to BD for prioritization and to Finance for the business case and board deck.", "kpi": "Forecast accuracy vs. actuals; % of new-market bets that hit revenue targets; planning-cycle time saved.", "roi": "Attribute won revenue in newly entered segments back to the sizing decision; compare hit-rate of data-backed vs. intuition-led entries."}, {"title": "Pipeline & competitive surveillance", "theme": "Competitiveness", "vertical": "ls", "what": "Continuously monitor competitor pipelines, trials, catalysts and messaging to anticipate moves.", "sources": ["AlphaSense", "Clarivate Cortellis", "OZMOSI", "Kognitic", "Crayon", "Klue"], "who": "Competitive intelligence curates; pushed to brand/product marketing as battlecards and to BD as catalyst alerts in CRM/Slack.", "kpi": "Time-to-detect competitor events; win-rate in competitive deals; battlecard usage by sellers.", "roi": "Lift in competitive win-rate × average deal size; defended revenue from early catalyst response."}, {"title": "KOL & HCP identification and segmentation", "theme": "Customer Understanding", "vertical": "both", "what": "Find and rank key opinion leaders and high-value clinicians by influence, volume and research.", "sources": ["Definitive Healthcare", "Komodo Health", "CiteAb", "Semantic Scholar", "Academic Labs"], "who": "Medical affairs & marketing build the KOL map; deployed to field/MSL teams and into CRM for engagement planning.", "kpi": "Coverage of tier-1 KOLs engaged; share of voice; speaker-program ROI.", "roi": "Incremental scripts/adoption among engaged-KOL networks vs. control; cost-per-meaningful-engagement reduction."}, {"title": "Lab & PI prospecting for tools / reagents", "theme": "Demand & Pipeline", "vertical": "ls", "what": "Identify labs and principal investigators most likely to buy instruments, reagents or services.", "sources": ["BioIntelli", "SciLeads", "CiteAb", "Academic Labs"], "who": "Demand gen builds research-area target lists; pushed to inside sales and field reps via CRM with funding/purchasing triggers.", "kpi": "Lead-to-opportunity conversion on funding-triggered leads; pipeline created per territory.", "roi": "Revenue from grant-/purchasing-signal leads vs. cold lists; shorter sales cycles on high-propensity labs."}, {"title": "Territory design & quota setting", "theme": "Revenue", "vertical": "hd", "what": "Balance territories and set quotas using procedure volumes, affiliations and prescribing.", "sources": ["Definitive Healthcare", "IQVIA", "Komodo Health", "SDI Group"], "who": "Sales ops builds the model annually; deployed to RevOps for quota and comp and to field leadership for coverage.", "kpi": "Quota attainment dispersion; coverage of high-volume accounts; ramp time.", "roi": "Revenue uplift from rebalanced territories; reduced under-/over-served whitespace."}, {"title": "Account prioritization & ABM orchestration", "theme": "Demand & Pipeline", "vertical": "both", "what": "Score and sequence in-market accounts and orchestrate multi-channel plays.", "sources": ["6sense", "ZoomInfo", "Cognism", "Clay", "Salesmotion"], "who": "Marketing ops runs scoring; deployed to SDR/AE teams via CRM tasks and to paid media for account targeting.", "kpi": "Pipeline from prioritized accounts; SDR meeting rate; marketing-sourced pipeline.", "roi": "Incremental pipeline & bookings from in-market accounts vs. baseline; lower cost-per-opportunity."}, {"title": "Real-world evidence for market access", "theme": "Revenue", "vertical": "hd", "what": "Generate outcomes/comparative-effectiveness evidence to support payer coverage and pricing.", "sources": ["Truveta", "IQVIA", "ConcertAI", "Atropos Health", "Clarify Health"], "who": "HEOR & medical affairs run studies; deployed to market access for payer dossiers and to pricing committees.", "kpi": "Coverage decisions won; time-to-evidence; formulary placement.", "roi": "Revenue unlocked by favorable coverage × covered lives; price defended via evidence."}, {"title": "Patient journey & treatment-switch analysis", "theme": "Customer Understanding", "vertical": "hd", "what": "Map diagnosis-to-treatment pathways and switching to find intervention points.", "sources": ["Komodo Health", "IQVIA", "Veradigm", "HealthVerity"], "who": "Commercial analytics builds journeys; deployed to brand teams for messaging and to field for trigger-based outreach.", "kpi": "Switch capture rate; adherence/persistence; identified intervention-point conversion.", "roi": "Incremental persistent patients × net revenue per patient attributable to journey-driven interventions."}, {"title": "CRO / CDMO outsourcing opportunity detection", "theme": "Demand & Pipeline", "vertical": "ls", "what": "Surface biotech/pharma programs about to need clinical, CMC or manufacturing services.", "sources": ["Zymewire", "BioIntelli", "PitchBook", "Clarivate Cortellis"], "who": "Services BD teams act on signals; routed to AEs via CRM with program context and funding triggers.", "kpi": "Qualified outsourcing opportunities; win-rate on signal-sourced deals.", "roi": "Bookings from signal-sourced programs vs. outbound baseline; earlier engagement → higher win-rate."}, {"title": "Diagnostic test utilization & adoption modeling", "theme": "Market Penetration", "vertical": "hd", "what": "Model where a test is ordered, by whom and where adoption can expand.", "sources": ["Techsalerator (Lab Test Data)", "SDI Group", "Definitive Healthcare", "Clarify Health"], "who": "Diagnostics commercial analytics builds the model; deployed to field for targeting and to marketing for adoption campaigns.", "kpi": "Test volume growth in targeted accounts; new-ordering-provider activation.", "roi": "Incremental test volume × net price attributable to targeted adoption plays."}, {"title": "Whitespace & cross-sell expansion", "theme": "Market Penetration", "vertical": "both", "what": "Find untapped accounts and cross-sell within existing ones using firmographic + claims overlays.", "sources": ["Definitive Healthcare", "ZoomInfo", "Clay", "Dun & Bradstreet (D&B)"], "who": "RevOps surfaces whitespace; deployed to AEs as expansion playbooks and to CS for renewals/upsell.", "kpi": "Net revenue retention; cross-sell attach rate; whitespace converted.", "roi": "Expansion revenue attributable to whitespace lists vs. organic growth."}, {"title": "Campaign data hygiene & deliverability", "theme": "Demand & Pipeline", "vertical": "both", "what": "Validate and enrich records before campaigns to protect deliverability and targeting.", "sources": ["BriteVerify", "FullEnrich", "Clay", "Clearbit"], "who": "Marketing ops runs hygiene in-pipeline; benefits every downstream campaign and CRM segment.", "kpi": "Bounce rate; sender reputation; deliverability; match/enrichment rate.", "roi": "Cost avoided from suppressed sends + incremental pipeline from improved deliverability; lower wasted spend."}, {"title": "BD&L target & partnership scouting", "theme": "Strategic Intelligence", "vertical": "ls", "what": "Identify assets, companies and modalities to license, partner or acquire.", "sources": ["PitchBook", "Crunchbase", "Clarivate Cortellis", "Hanson Wade (Beacon)", "PharmaCircle"], "who": "Corporate development & search-and-evaluation build the pipeline; deployed to deal teams and exec sponsors.", "kpi": "Qualified targets per quarter; deal-funnel velocity; diligence cycle time.", "roi": "Value of executed deals sourced via the data; reduced diligence cost and time."}, {"title": "Reimbursement & pricing strategy", "theme": "Revenue", "vertical": "hd", "what": "Model reimbursement pathways and price points for a device or diagnostic.", "sources": ["Clarify Health", "S2N Health", "Roots Analysis", "IQVIA"], "who": "Market access & pricing build models; deployed to finance for guidance and to sales for negotiation guardrails.", "kpi": "Realized price vs. list; reimbursement-pathway success rate; margin.", "roi": "Margin defended/expanded × volume attributable to pricing decisions."}, {"title": "Compliance & adverse-event / legal-risk monitoring", "theme": "Strategic Intelligence", "vertical": "both", "what": "Track regulatory enforcement, litigation and adverse-event signals affecting the portfolio.", "sources": ["LexisNexis", "AlphaSense"], "who": "Legal, regulatory and compliance monitor; alerts routed to risk committees and affected business units.", "kpi": "Time-to-detect material events; issues caught pre-escalation.", "roi": "Penalties/recalls avoided; risk-adjusted protection of revenue and reputation."}, {"title": "Specialty cohort & indication expansion", "theme": "Strategic Intelligence", "vertical": "hd", "what": "Define precise specialty cohorts to identify and validate new indications.", "sources": ["Verana Health", "ConcertAI", "Holmusk", "TriNetX"], "who": "R&D & medical affairs define cohorts; deployed to clinical-development planning and to commercial for launch prep.", "kpi": "Validated indications advanced; cohort-definition turnaround; trial-feasibility hit-rate.", "roi": "Pipeline value from new indications; de-risked trials reducing failed-study cost."}], "lifecycleLS": {"title": "Life Sciences commercial lifecycle", "stages": [{"n": "01", "name": "Discovery & market landscaping", "desc": "Size the opportunity and map the therapeutic/competitive landscape.", "layers": ["market", "pipeline"]}, {"n": "02", "name": "Pipeline & competitive intelligence", "desc": "Track competitor assets, trials, catalysts and IP.", "layers": ["pipeline", "competitive"]}, {"n": "03", "name": "Indication & cohort definition (RWD)", "desc": "Use real-world data to define cohorts and validate indications.", "layers": ["rwd", "linking"]}, {"n": "04", "name": "KOL & lab / account mapping", "desc": "Identify KOLs, labs and PIs; build the scientist/account graph.", "layers": ["scientific", "provider"]}, {"n": "05", "name": "Demand generation & prospecting", "desc": "Build target lists from funding, publications and firmographics.", "layers": ["scientific", "gtm", "hygiene"]}, {"n": "06", "name": "Engagement & ABM", "desc": "Prioritize in-market accounts and orchestrate outreach.", "layers": ["gtm"]}, {"n": "07", "name": "Deal & outsourcing signals", "desc": "Detect partnering/outsourcing intent and deal opportunities.", "layers": ["pipeline", "gtm"]}, {"n": "08", "name": "Launch & market access", "desc": "Generate evidence and model access for launch.", "layers": ["rwd", "econ"]}, {"n": "09", "name": "Post-launch RWE & expansion", "desc": "Track uptake, outcomes and expansion/whitespace.", "layers": ["rwd", "provider", "reg"]}]}, "lifecycleHD": {"title": "Diagnostics & Healthcare commercial lifecycle", "stages": [{"n": "01", "name": "Market sizing & opportunity", "desc": "Size diagnostic/device markets and segments.", "layers": ["market"]}, {"n": "02", "name": "Provider & IDN mapping", "desc": "Map hospitals, IDNs, clinics and affiliations.", "layers": ["provider"]}, {"n": "03", "name": "Test utilization & claims analysis", "desc": "Analyze where tests/procedures are ordered and by whom.", "layers": ["lab", "rwd", "econ"]}, {"n": "04", "name": "HCP / HCO master & targeting", "desc": "Build a clean provider master and targeting model.", "layers": ["provider", "hygiene"]}, {"n": "05", "name": "Demand & territory design", "desc": "Design territories and quotas from volumes.", "layers": ["provider", "gtm"]}, {"n": "06", "name": "Engagement & ABM", "desc": "Prioritize accounts and orchestrate outreach.", "layers": ["gtm"]}, {"n": "07", "name": "Reimbursement & economics", "desc": "Model reimbursement pathways and pricing.", "layers": ["econ"]}, {"n": "08", "name": "Adoption & penetration tracking", "desc": "Track adoption, new orderers and whitespace.", "layers": ["lab", "rwd", "provider"]}, {"n": "09", "name": "Outcomes & RWE", "desc": "Generate outcomes evidence for value-based care.", "layers": ["rwd", "econ", "reg"]}]}, "glossary": [{"term": "ABM", "full": "Account-Based Marketing", "def": "A B2B go-to-market approach that targets a defined set of high-value accounts with coordinated, personalized marketing and sales plays rather than broad lead generation."}, {"term": "ADC", "full": "Antibody-Drug Conjugate", "def": "A class of targeted cancer therapeutic that links a monoclonal antibody to a cytotoxic drug; a 'cutting-edge modality' tracked by specialized pipeline datasets."}, {"term": "ADT", "full": "Admission, Discharge, Transfer", "def": "Hospital event feeds that record when a patient is admitted, discharged or transferred — a core real-time signal in clinical interoperability."}, {"term": "AE", "full": "Account Executive", "def": "A quota-carrying salesperson responsible for closing deals within assigned accounts or territories."}, {"term": "API", "full": "Application Programming Interface", "def": "A programmatic way for one system to request data or services from another; here, a delivery mechanism where a vendor exposes data as a live feed for integration."}, {"term": "BAA", "full": "Business Associate Agreement", "def": "A HIPAA-required contract between a covered entity (or business associate) and a vendor that will handle protected health information, defining permitted uses and safeguards."}, {"term": "BD / BD&L", "full": "Business Development / Business Development & Licensing", "def": "Teams and activities focused on partnerships, in/out-licensing, and M&A — in life sciences, often the search-and-evaluation of external assets."}, {"term": "CCPA / CPRA", "full": "California Consumer Privacy Act / California Privacy Rights Act", "def": "California state privacy laws governing the collection, sale and processing of personal information, with consumer rights to access and delete."}, {"term": "CDMO", "full": "Contract Development & Manufacturing Organization", "def": "A company that provides drug development and manufacturing services to pharma/biotech on an outsourced basis."}, {"term": "CI", "full": "Competitive Intelligence", "def": "The systematic collection and analysis of information about competitors and the market to inform strategy, positioning and sales enablement."}, {"term": "CMC", "full": "Chemistry, Manufacturing & Controls", "def": "The body of work covering how a drug is made, characterized and quality-controlled; a common outsourcing area for services vendors."}, {"term": "CRM", "full": "Customer Relationship Management", "def": "The system of record (e.g. Salesforce) for accounts, contacts and opportunities; a frequent integration target for data delivery."}, {"term": "CRO", "full": "Contract Research Organization", "def": "A company that runs clinical trials and research services for sponsors on an outsourced basis."}, {"term": "DPA", "full": "Data Processing Agreement", "def": "A contract governing how a vendor (processor) may handle personal data on behalf of a customer (controller), required under GDPR and similar laws."}, {"term": "DPIA / PIA", "full": "Data Protection Impact Assessment / Privacy Impact Assessment", "def": "A structured assessment of the privacy risks of a data-processing activity and the mitigations in place; often required before high-risk processing."}, {"term": "DUNS", "full": "Data Universal Numbering System", "def": "Dun & Bradstreet's unique nine-digit identifier for business entities, widely used to standardize and link company records."}, {"term": "EHR / EMR", "full": "Electronic Health Record / Electronic Medical Record", "def": "Digital records of patient clinical data (diagnoses, medications, labs, notes); a primary source of real-world data."}, {"term": "FedRAMP", "full": "Federal Risk and Authorization Management Program", "def": "A US government program that standardizes security assessment and authorization for cloud services; a strong vendor security signal."}, {"term": "FHIR", "full": "Fast Healthcare Interoperability Resources", "def": "A modern standard for exchanging healthcare data electronically between systems."}, {"term": "GDPR", "full": "General Data Protection Regulation", "def": "The EU's comprehensive data-protection law governing the processing of personal data, with strict consent, purpose-limitation and individual-rights requirements."}, {"term": "GTM", "full": "Go-To-Market", "def": "The combined sales, marketing and commercial motion by which an organization brings offerings to customers."}, {"term": "HCO", "full": "Healthcare Organization", "def": "An entity that delivers care — hospital, clinic, group practice, health system — tracked in provider master data."}, {"term": "HCP", "full": "Healthcare Professional", "def": "An individual clinician (physician, nurse, pharmacist, etc.); the core entity in HCP master data and targeting."}, {"term": "HEOR", "full": "Health Economics & Outcomes Research", "def": "The discipline that evaluates the clinical and economic value of treatments, generating evidence for payers, pricing and access."}, {"term": "HIPAA", "full": "Health Insurance Portability and Accountability Act", "def": "The US law governing the privacy and security of protected health information; de-identification under it follows Safe Harbor or Expert Determination."}, {"term": "ICP", "full": "Ideal Customer Profile", "def": "A definition of the accounts most likely to be a good fit, used to focus targeting and prioritization."}, {"term": "IDN", "full": "Integrated Delivery Network", "def": "A network of hospitals and care facilities under common ownership that provides a continuum of care; a key account type in healthcare commercial planning."}, {"term": "InfoSec", "full": "Information Security", "def": "The function and controls that protect data confidentiality, integrity and availability; the team that vets a data vendor's security posture."}, {"term": "IP", "full": "Intellectual Property", "def": "Patents, trademarks and other protected inventions; in pipeline intelligence, patent landscapes inform freedom-to-operate and competitive position."}, {"term": "ISO 27001", "full": "ISO/IEC 27001", "def": "An international standard for information-security management systems; a common certification requested during vendor security review."}, {"term": "IVD", "full": "In-Vitro Diagnostic", "def": "A test performed on samples (blood, tissue) outside the body; a major diagnostics market segment."}, {"term": "KOL", "full": "Key Opinion Leader", "def": "An influential clinician or researcher whose adoption and advocacy shape peers; identified via publications, trials and claims."}, {"term": "KPI", "full": "Key Performance Indicator", "def": "A measurable value that signals how effectively an activity is achieving its objective."}, {"term": "MDM", "full": "Master Data Management", "def": "The practice of maintaining a single, authoritative 'golden record' for key entities (customers, providers, products) across systems."}, {"term": "MSL", "full": "Medical Science Liaison", "def": "A field-based scientific role that engages KOLs and clinicians on medical/scientific topics, distinct from sales."}, {"term": "NPI", "full": "National Provider Identifier", "def": "A unique 10-digit identifier for US healthcare providers, used as the backbone for HCP master data and linkage."}, {"term": "PI", "full": "Principal Investigator", "def": "The lead researcher responsible for a grant or study; a primary prospect for lab tools, reagents and services."}, {"term": "PPRL", "full": "Privacy-Preserving Record Linkage", "def": "Techniques (e.g. tokenization) that link records belonging to the same individual across datasets without exposing identifying information."}, {"term": "RWD", "full": "Real-World Data", "def": "Patient health data collected outside controlled clinical trials — EHR, claims, registries, devices — used to understand real-world treatment and outcomes."}, {"term": "RWE", "full": "Real-World Evidence", "def": "The clinical evidence about a product's use, benefits or risks derived from analyzing real-world data."}, {"term": "RevOps", "full": "Revenue Operations", "def": "The function that aligns sales, marketing and customer-success operations, data and processes to drive predictable revenue."}, {"term": "ROI", "full": "Return on Investment", "def": "The financial return generated relative to the cost of an investment — here, the value a dataset produces versus its license cost."}, {"term": "SAM", "full": "Serviceable Addressable Market", "def": "The portion of the total market that a company's offerings can actually serve, given its model and reach. See also TAM and SOM."}, {"term": "SDOH", "full": "Social Determinants of Health", "def": "Non-clinical factors (income, housing, education, access) that influence health outcomes; increasingly linked into RWD."}, {"term": "SDR", "full": "Sales Development Representative", "def": "A rep focused on top-of-funnel prospecting and qualifying leads before handing them to an AE."}, {"term": "SOC 2", "full": "System and Organization Controls 2", "def": "An audit report on a service organization's controls for security, availability, processing integrity, confidentiality and privacy; a key vendor-security artifact."}, {"term": "SOM", "full": "Serviceable Obtainable Market", "def": "The share of the serviceable market a company can realistically capture in the near term. See also TAM and SAM."}, {"term": "TAM", "full": "Total Addressable Market", "def": "The total revenue opportunity available if a product achieved 100% market share. See also SAM and SOM."}, {"term": "VBC", "full": "Value-Based Care", "def": "A care and payment model that ties reimbursement to outcomes and quality rather than volume of services."}], "objectives": [{"id": "o1", "title": "Enter a new diagnostics market & build the salesforce", "vertical": "hd", "desc": "Size the opportunity, find the right providers and design coverage for a new diagnostic or device.", "ucs": ["Market sizing & entry (TAM / SAM / SOM)", "KOL & HCP identification and segmentation", "Territory design & quota setting", "Diagnostic test utilization & adoption modeling", "Whitespace & cross-sell expansion"]}, {"id": "o2", "title": "Launch a therapy & win market access", "vertical": "both", "desc": "Build the launch evidence and access case: market size, RWE, reimbursement and the patient journey.", "ucs": ["Market sizing & entry (TAM / SAM / SOM)", "Real-world evidence for market access", "Reimbursement & pricing strategy", "Patient journey & treatment-switch analysis"]}, {"id": "o3", "title": "Build a lab & reagent demand engine", "vertical": "ls", "desc": "Find high-propensity labs and PIs and turn research signals into clean, prioritized pipeline.", "ucs": ["Lab & PI prospecting for tools / reagents", "KOL & HCP identification and segmentation", "Account prioritization & ABM orchestration", "Campaign data hygiene & deliverability"]}, {"id": "o4", "title": "Stand up competitive & pipeline intelligence", "vertical": "ls", "desc": "Continuously monitor competitor pipelines, catalysts, IP and risk; scout BD&L targets.", "ucs": ["Pipeline & competitive surveillance", "BD&L target & partnership scouting", "Compliance & adverse-event / legal-risk monitoring"]}, {"id": "o5", "title": "Establish a clean HCP/HCO commercial data foundation", "vertical": "both", "desc": "A trustworthy provider master + territory model + hygiene to underpin all commercial motions.", "ucs": ["KOL & HCP identification and segmentation", "Territory design & quota setting", "Whitespace & cross-sell expansion", "Campaign data hygiene & deliverability"]}, {"id": "o6", "title": "Generate real-world evidence at scale", "vertical": "hd", "desc": "Define cohorts, run RWE for access, and expand into new specialties and indications.", "ucs": ["Real-world evidence for market access", "Patient journey & treatment-switch analysis", "Specialty cohort & indication expansion"]}, {"id": "o7", "title": "Power services business development (CRO / CDMO)", "vertical": "ls", "desc": "Detect outsourcing intent, scout partners, and prioritize and reach the right accounts.", "ucs": ["CRO / CDMO outsourcing opportunity detection", "BD&L target & partnership scouting", "Account prioritization & ABM orchestration", "Campaign data hygiene & deliverability"]}]};
+</script>
+
+<script>
+// ============================ APP LOGIC ============================
+const $ = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const el = (t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;};
+const layerById = Object.fromEntries(DATA.layers.map(l=>[l.id,l]));
+const provById  = Object.fromEntries(DATA.providers.map(p=>[p.id,p]));
+const provByName= Object.fromEntries(DATA.providers.map(p=>[p.name,p]));
+const layerVar  = id => `var(--${(layerById[id].tag)})`;
+const TIERNAME = {1:"Beginner",2:"Intermediate",3:"Advanced"};
+const COST = n => '$'.repeat(n)+`<span style="opacity:.3">${'$'.repeat(4-n)}</span>`;
+// a provider belongs to its primary layer plus any cross-layers it spans
+const provLayers = p => [p.layer, ...(p.xlayers||[])];
+const inLayer = (p,lid) => provLayers(p).includes(lid);
+
+// ---------- navigation ----------
+const VIEWS = [
+  {id:"overview",  n:"00", label:"Overview"},
+  {id:"explorer",  n:"01", label:"Provider Explorer"},
+  {id:"compare",   n:"02", label:"Compare Providers"},
+  {id:"overlap",   n:"03", label:"Overlap & Fit"},
+  {id:"builder",   n:"04", label:"Stack Builder"},
+  {id:"usecases",  n:"05", label:"Use Case Library"},
+  {id:"lifecycle", n:"06", label:"Lifecycle Maps"},
+  {id:"minimize",  n:"07", label:"Data Minimization"},
+  {id:"governance",n:"08", label:"Procurement & Governance"},
+  {id:"glossary",  n:"09", label:"Glossary & Terms"},
+];
+const navitems = $("#navitems");
+$("#navitems").appendChild(el("div","navlab","Sections"));
+VIEWS.forEach(v=>{
+  const b=el("button","navbtn",`<span class="nb-n">${v.n}</span><span>${v.label}</span>`);
+  b.dataset.go=v.id; b.onclick=()=>go(v.id);
+  navitems.appendChild(b);
+});
+function go(id){
+  $$(".view").forEach(v=>v.classList.toggle("on",v.id==="v-"+id));
+  $$(".navbtn").forEach(b=>b.classList.toggle("on",b.dataset.go===id));
+  $("#nav").classList.remove("open");
+  window.scrollTo({top:0,behavior:"instant"});
+}
+$("#menubtn").onclick=()=>$("#nav").classList.toggle("open");
+
+// ---------- build view containers ----------
+const wrap=$("#wrap");
+VIEWS.forEach(v=>{const d=el("section","view");d.id="v-"+v.id;wrap.appendChild(d);});
+
+/* ============================ OVERVIEW ============================ */
+(function(){
+  const v=$("#v-overview");
+  const strata = DATA.layers.map(l=>{
+    const cnt=DATA.providers.filter(p=>inLayer(p,l.id)).length;
+    return `<div class="stratum" data-layer="${l.id}" role="button" tabindex="0" aria-label="${l.name} — ${cnt} providers, open details">
+      <div class="bar" style="background:${layerVar(l.id)}"></div>
+      <span class="lt mono">${l.tag}</span>
+      <div style="flex:1"><b>${l.name}</b><small>${l.blurb}</small></div>
+      <span class="cnt" title="${cnt} providers mapped to this layer">${cnt}</span>
+      <span class="arrow">›</span></div>`;
+  }).join("");
+  const questions = [
+    "Which providers overlap or are redundant?",
+    "What belongs in a beginner / intermediate / advanced stack?",
+    "How does third-party data become a profit generator, not a cost?",
+    "Where in the business lifecycle is each dataset leveraged?",
+    "What can I measure — KPIs and attributable ROI — per use case?",
+    "How do I vet, approve and govern a data provider before buying?",
+    "How much data is enough? Where do I stop?",
+    "How is each provider delivered — API, UI, CRM integration?",
+  ];
+  v.innerHTML = `
+  <div class="eyebrow">Enterprise B2B · Third-Party Data Framework</div>
+  <div class="hero">
+    <div>
+      <h2 class="big">Treat data as a portfolio,<br>not a shopping list.</h2>
+      <p class="lede">A working tool for a Life Sciences, Healthcare & Diagnostics commercial org to evaluate
+      what data is required across the business lifecycle — then assemble the smallest stack that drives
+      strategic intelligence, demand, customer insight and revenue.</p>
+      <div class="statrow">
+        <div class="stat"><div class="v">${DATA.providers.length}</div><div class="k">providers mapped</div></div>
+        <div class="stat"><div class="v">12</div><div class="k">intelligence layers</div></div>
+        <div class="stat"><div class="v">16</div><div class="k">use cases w/ ROI</div></div>
+        <div class="stat"><div class="v">2</div><div class="k">business lifecycles</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="navlab" style="color:var(--slate);margin:0 0 10px">The intelligence stack</div>
+      ${strata}
+      <p class="stack-note"><b>The number on each layer</b> is how many providers map to it (counting providers that span more than one layer). <b>Click any layer</b> for its definition and the full list of providers in it.</p>
+    </div>
+  </div>
+
+  <div class="qbox">
+    <h3>The eight questions this tool answers</h3>
+    <div class="qlist">${questions.map((q,i)=>`<div><span class="qn">Q${i+1}</span>${q}</div>`).join("")}</div>
+  </div>
+
+  <div class="section-h">How to use this</div>
+  <div class="grid g3">
+    <div class="panel"><div class="eyebrow" style="margin-bottom:8px">Start</div>
+      <p style="margin:0;font-size:13.5px;color:var(--ink-2)"><b>Explore</b> every provider by layer, vertical and tier.
+      Open any card for a deep dive: datasets, delivery, and where it overlaps.</p></div>
+    <div class="panel"><div class="eyebrow" style="margin-bottom:8px">Decide</div>
+      <p style="margin:0;font-size:13.5px;color:var(--ink-2)">Use <b>Overlap & Fit</b> to spot redundancy, then the
+      <b>Stack Builder</b> to assemble a tier that matches budget and maturity — watching coverage fill.</p></div>
+    <div class="panel"><div class="eyebrow" style="margin-bottom:8px">Justify</div>
+      <p style="margin:0;font-size:13.5px;color:var(--ink-2)">Map data to the <b>Lifecycle</b>, attach <b>Use Cases</b>
+      with KPIs/ROI, and run the <b>Governance</b> checklist before you sign.</p></div>
+  </div>
+  <p class="disclaimer">Provider attributes — delivery mechanisms, tier and relative cost bands — are framework
+  estimates to guide evaluation, drawn from the attached research and typical market positioning. Confirm specifics,
+  pricing and contractual terms with each vendor. Relative cost is shown as $–$$$$, not list pricing.</p>`;
+  $$("#v-overview .stratum").forEach(s=>{
+    const open=()=>openLayer(s.dataset.layer);
+    s.onclick=open;
+    s.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();open();}};
+  });
+})();
+
+/* ============================ EXPLORER ============================ */
+let EXP = {q:"", layer:"", vert:"", tier:"", view:"explorer"};
+const COMPARE = new Set();              // provider ids queued for comparison (max 4)
+const CMP_MAX = 4;
+(function(){
+  const v=$("#v-explorer");
+  const layerOpts = DATA.layers.map(l=>`<option value="${l.id}">${l.tag} · ${l.name}</option>`).join("");
+  v.innerHTML=`
+   <div class="eyebrow">Section 01</div>
+   <h2 class="big">Provider Explorer</h2>
+   <p class="kicker">Every known vendor, analyzed and placed in context. Filter by layer, vertical or tier; open any card for the deep dive, delivery mechanisms and overlap notes.</p>
+   <div class="toolbar">
+     <div class="search">
+       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+       <input id="expq" placeholder="Search providers, datasets, problems…" aria-label="Search providers">
+     </div>
+     <select class="sel" id="explayer"><option value="">All layers</option>${layerOpts}</select>
+     <select class="sel" id="expvert"><option value="">All verticals</option><option value="ls">Life Sciences</option><option value="hd">Healthcare / Dx</option><option value="both">Horizontal</option></select>
+     <select class="sel" id="exptier"><option value="">All tiers</option><option value="1">Beginner</option><option value="2">Intermediate</option><option value="3">Advanced</option></select>
+     <span class="count" id="expcount"></span>
+   </div>
+   <div class="explorer-grid" id="expgrid"></div>`;
+  $("#expq").oninput = e=>{EXP.q=e.target.value.toLowerCase();renderExplorer();};
+  $("#explayer").onchange=e=>{EXP.layer=e.target.value;renderExplorer();};
+  $("#expvert").onchange =e=>{EXP.vert=e.target.value;renderExplorer();};
+  $("#exptier").onchange =e=>{EXP.tier=e.target.value;renderExplorer();};
+})();
+function vertLabel(v){return v==="ls"?"Life Sci":v==="hd"?"Health/Dx":"Horizontal";}
+function provCard(p){
+  const lay=layerById[p.layer];
+  const cmp=COMPARE.has(p.id);
+  return `<div class="pcard" data-id="${p.id}">
+    <div class="edge" style="background:${layerVar(p.layer)}"></div>
+    <button class="cmpbtn ${cmp?'on':''}" data-cmp="${p.id}" title="${cmp?'Remove from comparison':'Add to comparison'}" aria-label="Add ${p.name} to comparison">${cmp?'✓':'+'} compare</button>
+    <div class="ph"><h4>${p.name}</h4></div>
+    <div class="psum">${p.summary}</div>
+    <div class="pf">
+      <span class="chip layer" style="background:${layerVar(p.layer)}">${lay.tag}</span>
+      <span class="chip">${vertLabel(p.vertical)}</span>
+      <span class="tier-pill t${p.tier}">${TIERNAME[p.tier].slice(0,3).toUpperCase()}</span>
+      <span class="cost mono" style="margin-left:auto">${COST(p.cost)}</span>
+    </div></div>`;
+}
+function renderExplorer(){
+  const list=DATA.providers.filter(p=>{
+    if(EXP.layer&&!inLayer(p,EXP.layer))return false;
+    if(EXP.vert &&p.vertical!==EXP.vert&&!(EXP.vert!=="both"&&p.vertical==="both"))return false;
+    if(EXP.tier&&String(p.tier)!==EXP.tier)return false;
+    if(EXP.q){const blob=(p.name+p.summary+p.specialty+p.datasets+p.problems+p.cats.join(" ")).toLowerCase();
+      if(!blob.includes(EXP.q))return false;}
+    return true;
+  });
+  $("#expgrid").innerHTML=list.map(provCard).join("")||`<div class="panel muted">No providers match. Clear a filter.</div>`;
+  $("#expcount").textContent=`${list.length} / ${DATA.providers.length}`;
+  $$("#expgrid .pcard").forEach(c=>c.onclick=e=>{ if(e.target.closest(".cmpbtn"))return; openProvider(c.dataset.id);});
+  $$("#expgrid .cmpbtn").forEach(b=>b.onclick=e=>{e.stopPropagation();toggleCompare(b.dataset.cmp);});
+}
+
+/* ---------- provider modal ---------- */
+const scrim=$("#scrim"), modal=$("#modal");
+function openProvider(id){
+  const p=provById[id]; const lay=layerById[p.layer]; const cl=DATA.clusters[p.cluster];
+  const deliv=p.delivery.map(d=>`<span class="dv">${DATA.deliveryLabel[d]}</span>`).join("");
+  const cats=p.cats.map(c=>`<span class="chip">${c}</span>`).join(" ");
+  const xlay=(p.xlayers||[]).map(lid=>{const L=layerById[lid];
+    return `<span class="xlay"><span class="d" style="background:${layerVar(lid)}"></span>${L.tag} · ${L.name}</span>`;}).join("");
+  const xlayRow = xlay
+    ? `<div class="mrow"><div class="ml">Also spans</div><div class="mmeta" style="margin:0">${xlay}</div></div>` : "";
+  const host = p.website ? p.website.replace(/^https?:\/\//,'').replace(/\/$/,'') : "";
+  const linkRow = p.website
+    ? `<div class="mrow"><div class="ml">Vendor website</div>
+        <a class="mlink" href="${p.website}" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></svg>
+        ${host}</a></div>` : "";
+  modal.innerHTML=`
+   <div class="mhead"><div class="medge" style="background:${layerVar(p.layer)}"></div>
+     <button class="mclose" aria-label="Close" onclick="closeModal()">×</button>
+     <h3>${p.name}</h3>
+     <div class="mmeta">
+       <span class="chip layer" style="background:${layerVar(p.layer)}">${lay.tag} · ${lay.name}</span>
+       <span class="chip">${vertLabel(p.vertical)}</span>
+       <span class="tier-pill t${p.tier}">${TIERNAME[p.tier]}</span>
+       <span class="cost mono">${COST(p.cost)}</span>
+     </div>
+     <div class="mmeta" style="margin-top:8px">${cats}</div>
+   </div>
+   <div class="mbody">
+     <div class="mrow"><div class="ml">Summary</div><p>${p.summary}</p></div>
+     <div class="mrow"><div class="ml">Specialty</div><p>${p.specialty}</p></div>
+     <div class="mrow"><div class="ml">Core datasets</div><p>${p.datasets}</p></div>
+     <div class="mrow"><div class="ml">Problems it solves</div><p>${p.problems}</p></div>
+     ${xlayRow}
+     <div class="mrow"><div class="ml">Delivery mechanisms</div><div class="deliv">${deliv}</div></div>
+     ${linkRow}
+     <div class="mrow"><div class="overlap-box"><div class="ml">Overlap & complementarity — ${cl.label}</div>
+        <p style="margin-top:4px">${p.overlap}</p>
+        <p style="margin-top:8px;font-size:12.5px;color:var(--slate)"><b>Cluster guidance:</b> ${cl.note}</p></div></div>
+   </div>`;
+  scrim.classList.add("on"); document.body.style.overflow="hidden";
+}
+function closeModal(){scrim.classList.remove("on");document.body.style.overflow="";}
+scrim.onclick=e=>{if(e.target===scrim)closeModal();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeLayer();}});
+
+/* ============================ LAYER MODAL (from Overview stack) ============================ */
+const scrim2=$("#scrim2"), lmodal=$("#lmodal");
+function openLayer(lid){
+  const L=layerById[lid];
+  const provs=DATA.providers.filter(p=>inLayer(p,lid))
+    .sort((a,b)=> (a.layer===lid?0:1)-(b.layer===lid?0:1) || a.name.localeCompare(b.name));
+  const chips=provs.map(p=>{
+    const cross = p.layer!==lid ? '<span class="x">cross-layer</span>' : '';
+    return `<span class="lm-chip" data-id="${p.id}"><span class="d" style="background:${layerVar(p.layer)}"></span>${p.name}${cross}</span>`;
+  }).join("");
+  lmodal.innerHTML=`
+   <div class="mhead"><div class="medge" style="background:${layerVar(lid)}"></div>
+     <button class="mclose" aria-label="Close" onclick="closeLayer()">×</button>
+     <h3>${L.tag} · ${L.name}</h3>
+     <div class="mmeta">
+       <span class="chip layer" style="background:${layerVar(lid)}">${provs.length} providers</span>
+     </div>
+   </div>
+   <div class="mbody">
+     <div class="mrow"><div class="ml">What this layer is</div><p>${L.desc}</p></div>
+     <div class="mrow"><div class="ml">Providers in this layer</div>
+       <p style="font-size:12.5px;color:var(--slate);margin:0 0 6px">The <b>${provs.length}</b> shown match the count on the stack. Tags marked <i>cross-layer</i> have a different primary home but genuinely also operate here. Click any to open its deep dive.</p>
+       <div class="lm-prov">${chips}</div></div>
+   </div>`;
+  scrim2.classList.add("on"); document.body.style.overflow="hidden";
+  $$("#lmodal .lm-chip").forEach(c=>c.onclick=()=>{closeLayer();openProvider(c.dataset.id);});
+}
+function closeLayer(){scrim2.classList.remove("on");document.body.style.overflow="";}
+scrim2.onclick=e=>{if(e.target===scrim2)closeLayer();};
+
+/* ============================ COMPARE PROVIDERS ============================ */
+// floating tray (appended once)
+const cmpTray = el("div","cmptray"); cmpTray.id="cmptray"; document.body.appendChild(cmpTray);
+function toggleCompare(id){
+  if(COMPARE.has(id)){COMPARE.delete(id);}
+  else{
+    if(COMPARE.size>=CMP_MAX){ flashTray(); return; }
+    COMPARE.add(id);
+  }
+  renderTray(); renderExplorer(); renderCompare();
+}
+let trayFlash=null;
+function flashTray(){ cmpTray.classList.add("full"); clearTimeout(trayFlash); trayFlash=setTimeout(()=>cmpTray.classList.remove("full"),900); }
+function renderTray(){
+  if(!COMPARE.size){ cmpTray.classList.remove("show"); cmpTray.innerHTML=""; return; }
+  const chips=[...COMPARE].map(id=>{const p=provById[id];
+    return `<span class="ct-chip"><span class="d" style="background:${layerVar(p.layer)}"></span>${p.name}<button data-rm="${id}" aria-label="Remove ${p.name}">×</button></span>`;}).join("");
+  cmpTray.innerHTML=`<div class="ct-label mono">COMPARE · ${COMPARE.size}/${CMP_MAX}</div>
+     <div class="ct-chips">${chips}</div>
+     <div class="ct-actions">
+       <button class="ct-clear" id="ctclear">Clear</button>
+       <button class="ct-go" id="ctgo" ${COMPARE.size<2?'disabled':''}>Compare →</button>
+     </div>`;
+  cmpTray.classList.add("show");
+  $$("#cmptray [data-rm]").forEach(b=>b.onclick=()=>toggleCompare(b.dataset.rm));
+  $("#ctclear").onclick=()=>{COMPARE.clear();renderTray();renderExplorer();if($("#v-compare").classList.contains("on"))renderCompare();};
+  $("#ctgo").onclick=()=>{ if(COMPARE.size>=2){ go("compare"); renderCompare(); } };
+}
+
+(function(){
+  const v=$("#v-compare");
+  const opts=[...DATA.providers].sort((a,b)=>a.name.localeCompare(b.name))
+    .map(p=>`<option value="${p.id}">${p.name}</option>`).join("");
+  v.innerHTML=`
+   <div class="eyebrow">Section 02</div>
+   <h2 class="big">Compare Providers</h2>
+   <p class="kicker">Put 2–4 providers side by side — datasets, delivery, cost, overlap and compliance posture in one view. Add from here, or hit the “+ compare” button on any card in the Provider Explorer.</p>
+   <div class="toolbar">
+     <select class="sel" id="cmpadd" aria-label="Add a provider to compare"><option value="">+ Add a provider…</option>${opts}</select>
+     <button class="btn-ghost" id="cmpclear2">Clear all</button>
+     <span class="count" id="cmpcount"></span>
+   </div>
+   <div id="cmpwrap"></div>`;
+  $("#cmpadd").onchange=e=>{ if(e.target.value){ if(COMPARE.size<CMP_MAX){COMPARE.add(e.target.value);renderTray();renderExplorer();renderCompare();} else flashTray(); e.target.value=""; } };
+  $("#cmpclear2").onclick=()=>{COMPARE.clear();renderTray();renderExplorer();renderCompare();};
+})();
+
+function renderCompare(){
+  const ids=[...COMPARE]; const wrap=$("#cmpwrap");
+  $("#cmpcount").textContent=`${ids.length}/${CMP_MAX} selected`;
+  if(ids.length<2){
+    wrap.innerHTML=`<div class="panel muted" style="text-align:center;padding:40px 20px">
+      <div style="font-size:30px;margin-bottom:8px">⚖️</div>
+      <b>Pick at least two providers to compare.</b>
+      <p style="margin:8px 0 0;color:var(--slate)">Use the dropdown above, or the “+ compare” button on any Provider Explorer card. You can compare up to ${CMP_MAX} at once.</p></div>`;
+    return;
+  }
+  const ps=ids.map(id=>provById[id]);
+  const colW=`minmax(190px,1fr)`;
+  const grid=`grid-template-columns:160px repeat(${ps.length},${colW})`;
+  const head=`<div class="cmp-row cmp-head" style="${grid}"><div class="cmp-k"></div>`+
+    ps.map(p=>`<div class="cmp-cell cmp-name"><button class="cmp-rm" data-rm="${p.id}" aria-label="Remove ${p.name}">×</button>
+      <div class="cn"><span class="d" style="background:${layerVar(p.layer)}"></span>${p.name}</div></div>`).join("")+`</div>`;
+  const rows=[];
+  const row=(label,fn,cls="")=>{
+    rows.push(`<div class="cmp-row ${cls}" style="${grid}"><div class="cmp-k">${label}</div>`+
+      ps.map(p=>`<div class="cmp-cell">${fn(p)}</div>`).join("")+`</div>`);
+  };
+  row("Primary layer", p=>`<span class="chip layer" style="background:${layerVar(p.layer)}">${layerById[p.layer].tag}</span> ${layerById[p.layer].name}`);
+  row("Also spans", p=>(p.xlayers&&p.xlayers.length)?p.xlayers.map(l=>`<span class="xlay"><span class="d" style="background:${layerVar(l)}"></span>${layerById[l].tag}</span>`).join(" "):`<span class="muted-d">—</span>`);
+  row("Vertical", p=>vertLabel(p.vertical));
+  row("Maturity tier", p=>`<span class="tier-pill t${p.tier}">${TIERNAME[p.tier]}</span>`);
+  row("Relative cost", p=>`<span class="cost mono">${COST(p.cost)}</span>`);
+  row("Specialty", p=>p.specialty);
+  row("Core datasets", p=>p.datasets);
+  row("Problems solved", p=>p.problems);
+  row("Delivery", p=>p.delivery.map(d=>`<span class="dv">${DATA.deliveryLabel[d]}</span>`).join(" "));
+  row("Compliance posture", p=>`<div class="cmp-comp">${p.comp.map(t=>`<span class="ctag">${t}</span>`).join("")}</div><div class="cmp-compnote">${p.compnote}</div>`,"cmp-comprow");
+  row("Overlap / cluster", p=>`<b style="font-size:12px">${DATA.clusters[p.cluster].label}</b><div style="margin-top:3px">${p.overlap}</div>`);
+  row("Website", p=>p.website?`<a class="mlink" style="padding:5px 9px;font-size:12px" href="${p.website}" target="_blank" rel="noopener noreferrer">${p.website.replace(/^https?:\/\//,'').replace(/\/$/,'')}</a>`:`<span class="muted-d">—</span>`);
+  wrap.innerHTML=`<div class="cmp-table">${head}${rows.join("")}</div>
+    <p class="disclaimer">Compliance posture is framework-level guidance to scope your InfoSec / privacy review — derived from each provider's data type, with publicly stated specifics where available. It is not a verified list of certifications; confirm with the vendor and your legal team.</p>`;
+  $$("#cmpwrap .cmp-rm").forEach(b=>b.onclick=()=>toggleCompare(b.dataset.rm));
+}
+
+/* ============================ OVERLAP & FIT ============================ */
+(function(){
+  const v=$("#v-overlap");
+  // group providers by cluster (skip "none")
+  const groups={};
+  DATA.providers.forEach(p=>{if(p.cluster!=="none"){(groups[p.cluster]=groups[p.cluster]||[]).push(p);}});
+  const redundClusters=["verify","contact","syndicated","compweb","labprospect","enrich"];
+  function clusterCard(key){
+    const cl=DATA.clusters[key]; const mem=groups[key]||[];
+    const redund=redundClusters.includes(key);
+    const members=mem.map(p=>`<span class="memchip" data-id="${p.id}">${p.name}</span>`).join("");
+    return `<div class="cluster ${redund?'redund':'compl'}">
+      <div class="ch"><h4>${cl.label}</h4>
+        <span class="verdict ${redund?'r':'c'}">${redund?'WATCH FOR REDUNDANCY':'COMPLEMENTARY — DIFFERENTIATE'}</span></div>
+      <p style="margin:0;font-size:13.5px;color:var(--ink-2)">${cl.note}</p>
+      <div class="members">${members}</div></div>`;
+  }
+  const order=["verify","contact","enrich","compweb","labprospect","syndicated","providermaster","pipelineci","rwd","deals"];
+  v.innerHTML=`
+    <div class="eyebrow">Section 03</div>
+    <h2 class="big">Overlap & Fit</h2>
+    <p class="kicker">Where buying two tools means paying twice for the same coverage — and where apparent competitors are actually complementary. Red clusters: consolidate. Green clusters: keep both, but assign each a distinct job.</p>
+    <div class="note"><b>Rule of thumb:</b> one system of record per layer. Redundancy hides in the seams —
+    two contact databases, three email verifiers, two broad RWD spines. Complementarity is real only when each tool
+    owns a job the other can't do (e.g. claims volumes vs. NPI master; oncology depth vs. broad EHR).</div>
+    ${order.map(clusterCard).join("")}
+    <div class="section-h">Distinct, low-overlap roles</div>
+    <p class="kicker" style="margin-bottom:14px">These sit largely on their own in a typical stack — little redundancy risk.</p>
+    <div class="grid g3">
+      ${DATA.providers.filter(p=>p.cluster==="none").map(p=>`<div class="panel" style="cursor:pointer;padding:14px 16px" data-id="${p.id}">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <b style="font-family:Space Grotesk;font-size:14px">${p.name}</b>
+          <span class="chip layer" style="background:${layerVar(p.layer)}">${layerById[p.layer].tag}</span></div>
+        <small style="color:var(--slate);font-size:12px">${layerById[p.layer].name}</small></div>`).join("")}
+    </div>`;
+  $$("#v-overlap [data-id]").forEach(c=>c.onclick=()=>openProvider(c.dataset.id));
+})();
+
+/* ============================ STACK BUILDER ============================ */
+let STACK={tier:1, on:new Set(), mode:"tier", goals:new Set(), trimmed:[]};
+(function(){
+  const v=$("#v-builder");
+  const objCards = DATA.objectives.map(o=>`
+    <button class="objcard" data-obj="${o.id}">
+      <div class="objtitle">${o.title}</div>
+      <div class="objvert mono">${o.vertical==='ls'?'Life Sciences':o.vertical==='hd'?'Healthcare / Dx':'Both verticals'}</div>
+      <div class="objdesc">${o.desc}</div>
+    </button>`).join("");
+  v.innerHTML=`
+    <div class="eyebrow">Section 04</div>
+    <h2 class="big">Stack Builder</h2>
+    <p class="kicker">Build a recommended stack two ways: start from a <b>maturity tier</b>, or start from a <b>business goal</b> and let the tool assemble the minimal set of providers — then tune either one and watch coverage, spend and redundancy respond.</p>
+    <div class="mode-toggle">
+      <button class="modebtn on" data-mode="tier">Start from maturity tier</button>
+      <button class="modebtn" data-mode="goal">Start from a business goal</button>
+    </div>
+
+    <div id="tierctrl">
+      <div class="tier-tabs">
+        <button class="ttab on" data-tier="1"><span class="tnum">TIER 1</span><b>Beginner</b><small>Lean, foundational, mostly $–$$</small></button>
+        <button class="ttab" data-tier="2"><span class="tnum">TIER 2</span><b>Intermediate</b><small>Adds depth & RWD basics</small></button>
+        <button class="ttab" data-tier="3"><span class="tnum">TIER 3</span><b>Advanced</b><small>Full RWD, specialty & AI</small></button>
+      </div>
+    </div>
+
+    <div id="goalctrl" style="display:none">
+      <div class="navlab" style="color:var(--slate);margin:2px 2px 8px">Pick one or more goals — the tool recommends the leanest stack that covers them</div>
+      <div class="obj-grid">${objCards}</div>
+      <div class="goal-actions">
+        <button class="btn-primary" id="recbtn" disabled>Recommend a minimal stack →</button>
+        <span class="goal-hint mono" id="goalhint">Select at least one goal</span>
+      </div>
+    </div>
+
+    <div class="builder">
+      <div id="browlist"></div>
+      <div class="bsum">
+        <div class="panel">
+          <div class="navlab" style="color:var(--slate);margin:0">Selected stack</div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin:6px 0 2px">
+            <span class="mono" id="selcount" style="font-size:30px;font-weight:600;font-family:Space Grotesk;color:var(--ink)">0</span>
+            <span style="color:var(--slate);font-size:13px">providers</span>
+          </div>
+          <div class="navlab" style="color:var(--slate);margin:14px 0 2px">Layer coverage</div>
+          <div class="gauge"><i id="covbar" style="width:0%"></i></div>
+          <div class="mono" style="font-size:11px;color:var(--slate)"><span id="covn">0</span> / 12 layers covered</div>
+          <div class="navlab" style="color:var(--slate);margin:14px 0 4px">Relative spend</div>
+          <div class="gauge"><i id="spendbar" style="width:0%;background:linear-gradient(90deg,var(--gold),#9C6E16)"></i></div>
+          <div class="mono" id="spendlab" style="font-size:11px;color:var(--slate)">—</div>
+        </div>
+        <div class="panel" id="goalcovpanel" style="display:none">
+          <div class="navlab" style="color:var(--slate);margin:0 0 8px">Goal coverage</div>
+          <div id="goalcov"></div>
+        </div>
+        <div class="panel">
+          <div class="navlab" style="color:var(--slate);margin:0 0 8px">Coverage by layer</div>
+          <div class="cov-list" id="covlist"></div>
+        </div>
+        <div class="note" id="stacktip" style="margin:0"></div>
+        <div class="panel" id="trimpanel" style="display:none">
+          <div class="navlab" style="color:var(--slate);margin:0 0 6px">Trimmed for redundancy — alternatives</div>
+          <div id="trimlist" style="font-size:12.5px;color:var(--ink-2)"></div>
+        </div>
+      </div>
+    </div>`;
+  $$(".ttab").forEach(t=>t.onclick=()=>loadTier(+t.dataset.tier));
+  $$(".modebtn").forEach(b=>b.onclick=()=>setBuildMode(b.dataset.mode));
+  $$("#goalctrl .objcard").forEach(c=>c.onclick=()=>{
+    const id=c.dataset.obj;
+    if(STACK.goals.has(id))STACK.goals.delete(id);else STACK.goals.add(id);
+    c.classList.toggle("on");
+    const n=STACK.goals.size;
+    $("#recbtn").disabled=!n;
+    $("#goalhint").textContent=n?`${n} goal${n>1?'s':''} selected`:"Select at least one goal";
+  });
+  $("#recbtn").onclick=recommendFromGoals;
+  loadTier(1);
+})();
+function setBuildMode(m){
+  STACK.mode=m;
+  $$(".modebtn").forEach(b=>b.classList.toggle("on",b.dataset.mode===m));
+  $("#tierctrl").style.display = m==="tier"?"":"none";
+  $("#goalctrl").style.display = m==="goal"?"":"none";
+  $("#goalcovpanel").style.display = (m==="goal"&&STACK.goals.size)?"":"none";
+  $("#trimpanel").style.display = (m==="goal"&&STACK.trimmed.length)?"":"none";
+  if(m==="tier") loadTier(STACK.tier);
+}
+const PICK_ONE=["verify","contact","compweb","labprospect","syndicated","enrich","rwd"];
+function recommendFromGoals(){
+  // gather candidate providers from selected goals' use cases
+  const ucTitles=new Set();
+  DATA.objectives.filter(o=>STACK.goals.has(o.id)).forEach(o=>o.ucs.forEach(t=>ucTitles.add(t)));
+  // count how many selected use cases each provider serves (for choosing reps)
+  const serves={};
+  DATA.useCases.filter(u=>ucTitles.has(u.title)).forEach(u=>u.sources.forEach(name=>{
+    const p=provByName[name]; if(!p)return; serves[p.id]=(serves[p.id]||0)+1;
+  }));
+  const candidates=Object.keys(serves).map(id=>provById[id]);
+  // minimize: for pick-one clusters keep a single representative; others kept
+  const byCluster={}; candidates.forEach(p=>{(byCluster[p.cluster]=byCluster[p.cluster]||[]).push(p);});
+  const keep=new Set(); const trimmed=[];
+  candidates.forEach(p=>{
+    if(!PICK_ONE.includes(p.cluster)){ keep.add(p.id); return; }
+    const group=byCluster[p.cluster];
+    // representative = serves most selected use cases, then lower cost, then lower tier
+    const rep=[...group].sort((a,b)=> (serves[b.id]-serves[a.id]) || (a.cost-b.cost) || (a.tier-b.tier))[0];
+    keep.add(rep.id);
+    if(p.id!==rep.id && !trimmed.find(t=>t.id===p.id)) trimmed.push(p);
+  });
+  STACK.on=keep; STACK.trimmed=trimmed.filter(p=>!keep.has(p.id));
+  renderBuilderRows(); updateStackSummary();
+  $("#goalcovpanel").style.display=STACK.goals.size?"":"none";
+  $("#trimpanel").style.display=STACK.trimmed.length?"":"none";
+  if(STACK.trimmed.length){
+    $("#trimlist").innerHTML=STACK.trimmed.map(p=>`<span class="trim-chip" data-id="${p.id}">${p.name} <span class="mono" style="color:var(--slate-2)">${DATA.clusters[p.cluster].label}</span></span>`).join("");
+    $$("#trimlist .trim-chip").forEach(c=>c.onclick=()=>openProvider(c.dataset.id));
+  }
+  // scroll the builder into view
+  $(".builder").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function renderGoalCoverage(on){
+  if(STACK.mode!=="goal"||!STACK.goals.size){ $("#goalcovpanel").style.display="none"; return; }
+  $("#goalcovpanel").style.display="";
+  const onNames=new Set(on.map(p=>p.name));
+  const html=DATA.objectives.filter(o=>STACK.goals.has(o.id)).map(o=>{
+    const ucs=DATA.useCases.filter(u=>o.ucs.includes(u.title));
+    const covered=ucs.filter(u=>u.sources.some(n=>onNames.has(n)));
+    const pct=Math.round(covered.length/ucs.length*100);
+    const cls=pct===100?"full":pct>0?"part":"none";
+    const ucChips=ucs.map(u=>{const ok=u.sources.some(n=>onNames.has(n));
+      return `<span class="uc-dot ${ok?'ok':'no'}" title="${u.title}: ${ok?'covered':'not yet covered'}"></span>`;}).join("");
+    return `<div class="gc-row">
+      <div class="gc-bar ${cls}"><i style="width:${pct}%"></i></div>
+      <div class="gc-meta"><div class="gc-t">${o.title}</div>
+        <div class="gc-sub"><span class="mono">${covered.length}/${ucs.length} use cases</span> ${ucChips}</div></div>
+    </div>`;
+  }).join("");
+  $("#goalcov").innerHTML=html;
+}
+function loadTier(tier){
+  STACK.tier=tier; STACK.on=new Set();
+  // recommended baseline: all providers at this tier or below that are tier<=selected,
+  // but for redundant clusters, pick only one representative to model "lean".
+  const chosen=new Set();
+  const clusterTaken={};
+  DATA.providers.filter(p=>p.tier<=tier).sort((a,b)=>a.cost-b.cost).forEach(p=>{
+    const redund=["verify","contact","compweb","labprospect","syndicated","enrich"].includes(p.cluster);
+    if(redund){ if(clusterTaken[p.cluster])return; clusterTaken[p.cluster]=true; }
+    chosen.add(p.id);
+  });
+  STACK.on=chosen;
+  STACK.trimmed=[];
+  if($("#trimpanel")) $("#trimpanel").style.display="none";
+  if($("#goalcovpanel")) $("#goalcovpanel").style.display="none";
+  $$(".ttab").forEach(t=>t.classList.toggle("on",+t.dataset.tier===tier));
+  renderBuilderRows(); updateStackSummary();
+}
+function renderBuilderRows(){
+  const list=DATA.providers.filter(p=>p.tier<=Math.max(STACK.tier,3));
+  // show all up to advanced so users can add; sort by layer order
+  const order=Object.fromEntries(DATA.layers.map((l,i)=>[l.id,i]));
+  list.sort((a,b)=>order[a.layer]-order[b.layer]||a.name.localeCompare(b.name));
+  $("#browlist").innerHTML=list.map(p=>`
+    <div class="brow">
+      <div class="bbar" style="background:${layerVar(p.layer)}"></div>
+      <div style="flex:1;min-width:0">
+        <div class="bn">${p.name} <span class="tier-pill t${p.tier}" style="margin-left:4px">${TIERNAME[p.tier].slice(0,3).toUpperCase()}</span></div>
+        <div class="blay mono">${layerById[p.layer].tag} · ${layerById[p.layer].name} · ${COST(p.cost).replace(/<[^>]+>/g,'').trim()}</div>
+      </div>
+      <button class="toggle ${STACK.on.has(p.id)?'on':''}" data-id="${p.id}" aria-label="Toggle ${p.name}"></button>
+    </div>`).join("");
+  $$("#browlist .toggle").forEach(t=>t.onclick=()=>{
+    if(STACK.on.has(t.dataset.id))STACK.on.delete(t.dataset.id);else STACK.on.add(t.dataset.id);
+    t.classList.toggle("on"); updateStackSummary();
+  });
+}
+function updateStackSummary(){
+  const on=[...STACK.on].map(id=>provById[id]);
+  $("#selcount").textContent=on.length;
+  renderGoalCoverage(on);
+  const covered=new Set(on.flatMap(p=>provLayers(p)));
+  $("#covn").textContent=covered.size;
+  $("#covbar").style.width=(covered.size/12*100)+"%";
+  const spend=on.reduce((s,p)=>s+p.cost,0);
+  const maxSpend=DATA.providers.reduce((s,p)=>s+p.cost,0);
+  $("#spendbar").style.width=Math.min(100,spend/ (maxSpend*0.55) *100)+"%";
+  $("#spendlab").innerHTML=`${spend} cost-units · <b>${'$'.repeat(Math.max(1,Math.round(spend/on.length||1)))}</b> avg band`;
+  // per-layer coverage list
+  $("#covlist").innerHTML=DATA.layers.map(l=>{
+    const c=on.filter(p=>inLayer(p,l.id)).length;
+    return `<div class="ci ${c?'has':'miss'}"><span class="dot" style="background:${c?layerVar(l.id):'var(--line)'}"></span>
+      <span class="cn">${l.name}</span><span class="cv mono" style="color:${c?layerVar(l.id):'var(--slate-2)'}">${c||'—'}</span></div>`;
+  }).join("");
+  // redundancy detection for tip
+  const clusterCount={};
+  on.forEach(p=>{if(["verify","contact","compweb","labprospect","syndicated","enrich","rwd"].includes(p.cluster))clusterCount[p.cluster]=(clusterCount[p.cluster]||0)+1;});
+  const redund=Object.entries(clusterCount).filter(([k,n])=>n>1);
+  const tip=$("#stacktip");
+  if(redund.length){
+    tip.style.background="var(--warn-wash)";tip.style.borderColor="var(--warn)";
+    tip.style.borderLeftColor="var(--warn)";
+    tip.innerHTML=`<b style="color:var(--warn)">Redundancy flagged.</b> You have multiple tools in: `+
+      redund.map(([k])=>DATA.clusters[k].label).join(", ")+`. Consolidate unless each owns a distinct job.`;
+  }else if(covered.size>=10){
+    tip.style.background="#E7F4EC";tip.style.borderLeftColor="var(--good)";tip.style.borderColor="#CDE7D7";
+    tip.innerHTML=`<b style="color:var(--good)">Broad, clean coverage.</b> No obvious redundancy. Pressure-test whether every layer earns its spend.`;
+  }else{
+    tip.style.background="var(--signal-wash)";tip.style.borderLeftColor="var(--signal)";tip.style.borderColor="#D4E0FF";
+    tip.innerHTML=`<b>Lean stack.</b> ${12-covered.size} layers uncovered. Add only where a real use case demands it — see Data Minimization.`;
+  }
+}
+
+/* ============================ USE CASES ============================ */
+let UCTHEME="";
+(function(){
+  const v=$("#v-usecases");
+  const tabs=['<button class="thtab on" data-th="">All</button>']
+    .concat(DATA.themes.map(t=>`<button class="thtab" data-th="${t}">${t}</button>`)).join("");
+  v.innerHTML=`
+    <div class="eyebrow">Section 05</div>
+    <h2 class="big">Use Case Library</h2>
+    <p class="kicker">How datasets turn into strategic intelligence, demand, customer understanding, revenue, competitiveness and market penetration — with who deploys each one downstream, the KPI to watch, and how to attribute ROI back to the data spend.</p>
+    <div class="note"><b>Data as a profit generator:</b> every card pairs a measurable KPI with an attribution path.
+    If a dataset can't be tied to a KPI and an ROI story, it's a cost line, not an investment — challenge it in Governance.</div>
+    <div class="theme-tabs">${tabs}</div>
+    <div id="uclist"></div>`;
+  $$(".thtab").forEach(t=>t.onclick=()=>{UCTHEME=t.dataset.th;
+    $$(".thtab").forEach(x=>x.classList.toggle("on",x===t)); renderUseCases();});
+  renderUseCases();
+})();
+function renderUseCases(){
+  const list=DATA.useCases.filter(u=>!UCTHEME||u.theme===UCTHEME);
+  $("#uclist").innerHTML=list.map(u=>{
+    const srcs=u.sources.map(s=>{const p=provByName[s];return p?`<span class="src" data-id="${p.id}">${s}</span>`:`<span class="src" style="cursor:default">${s}</span>`;}).join("");
+    const vlab=u.vertical==="ls"?"Life Sciences":u.vertical==="hd"?"Healthcare / Dx":"Both verticals";
+    return `<div class="uc">
+      <div class="uch"><h4>${u.title}</h4>
+        <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="chip" style="background:var(--ink);color:#fff">${u.theme}</span>
+        <span class="chip">${vlab}</span></div></div>
+      <div class="uwhat">${u.what}</div>
+      <div class="ucell"><div class="ucl">Who deploys it · downstream</div><p>${u.who}</p></div>
+      <div class="uc-grid">
+        <div class="ucell kpi"><div class="ucl">KPI — what to measure</div><p>${u.kpi}</p></div>
+        <div class="ucell roi"><div class="ucl">ROI — attributable value</div><p>${u.roi}</p></div>
+      </div>
+      <div class="srcs">${srcs}</div>
+    </div>`;
+  }).join("");
+  $$("#uclist .src[data-id]").forEach(s=>s.onclick=()=>openProvider(s.dataset.id));
+}
+
+/* ============================ LIFECYCLE ============================ */
+let LC="ls";
+(function(){
+  const v=$("#v-lifecycle");
+  v.innerHTML=`
+    <div class="eyebrow">Section 06</div>
+    <h2 class="big">Lifecycle Maps</h2>
+    <p class="kicker">Where each layer of data is leveraged across the commercial lifecycle. Two spines — one for Life Sciences, one for Diagnostics & Healthcare — because the entities (patients/PIs vs. providers/IDNs) and buyers differ.</p>
+    <div class="lc-toggle">
+      <button class="on" data-lc="ls">Life Sciences</button>
+      <button data-lc="hd">Diagnostics & Healthcare</button>
+    </div>
+    <div id="lcbody"></div>`;
+  $$(".lc-toggle button").forEach(b=>b.onclick=()=>{LC=b.dataset.lc;
+    $$(".lc-toggle button").forEach(x=>x.classList.toggle("on",x===b));renderLifecycle();});
+  renderLifecycle();
+})();
+function renderLifecycle(){
+  const data=LC==="ls"?DATA.lifecycleLS:DATA.lifecycleHD;
+  $("#lcbody").innerHTML=`<div class="spine">${data.stages.map(s=>{
+    const lays=s.layers.map(lid=>{const l=layerById[lid];
+      const provs=DATA.providers.filter(p=>inLayer(p,lid)&&(p.vertical===(LC)||p.vertical==="both"));
+      return `<span class="chip layer" style="background:${layerVar(lid)}" title="${provs.slice(0,6).map(p=>p.name).join(', ')}">${l.tag} · ${l.name}</span>`;
+    }).join(" ");
+    // example providers for the stage
+    const ex=[...new Set(s.layers.flatMap(lid=>DATA.providers.filter(p=>inLayer(p,lid)&&(p.vertical===LC||p.vertical==="both")).map(p=>p.name)))].slice(0,5);
+    return `<div class="stage"><span class="sn mono">STAGE ${s.n}</span>
+      <h4>${s.name}</h4><p>${s.desc}</p>
+      <div class="slay">${lays}</div>
+      <div style="margin-top:10px;font-size:12px;color:var(--slate)"><span class="mono" style="color:var(--slate-2)">e.g.</span> ${ex.join(" · ")}</div>
+      </div>`;
+  }).join("")}</div>
+  <p class="disclaimer">Stage-to-layer mapping is a recommended default. Example providers are filtered to the selected vertical (plus horizontal tools). Hover a layer chip to preview providers.</p>`;
+}
+
+/* ============================ DATA MINIMIZATION ============================ */
+(function(){
+  const v=$("#v-minimize");
+  const principles=[
+    ["Start with the question, not the dataset","Every purchase should trace to a named use case, KPI and owner. No question → no data. 'Nice to have' is how budgets balloon and integrations rot unused."],
+    ["One system of record per layer","Resist parallel subscriptions in the same layer (two contact DBs, three verifiers, two broad RWD spines). Pick a master; make everything else enrich it, not duplicate it."],
+    ["Prefer enrichment-on-demand over bulk","License what you query, not the whole universe. Waterfall enrichment (e.g. via Clay) often beats a full firehose you'll use 5% of."],
+    ["License narrow, then widen","Scope geographies, specialties and record counts to where you sell today. Expand on proven ROI — vendors will happily upsell later."],
+    ["Negotiate the delivery you'll actually use","UI seats, API calls and cloud shares price very differently. Don't pay for an enterprise API if three analysts need a UI — or vice versa."],
+    ["Instrument utilization, then sunset","Track logins, API calls and downstream usage. A feed nobody queries in two quarters is a renewal to kill, not rubber-stamp."],
+    ["Buy vs. borrow vs. build","Some signals are cheaper to derive (public trials, PubMed, EDGAR) than to license. Reserve paid data for what you genuinely can't assemble."],
+    ["Minimize PHI/PII by design","The least sensitive data that answers the question lowers cost, risk and governance load. De-identified or aggregate beats identified whenever it works."],
+  ];
+  v.innerHTML=`
+    <div class="eyebrow">Section 07</div>
+    <h2 class="big">Data Minimization & Budget Optimization</h2>
+    <p class="kicker">Just because you can afford all the data doesn't mean you should. Every feed carries integration cost, governance load and renewal drag. Minimization is a strategy, not a constraint.</p>
+    <div class="note"><b>The hidden cost curve:</b> the license fee is the visible part. Integration, mastering,
+    governance review, analyst time and the opportunity cost of unused seats often exceed it. Optimize total cost of ownership, not sticker price.</div>
+    <div class="grid g2">
+      ${principles.map((p,i)=>`<div class="panel"><div style="display:flex;gap:12px;align-items:flex-start">
+        <span class="mono" style="font-size:13px;color:var(--signal);font-weight:600;flex:0 0 auto">${String(i+1).padStart(2,'0')}</span>
+        <div><b style="font-family:Space Grotesk;font-size:15px;display:block;margin-bottom:5px">${p[0]}</b>
+        <span style="font-size:13.3px;color:var(--ink-2);line-height:1.5">${p[1]}</span></div></div></div>`).join("")}
+    </div>
+    <div class="section-h">A four-question gate before any purchase</div>
+    <div class="grid g4">
+      ${[["Which use case?","Name the use case + KPI it serves."],
+         ["What overlaps?","List existing tools in the same layer."],
+         ["Smallest scope?","Narrowest geography/specialty/count that works."],
+         ["How attributed?","The ROI path back to this spend."]]
+        .map((q,i)=>`<div class="panel" style="text-align:center"><div class="mono" style="color:var(--signal);font-size:11px;margin-bottom:6px">GATE ${i+1}</div>
+        <b style="font-family:Space Grotesk;font-size:15px">${q[0]}</b><p style="font-size:12.5px;color:var(--slate);margin:6px 0 0">${q[1]}</p></div>`).join("")}
+    </div>`;
+})();
+
+/* ============================ GOVERNANCE ============================ */
+(function(){
+  const v=$("#v-governance");
+  const sections=[
+    {t:"Vendor approval & intake", w:"Step 1",
+     p:"Run every provider through a standard intake before commercial talks get far. Capture the use case, data owner, sponsoring team, data categories, and whether any PHI/PII is involved — that single answer routes the rest of the review.",
+     items:[
+       ["Use case, business owner & sponsoring team documented","No data buys without a named owner and a use case on file."],
+       ["Data categories & sensitivity classified","Aggregate vs. de-identified vs. identified; PHI/PII flagged early."],
+       ["Existing-overlap check completed","Confirm no current tool already covers this layer (see Overlap & Fit)."],
+       ["Vendor viability & references checked","Financial stability, customer references, roadmap fit."],
+     ]},
+    {t:"Security & InfoSec review", w:"Step 2",
+     p:"Treat data vendors as you would any processor with access to or influence over enterprise systems. Require evidence, not assurances.",
+     items:[
+       ["SOC 2 Type II and/or ISO 27001 evidence obtained","Current report reviewed by InfoSec, not just claimed."],
+       ["Penetration-test summary & remediation reviewed","Recent third-party testing with closed criticals."],
+       ["Encryption in transit & at rest confirmed","Plus key-management and access-control posture."],
+       ["Sub-processor list & their controls reviewed","Fourth-party risk is your risk; map the chain."],
+       ["Incident-response & breach-notification SLAs agreed","Defined timelines and contacts in contract."],
+     ]},
+    {t:"Data privacy & compliance", w:"Step 3",
+     p:"Privacy obligations scale with sensitivity and geography. Healthcare data adds HIPAA; consumer/contact data adds CCPA/CPRA and GDPR. Get the de-identification method on record.",
+     items:[
+       ["De-identification method documented (Safe Harbor or Expert Determination)","For any health data, know which HIPAA method and who certified it."],
+       ["BAA executed where PHI is involved","Business Associate Agreement in place before any PHI flows."],
+       ["GDPR / CCPA / CPRA applicability assessed","Lawful basis, consumer rights handling, cross-border transfer mechanism."],
+       ["Consent & source provenance verified","How was the data collected and is its use license consistent with your purpose?"],
+       ["Secondary-use & re-identification restrictions in contract","No combining/re-identifying beyond the licensed purpose."],
+     ]},
+    {t:"Registered data broker check", w:"Step 4",
+     p:"Several US states maintain data-broker registries. If the vendor sells personal data they didn't collect directly from the consumer, confirm they're properly registered where required — it's a fast credibility and compliance signal.",
+     items:[
+       ["Data-broker registration confirmed where applicable","Check state registries (e.g. California, Vermont, Texas, Oregon) for the vendor."],
+       ["Vendor's own sourcing & opt-out handling reviewed","How consumers exercise deletion/opt-out upstream of you."],
+       ["Personal-data scope vs. your purpose reconciled","Don't ingest broader personal data than your use case needs."],
+     ]},
+    {t:"DPA, PIA/DPIA & contracting", w:"Step 5",
+     p:"Paper the relationship properly. A Data Processing Agreement defines roles and obligations; a Privacy/Data Protection Impact Assessment documents the risk analysis for higher-risk processing.",
+     items:[
+       ["Data Processing Agreement (DPA) executed","Roles (controller/processor), purpose limitation, security obligations."],
+       ["PIA / DPIA completed for higher-risk processing","Documented risk assessment, mitigations and sign-off."],
+       ["Audit rights & compliance attestations secured","Right to audit or receive periodic attestations."],
+       ["Liability, indemnity & data-quality terms reviewed","Including remedies if data is inaccurate or non-compliant."],
+     ]},
+    {t:"Ownership, retention & exit", w:"Step 6",
+     p:"Decide up front what happens to the data — and any derivative works — when the contract ends. This is the term teams most often forget and most regret.",
+     items:[
+       ["Data ownership & license scope explicit","What you may store, combine, and create derivatives from — and what reverts."],
+       ["Derivative-works & model-training rights clarified","Can you keep insights/models built on the data post-termination?"],
+       ["Retention & deletion-on-termination terms defined","Deletion timelines, certification of destruction, return-of-data option."],
+       ["Data-governance & stewardship roles assigned internally","Internal owner, steward and MDM placement before go-live."],
+       ["Exit & portability plan documented","How you offboard without breaking downstream systems."],
+     ]},
+  ];
+  v.innerHTML=`
+    <div class="eyebrow">Section 08</div>
+    <h2 class="big">Procurement & Governance</h2>
+    <p class="kicker">Buying third-party data is buying obligation. Walk this gated checklist before signing — it sequences security, privacy, data-broker, contracting and exit considerations so nothing surfaces after the ink dries. Tick items to track readiness.</p>
+    <div class="prog-wrap"><div class="prog"><i id="govprog" style="width:0%"></i></div>
+      <span class="mono" id="govpct" style="font-size:12px;color:var(--slate);white-space:nowrap">0% ready</span></div>
+    <div id="govacc"></div>
+    <p class="disclaimer">This checklist is a practical framework, not legal advice. Specific obligations depend on your jurisdictions, data categories and contracts — confirm with your privacy, security and legal counsel.</p>`;
+  const acc=$("#govacc");
+  sections.forEach((s,si)=>{
+    const items=s.items.map((it,ii)=>`<div class="check" data-k="${si}-${ii}">
+       <div class="cbox">✓</div><div class="ct"><b>${it[0]}</b><small>${it[1]}</small></div></div>`).join("");
+    const a=el("div","acc"+(si===0?" open":""));
+    a.innerHTML=`<button><span>${s.t}</span><span class="aw"><span>${s.w}</span><span class="caret">›</span></span></button>
+      <div class="abody"><p>${s.p}</p>${items}</div>`;
+    a.querySelector("button").onclick=()=>a.classList.toggle("open");
+    acc.appendChild(a);
+  });
+  let total=sections.reduce((n,s)=>n+s.items.length,0), done=0;
+  $$("#govacc .check").forEach(c=>c.onclick=e=>{e.stopPropagation();c.classList.toggle("done");
+    done=$$("#govacc .check.done").length;
+    const pct=Math.round(done/total*100);
+    $("#govprog").style.width=pct+"%"; $("#govpct").textContent=pct+"% ready";});
+})();
+
+/* ============================ GLOSSARY ============================ */
+(function(){
+  const v=$("#v-glossary");
+  v.innerHTML=`
+   <div class="eyebrow">Section 09</div>
+   <h2 class="big">Glossary & Terms</h2>
+   <p class="kicker">Plain-language definitions of the acronyms, roles and concepts used throughout this tool — so any stakeholder can read it without a decoder ring.</p>
+   <div class="toolbar gloss-search">
+     <div class="search">
+       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+       <input id="glq" placeholder="Search terms, e.g. RWE, IDN, tokenization…" aria-label="Search glossary">
+     </div>
+     <span class="count" id="glcount"></span>
+   </div>
+   <div class="gloss-grid" id="glgrid"></div>`;
+  const terms=[...DATA.glossary].sort((a,b)=>a.term.localeCompare(b.term));
+  function render(){
+    const q=($("#glq").value||"").toLowerCase().trim();
+    const list=terms.filter(t=>!q || (t.term+" "+t.full+" "+t.def).toLowerCase().includes(q));
+    let html="", letter="";
+    list.forEach(t=>{
+      const L=t.term[0].toUpperCase();
+      if(L!==letter && !q){letter=L; html+=`<div class="gloss-letter">${letter}</div>`;}
+      html+=`<div class="gterm"><h4><span class="abbr">${t.term}</span><span class="full">${t.full}</span></h4><p>${t.def}</p></div>`;
+    });
+    $("#glgrid").innerHTML=html||`<div class="panel muted">No terms match “${q}”.</div>`;
+    $("#glcount").textContent=`${list.length} / ${terms.length}`;
+  }
+  $("#glq").oninput=render;
+  render();
+})();
+
+/* ---------- init ---------- */
+renderExplorer();
+renderTray();
+renderCompare();
+go("overview");
+
+</script>
+</body>
+</html>
