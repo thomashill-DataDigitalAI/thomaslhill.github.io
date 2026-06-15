@@ -6,75 +6,106 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Enterprise AI Landscape — May 2026</title>
+<title>Enterprise AI Landscape — June 2026</title>
+<meta property="og:title" content="The Enterprise AI Landscape — June 2026">
+<meta property="og:description" content="A Fortune 500 decision-maker's guide to the enterprise AI stack: agentic architecture, governance, data foundations, costs, and build vs. buy.">
+<meta property="og:type" content="website">
+<meta name="author" content="Thomas Hill">
+<meta name="description" content="A decision framework for Fortune 500 leaders navigating AI strategy, agentic architecture, governance, and the economics of running AI in production.">
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg0:#0a0c10;--bg1:#111520;--bg2:#0d1117;--bgc:rgba(255,255,255,0.02);--bgh:rgba(255,255,255,0.04);--bs:rgba(255,255,255,0.06);--bm:rgba(255,255,255,0.08);--t1:#f0f6fc;--t2:#c9d1d9;--tm:#8b949e;--td:#484f58;--ab:#58a6ff;--ag:#3fb950;--ao:#f0883e;--ar:#f85149;--aw:#d4a574;--ap:#bc8cff;--ac:#39d2c0;--ay:#e3b341;--fs:'Newsreader',Georgia,serif;--fn:'DM Sans',-apple-system,sans-serif;--fm:'JetBrains Mono',monospace}
-body{font-family:var(--fs);background:linear-gradient(180deg,var(--bg0),var(--bg1) 40%,var(--bg2));color:var(--t2);min-height:100vh;-webkit-font-smoothing:antialiased}
+:root{
+--bg0:#eef2f7;--bg1:#f4f6fb;--bg2:#ffffff;
+--bgc:#ffffff;--bgh:#f3f7fd;
+--bs:rgba(15,23,42,.10);--bm:rgba(15,23,42,.17);
+--t1:#0f172a;--t2:#3a4761;--tm:#697587;--td:#9aa6b8;
+--ab:#2563eb;--ag:#16a34a;--ao:#ea580c;--ar:#dc2626;--aw:#b7791f;--ap:#7c3aed;--ac:#0891b2;--ay:#ca8a04;
+--side:#ffffff;--sideb:rgba(15,23,42,.09);
+--fs:'Newsreader',Georgia,serif;--fn:'DM Sans',-apple-system,sans-serif;--fm:'JetBrains Mono',monospace}
+body{font-family:var(--fs);background:var(--bg0);color:var(--t2);min-height:100vh;-webkit-font-smoothing:antialiased}
 a{color:var(--ab);text-decoration:none}a:hover{text-decoration:underline}
-.hdr{padding:40px 32px 24px;border-bottom:1px solid var(--bs);background:linear-gradient(180deg,rgba(99,179,237,.04),transparent)}
-.hdr-in{max-width:1100px;margin:0 auto}
-.hdr-tg{font-family:var(--fn);font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ab);margin-bottom:12px}
-.hdr h1{font-size:clamp(28px,4vw,42px);font-weight:700;color:var(--t1);line-height:1.15;letter-spacing:-.02em;margin-bottom:8px}
-.hdr p{font-size:17px;color:var(--tm);max-width:750px;line-height:1.55;font-style:italic}
-.auth{background:linear-gradient(135deg,rgba(212,165,116,.10),rgba(212,165,116,.03));border-bottom:1px solid rgba(212,165,116,.15);padding:14px 32px}
-.auth-in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.auth-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#d4a574,#b8956a);display:flex;align-items:center;justify-content:center;font-family:var(--fn);font-size:15px;font-weight:700;color:#0a0c10;flex-shrink:0}
+
+/* AUTHOR BAR */
+.auth{background:linear-gradient(135deg,rgba(183,121,31,.10),rgba(183,121,31,.02));border-bottom:1px solid rgba(183,121,31,.18);padding:11px 32px}
+.auth-in{margin:0;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.auth-av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#d4a574,#b8956a);display:flex;align-items:center;justify-content:center;font-family:var(--fn);font-size:14px;font-weight:700;color:#fff;flex-shrink:0}
 .auth-nm{font-family:var(--fn);font-size:15px;font-weight:700;color:var(--t1)}
 .auth-rl{font-family:var(--fn);font-size:12px;color:var(--aw);margin-top:2px}
-.auth-li{font-family:var(--fn);font-size:11px;font-weight:600;color:var(--aw);background:rgba(212,165,116,.1);border:1px solid rgba(212,165,116,.25);border-radius:6px;padding:7px 14px;display:flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none}
-.auth-li:hover{background:rgba(212,165,116,.18);text-decoration:none}
-.tabs{padding:16px 32px 0;background:rgba(0,0,0,.2);border-bottom:1px solid var(--bs);overflow-x:auto}
-.tabs-in{max-width:1100px;margin:0 auto;display:flex;gap:0;min-width:max-content}
-.tb{font-family:var(--fn);font-size:12px;font-weight:500;color:var(--tm);background:0 0;border:1px solid transparent;border-radius:8px 8px 0 0;padding:10px 14px;cursor:pointer;margin-bottom:-1px;transition:all .2s;white-space:nowrap}
-.tb:hover{color:var(--t2)}
-.tb.on{font-weight:600;color:var(--t1);background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);border-bottom-color:var(--bg2);z-index:1}
-.main{max-width:1100px;margin:0 auto;padding:24px 32px 60px}
+.auth-li{font-family:var(--fn);font-size:11px;font-weight:600;color:var(--aw);background:rgba(183,121,31,.10);border:1px solid rgba(183,121,31,.28);border-radius:6px;padding:7px 14px;display:flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none}
+.auth-li:hover{background:rgba(183,121,31,.18);text-decoration:none}
+
+/* SHELL = SIDEBAR + CONTENT */
+.shell{display:flex;align-items:flex-start}
+.side{width:258px;flex-shrink:0;position:sticky;top:0;align-self:flex-start;height:100vh;overflow-y:auto;background:var(--side);border-right:1px solid var(--sideb);display:flex;flex-direction:column;padding:20px 12px 16px}
+.side-brand{padding:6px 12px 14px;border-bottom:1px solid var(--bs);margin-bottom:10px}
+.side-brand .sb-tt{font-family:var(--fn);font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ab)}
+.side-brand .sb-h{font-family:var(--fs);font-size:19px;font-weight:700;color:var(--t1);line-height:1.18;margin-top:5px}
+.side-brand .sb-bd{display:inline-block;margin-top:10px;font-family:var(--fn);font-size:10px;font-weight:700;color:var(--aw);background:rgba(183,121,31,.10);border:1px solid rgba(183,121,31,.28);border-radius:5px;padding:3px 9px}
+.side-nav{display:flex;flex-direction:column;gap:2px;flex:1}
+.tb{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font-family:var(--fn);font-size:13px;font-weight:500;color:var(--tm);background:none;border:none;border-left:3px solid transparent;border-radius:0 8px 8px 0;padding:10px 13px;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.tb:hover{background:var(--bgh);color:var(--t1)}
+.tb.on{background:linear-gradient(90deg,rgba(37,99,235,.12),rgba(37,99,235,.02));color:var(--ab);font-weight:700;border-left-color:var(--ab)}
+.side-foot{padding:13px 13px 2px;border-top:1px solid var(--bs);margin-top:10px;font-family:var(--fn);font-size:10.5px;color:var(--td);line-height:1.55}
+.content{flex:1;min-width:0}
+
+/* HEADER */
+.hdr{padding:34px 40px 22px;border-bottom:1px solid var(--bs);background:linear-gradient(180deg,rgba(37,99,235,.05),transparent)}
+.hdr-in{margin:0}
+.hdr-tg{font-family:var(--fn);font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ab);margin-bottom:12px}
+.hdr h1{font-size:clamp(28px,3.4vw,40px);font-weight:700;color:var(--t1);line-height:1.15;letter-spacing:-.02em;margin-bottom:8px}
+.hdr p{font-size:17px;color:var(--tm);max-width:780px;line-height:1.55;font-style:italic}
+
+/* HOW TO USE */
+.howto{padding:14px 40px;background:linear-gradient(135deg,rgba(37,99,235,.05),rgba(8,145,178,.03));border-bottom:1px solid rgba(37,99,235,.10)}
+.howto-in{margin:0;display:flex;gap:16px;align-items:flex-start}
+
+.main{margin:0;padding:26px 40px 56px}
 .vp{display:none}.vp.on{display:block}
-.si{font-size:15px;color:var(--t2);line-height:1.7;margin-bottom:24px;max-width:800px}
-/* Reusable */
-.crd{background:var(--bgc);border:1px solid var(--bs);border-radius:12px;padding:20px 24px;margin-bottom:12px;cursor:pointer;transition:all .3s}
-.crd:hover{background:var(--bgh)}
-.crd.ex{background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,.02))}
+.si{font-size:15px;color:var(--t2);line-height:1.7;margin-bottom:24px;max-width:840px}
+
+/* CARDS */
+.crd{background:var(--bgc);border:1px solid var(--bs);border-radius:12px;padding:20px 24px;margin-bottom:12px;cursor:pointer;transition:background .2s,border-color .2s,box-shadow .2s;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.crd:hover{background:var(--bgh);border-color:var(--bm);box-shadow:0 5px 16px rgba(15,23,42,.08)}
+.crd.ex{background:linear-gradient(135deg,rgba(37,99,235,.05),rgba(37,99,235,.01));border-color:rgba(37,99,235,.22);box-shadow:0 6px 20px rgba(15,23,42,.09)}
 .crd-h{display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
 .chv{font-size:18px;color:var(--td);transition:transform .2s;flex-shrink:0;user-select:none}
 .ex .chv{transform:rotate(180deg)}
 .crd-d{display:none;margin-top:16px;padding-top:16px;border-top:1px solid var(--bs)}.crd.ex .crd-d{display:block}
 .st{font-family:var(--fn);font-size:16px;font-weight:700;color:var(--t1);margin:28px 0 14px}
 .st2{font-family:var(--fn);font-size:14px;font-weight:700;color:var(--t1);margin:20px 0 10px}
-.tbl{background:var(--bgc);border:1px solid var(--bs);border-radius:10px;overflow:hidden;margin-bottom:20px}
-.tbl .rw{display:grid;padding:11px 18px;border-bottom:1px solid rgba(255,255,255,.04);font-family:var(--fn);font-size:13px;align-items:center;gap:8px}
+.tbl{background:var(--bgc);border:1px solid var(--bs);border-radius:10px;overflow:hidden;margin-bottom:20px;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.tbl .rw{display:grid;padding:11px 18px;border-bottom:1px solid rgba(15,23,42,.06);font-family:var(--fn);font-size:13px;align-items:center;gap:8px}
 .tbl .rw:last-child{border-bottom:none}
-.tbl .rw.hd{background:rgba(255,255,255,.03);font-weight:600;color:var(--tm);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
+.tbl .rw.hd{background:rgba(15,23,42,.035);font-weight:600;color:var(--tm);font-size:11px;text-transform:uppercase;letter-spacing:.06em}
 .tbl .rw .c1{color:var(--t1);font-weight:500}
 .hbox{border-radius:12px;padding:22px 26px;margin:24px 0}
 .hbox .hl{font-family:var(--fn);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;margin-bottom:10px}
 .hbox .ht{font-size:15px;color:var(--t1);line-height:1.65}
-.blu{background:linear-gradient(135deg,rgba(88,166,255,.06),rgba(88,166,255,.02));border:1px solid rgba(88,166,255,.15)}.blu .hl{color:var(--ab)}
-.wrm{background:linear-gradient(135deg,rgba(212,165,116,.08),rgba(212,165,116,.02));border:1px solid rgba(212,165,116,.2)}.wrm .hl{color:var(--aw)}
-.prp{background:linear-gradient(135deg,rgba(188,140,255,.08),rgba(188,140,255,.02));border:1px solid rgba(188,140,255,.2)}.prp .hl{color:var(--ap)}
-.cyn{background:linear-gradient(135deg,rgba(57,210,192,.08),rgba(57,210,192,.02));border:1px solid rgba(57,210,192,.2)}.cyn .hl{color:var(--ac)}
-.ylw{background:linear-gradient(135deg,rgba(227,179,65,.08),rgba(227,179,65,.02));border:1px solid rgba(227,179,65,.2)}.ylw .hl{color:var(--ay)}
+.blu{background:linear-gradient(135deg,rgba(37,99,235,.07),rgba(37,99,235,.02));border:1px solid rgba(37,99,235,.18)}.blu .hl{color:var(--ab)}
+.wrm{background:linear-gradient(135deg,rgba(183,121,31,.10),rgba(183,121,31,.03));border:1px solid rgba(183,121,31,.24)}.wrm .hl{color:var(--aw)}
+.prp{background:linear-gradient(135deg,rgba(124,58,237,.07),rgba(124,58,237,.02));border:1px solid rgba(124,58,237,.18)}.prp .hl{color:var(--ap)}
+.cyn{background:linear-gradient(135deg,rgba(8,145,178,.07),rgba(8,145,178,.02));border:1px solid rgba(8,145,178,.18)}.cyn .hl{color:var(--ac)}
+.ylw{background:linear-gradient(135deg,rgba(202,138,4,.10),rgba(202,138,4,.03));border:1px solid rgba(202,138,4,.24)}.ylw .hl{color:var(--ay)}
 .tg{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
-.ti{background:rgba(0,0,0,.3);border:1px solid var(--bs);border-radius:8px;padding:14px 16px}
+.ti{background:rgba(15,23,42,.03);border:1px solid var(--bs);border-radius:8px;padding:14px 16px}
 .ti .tn{font-family:var(--fn);font-size:12px;font-weight:700;margin-bottom:6px}
 .ti .td{font-family:var(--fn);font-size:13px;color:var(--t2);line-height:1.55}
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:12px}
-.si2{background:rgba(255,255,255,.03);border-radius:6px;padding:10px 12px}
+.si2{background:rgba(15,23,42,.035);border-radius:6px;padding:10px 12px}
 .si2 .sl{font-family:var(--fn);font-size:10px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
 .si2 .sv{font-family:var(--fn);font-size:12.5px;color:var(--t1);line-height:1.45}
 .vt{display:inline-block;font-family:var(--fn);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;margin:3px 4px 3px 0}
 .badge{font-family:var(--fm);font-size:10px;font-weight:600;padding:4px 10px;border-radius:4px;display:inline-block;margin-bottom:8px}
 .cg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:24px}
-.cb{background:var(--bgc);border:1px solid var(--bs);border-radius:10px;padding:12px 14px;cursor:pointer;text-align:left;transition:all .25s}
-.cb:hover{border-color:rgba(255,255,255,.12)}
-.cb.on{background:linear-gradient(135deg,rgba(88,166,255,.12),rgba(88,166,255,.04));border-color:rgba(88,166,255,.3)}
+.cb{background:var(--bgc);border:1px solid var(--bs);border-radius:10px;padding:12px 14px;cursor:pointer;text-align:left;transition:border-color .2s,box-shadow .2s,background .2s;box-shadow:0 1px 2px rgba(15,23,42,.04)}
+.cb:hover{border-color:var(--bm);box-shadow:0 4px 12px rgba(15,23,42,.08)}
+.cb.on{background:linear-gradient(135deg,rgba(37,99,235,.12),rgba(37,99,235,.03));border-color:rgba(37,99,235,.34)}
 .cb .ci{font-size:20px;margin-bottom:4px}
 .cb .cl{font-family:var(--fn);font-size:13px;font-weight:600;color:var(--t2)}
-.cb.on .cl{color:var(--t1)}
+.cb.on .cl{color:var(--ab)}
 .cb .cd{font-family:var(--fn);font-size:10px;color:var(--tm);margin-top:3px;line-height:1.4}
-.warn{margin-top:14px;padding:12px 16px;background:rgba(248,81,73,.06);border:1px solid rgba(248,81,73,.15);border-radius:8px;font-family:var(--fn);font-size:13px;color:var(--t2);line-height:1.55}
+.warn{margin-top:14px;padding:12px 16px;background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.18);border-radius:8px;font-family:var(--fn);font-size:13px;color:var(--t2);line-height:1.55}
 .warn b{color:var(--ar)}
 .gls-item{padding:16px 20px;border-bottom:1px solid var(--bs)}
 .gls-item:last-child{border-bottom:none}
@@ -83,9 +114,20 @@ a{color:var(--ab);text-decoration:none}a:hover{text-decoration:underline}
 .gls-aka{font-family:var(--fm);font-size:10px;color:var(--tm);margin-top:4px}
 .gd{font-family:var(--fn);font-size:11px;font-weight:600;color:var(--ab);cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-top:6px;padding:3px 0;border:none;background:none}
 .gd:hover{text-decoration:underline}
-.gd-body{display:none;margin-top:8px;padding:10px 14px;background:rgba(88,166,255,.04);border:1px solid rgba(88,166,255,.1);border-radius:6px;font-family:var(--fn);font-size:12px;color:var(--t2);line-height:1.55}
+.gd-body{display:none;margin-top:8px;padding:10px 14px;background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.14);border-radius:6px;font-family:var(--fn);font-size:12px;color:var(--t2);line-height:1.55}
 .gd-body.show{display:block}
-@media(max-width:700px){.hdr,.tabs,.main,.auth{padding-left:16px;padding-right:16px}.tg,.sg{grid-template-columns:1fr}.cg{grid-template-columns:1fr 1fr}.tbl .rw{grid-template-columns:1fr;gap:2px}}
+.footer{margin:0;padding:22px 40px 36px;border-top:1px solid var(--bs);font-family:var(--fn);color:var(--tm);font-size:12px;display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;background:var(--bg1)}
+
+@media(max-width:980px){
+.shell{flex-direction:column}
+.side{width:100%;height:auto;position:sticky;top:0;z-index:30;flex-direction:row;align-items:center;gap:6px;overflow-x:auto;overflow-y:hidden;border-right:none;border-bottom:1px solid var(--sideb);padding:8px 12px;box-shadow:0 2px 8px rgba(15,23,42,.05)}
+.side-brand{display:none}
+.side-nav{flex-direction:row;flex-wrap:nowrap;gap:4px;flex:none}
+.tb{white-space:nowrap;border-left:none;border-bottom:3px solid transparent;border-radius:8px;padding:9px 12px}
+.tb.on{border-left:none;border-bottom-color:var(--ab);background:rgba(37,99,235,.10)}
+.side-foot{display:none}
+}
+@media(max-width:700px){.hdr,.howto,.main,.auth,.footer{padding-left:16px;padding-right:16px}.tg,.sg{grid-template-columns:1fr}.cg{grid-template-columns:1fr 1fr}.tbl .rw{grid-template-columns:1fr;gap:2px}}
 </style>
 </head>
 <body>
@@ -95,22 +137,10 @@ a{color:var(--ab);text-decoration:none}a:hover{text-decoration:underline}
 <div style="flex:1;min-width:200px"><a href="https://www.linkedin.com/in/thomaslhill/" target="_blank" class="auth-nm" style="border-bottom:1px solid rgba(212,165,116,.4);padding-bottom:1px">Thomas Hill</a><div class="auth-rl">Enterprise Data, AI & Digital Strategy Leader</div></div>
 <a href="https://www.linkedin.com/in/thomaslhill/" target="_blank" class="auth-li"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>Connect on LinkedIn</a>
 </div></div>
-<!-- HEADER -->
-<div class="hdr"><div class="hdr-in"><div class="hdr-tg">Enterprise AI Decision Framework · May 2026</div><h1>The Enterprise AI Landscape</h1><p>A Fortune 500 decision-maker's guide to the full enterprise AI stack — models, platforms, data foundations, developer tools, agentic architectures, and build vs. buy strategy</p></div></div>
-<!-- TABS -->
-<!-- HOW TO USE -->
-<div style="padding:16px 32px;background:linear-gradient(135deg,rgba(88,166,255,0.05),rgba(57,210,192,0.03));border-bottom:1px solid rgba(88,166,255,0.1)"><div style="max-width:1100px;margin:0 auto;display:flex;gap:16px;align-items:flex-start">
-<div style="font-size:20px;flex-shrink:0;margin-top:2px">🧭</div>
-<div style="flex:1">
-<div style="font-family:var(--fn);font-size:13px;font-weight:700;color:var(--ab);margin-bottom:6px">How to Use This Framework</div>
-<div style="font-family:var(--fn);font-size:13px;color:var(--t2);line-height:1.6">
-<b style="color:var(--t1)">New here →</b> Start with <span onclick="document.querySelector('[data-v=trends]').click()" style="color:var(--ab);cursor:pointer;border-bottom:1px dashed var(--ab)">AI Trends</span> for what is driving the conversation in May 2026.
-Then <span onclick="document.querySelector('[data-v=decisions]').click()" style="color:var(--ab);cursor:pointer;border-bottom:1px dashed var(--ab)">Decisions & Build vs. Buy</span> to find your entry point based on your existing stack.
-Explore <span onclick="document.querySelector('[data-v=usecases]').click()" style="color:var(--ab);cursor:pointer;border-bottom:1px dashed var(--ab)">Use Cases</span> for high-impact opportunities, <span onclick="document.querySelector('[data-v=data]').click()" style="color:var(--ab);cursor:pointer;border-bottom:1px dashed var(--ab)">Data Foundations</span> to assess readiness (with a self-scoring assessment), and <span onclick="document.querySelector('[data-v=costs]').click()" style="color:var(--ab);cursor:pointer;border-bottom:1px dashed var(--ab)">AI Costs</span> to understand the real economics before your CFO does.
-</div>
-</div>
-</div></div>
-<div class="tabs"><div class="tabs-in">
+<div class="shell">
+<aside class="side">
+<div class="side-brand"><div class="sb-tt">AI Decision Framework</div><div class="sb-h">The Enterprise AI Landscape</div><span class="sb-bd">June 2026</span></div>
+<nav class="side-nav">
 <button class="tb on" data-v="trends">📰 AI Trends</button>
 <button class="tb" data-v="adoption">📊 Adoption Insights</button>
 <button class="tb" data-v="decisions">🧭 Decisions &amp; Build vs. Buy</button>
@@ -122,6 +152,24 @@ Explore <span onclick="document.querySelector('[data-v=usecases]').click()" styl
 <button class="tb" data-v="orgmodel">👥 Org &amp; Talent</button>
 <button class="tb" data-v="costs">💰 AI Costs</button>
 <button class="tb" data-v="glossary">📖 Glossary</button>
+</nav>
+<div class="side-foot">Authored by <b style="color:var(--t2)">Thomas Hill</b><br>v3.0 · June 2026 · Updated monthly</div>
+</aside>
+<div class="content">
+<!-- HEADER -->
+<div class="hdr"><div class="hdr-in"><div class="hdr-tg">Enterprise AI Decision Framework · June 2026</div><h1>The Enterprise AI Landscape</h1><p>A Fortune 500 decision-maker's guide to the full enterprise AI stack — models, platforms, data foundations, developer tools, agentic architectures, and build vs. buy strategy</p></div></div>
+<!-- TABS -->
+<!-- HOW TO USE -->
+<div class="howto"><div class="howto-in">
+<div style="font-size:20px;flex-shrink:0;margin-top:2px">🧭</div>
+<div style="flex:1">
+<div style="font-family:var(--fn);font-size:13px;font-weight:700;color:var(--ab);margin-bottom:6px">How to Use This Framework</div>
+<div style="font-family:var(--fn);font-size:13px;color:var(--t2);line-height:1.6">
+<b style="color:var(--t1)">New here →</b> Start with <span onclick="document.querySelector('[data-v=trends]').click()" style="color:var(--ab);cursor:pointer;border-bottom:1px dashed var(--ab)">AI Trends</span> for what is driving the conversation in June 2026.
+Then <span onclick="document.querySelector('[data-v=decisions]').click()" style="color:var(--ab);cursor:pointer;border-bottom:1px dashed var(--ab)">Decisions & Build vs. Buy</span> to find your entry point based on your existing stack.
+Explore <span onclick="document.querySelector('[data-v=usecases]').click()" style="color:var(--ab);cursor:pointer;border-bottom:1px dashed var(--ab)">Use Cases</span> for high-impact opportunities, <span onclick="document.querySelector('[data-v=data]').click()" style="color:var(--ab);cursor:pointer;border-bottom:1px dashed var(--ab)">Data Foundations</span> to assess readiness (with a self-scoring assessment), and <span onclick="document.querySelector('[data-v=costs]').click()" style="color:var(--ab);cursor:pointer;border-bottom:1px dashed var(--ab)">AI Costs</span> to understand the real economics before your CFO does.
+</div>
+</div>
 </div></div>
 <div class="main">
 <div id="v-trends" class="vp on"></div>
@@ -135,6 +183,8 @@ Explore <span onclick="document.querySelector('[data-v=usecases]').click()" styl
 <div id="v-orgmodel" class="vp"></div>
 <div id="v-costs" class="vp"></div>
 <div id="v-glossary" class="vp"></div>
+</div>
+</div>
 </div>
 <script>
 // ========== UTILITY ==========
@@ -277,13 +327,55 @@ rev:'~$2B ARR',et:'$40 Business, Custom Enterprise',bf:'Complex multi-file devel
 s:['Deepest codebase understanding','Autonomous multi-file','Architecture refactoring','No editor lock-in'],
 x:['Usage-based $20-200+/mo','Terminal learning curve','Complement to IDE tool'],
 rev:'$2.5B+ ARR',et:'API usage-based',bf:'Senior engineers, large refactors'}
+]},
+{id:'governance',lbl:'Governance, Orchestration & Risk',icon:'🛡️',desc:'Keeping AI trusted — policy, identity, risk & control',players:[
+{n:'Dataiku',ap:'Orchestration + Governance',c:'#7c3aed',st:'Unified data science and AI platform with an LLM Mesh that routes, governs, and monitors models and agents across the enterprise.',
+dp:'One platform to build, govern, and orchestrate AI — its LLM Mesh sits in front of multiple model providers to enforce policy, control cost, and monitor usage. Best when you want a single governed environment spanning analytics, GenAI, and agents rather than stitching point tools together.',
+s:['LLM Mesh routes and governs across model providers','End-to-end lifecycle: data to models to agents','Central policy, cost, and usage monitoring','Strong for mixed analytics and GenAI estates'],
+x:['Broad platform — heavier to adopt than a point tool','Not a dedicated identity or GRC system','Best value when standardized org-wide'],
+bf:'Enterprises wanting one governed platform to orchestrate models and agents'},
+{n:'UiPath',ap:'Agentic Orchestration',c:'#ea580c',st:'Automation leader extending from RPA into agentic orchestration — coordinating agents, robots, and humans across end-to-end processes.',
+dp:'If you already run RPA, UiPath is the natural path to orchestrating agents alongside existing automations with human-in-the-loop control. Strong on process orchestration and governance of long-running workflows; lighter on AI-native model governance.',
+s:['Mature orchestration with human-in-the-loop','Bridges agents, robots, and people in one process','Enterprise process governance and audit trails','Large install base and partner ecosystem'],
+x:['RPA heritage can carry legacy cost and complexity','Governance is process-centric, not model-centric','Agent capabilities still maturing vs. AI-native tools'],
+bf:'Process-heavy enterprises orchestrating agents alongside existing automation'},
+{n:'Elementum',ap:'Process Orchestration',c:'#0891b2',st:'Autonomous process orchestration platform that coordinates AI agents to run multi-step operational processes end to end.',
+dp:'A newer, process-first orchestration player focused on running operational workflows with agents. Compelling for specific process domains; not a broad governance suite, so pair it with identity and GRC tooling.',
+s:['Process-first agent orchestration','Fast to stand up for operational workflows','Built for autonomous multi-step execution'],
+x:['Younger and less established than incumbents','Narrower scope — not a full governance suite','Smaller ecosystem'],
+bf:'Teams orchestrating specific operational processes with agents'},
+{n:'Okta / Auth0',ap:'Identity for Agents',c:'#2563eb',st:'The enterprise identity standard, extending to AI — identity and fine-grained authorization for agents and non-human identities (Auth0 FGA).',
+dp:'The identity backbone for agents: give each agent a managed identity with scoped, least-privilege access, and enforce fine-grained authorization on what it can do. Identity-focused, so combine with secrets management and GRC.',
+s:['Standard for enterprise identity and SSO','Identity and fine-grained authorization for agents','Manages non-human and machine identities','Broad integration ecosystem'],
+x:['Identity only — pair with secrets and GRC tooling','Agent-specific features still emerging','Requires disciplined access design to be effective'],
+bf:'Enterprises governing agent identity and access at scale'},
+{n:'CyberArk',ap:'Secrets + Privileged Access',c:'#4338ca',st:'Privileged access and secrets management, extended to securing machine and non-human identities — including AI agents.',
+dp:'The vault for credentials and privileged access. As agents accumulate API keys, tokens, and machine identities, CyberArk secures and rotates those secrets and limits privileged blast radius. Security-focused; not an orchestration or GRC layer.',
+s:['Leader in privileged access and secrets','Secures machine and non-human identities','Credential rotation and least-privilege enforcement','Strong audit and session controls'],
+x:['Security-focused — not orchestration or GRC','Implementation can be complex','Best deployed alongside an identity provider'],
+bf:'Securing agent credentials, secrets, and privileged access'},
+{n:'OneTrust',ap:'AI Governance + GRC',c:'#16a34a',st:'Trust and privacy platform with an AI governance module — model and use-case inventories, risk assessments, and EU AI Act mapping.',
+dp:'The GRC home for AI: register models and use cases, run risk assessments, map controls to regulations like the EU AI Act, and generate audit evidence. Governance and compliance focused — not a runtime orchestration or identity layer.',
+s:['AI governance: model and use-case inventory','Risk assessments and policy management','Regulatory mapping (EU AI Act, privacy)','Audit evidence and board reporting'],
+x:['Governance and compliance layer — not runtime control','Heaviest value for regulated enterprises','Needs integration with engineering workflows'],
+bf:'Regulated enterprises formalizing AI governance and risk'},
+{n:'Vanta',ap:'Compliance Automation',c:'#0d9488',st:'Continuous compliance automation (SOC 2, ISO 27001, and more) extending into AI trust and governance reporting.',
+dp:'Automates the evidence collection and continuous monitoring behind security and compliance certifications, increasingly including AI governance. Fast to value for proving trust to customers; lighter on agent orchestration.',
+s:['Automated evidence collection and monitoring','Fast path to SOC 2 / ISO and AI trust reporting','Continuous control monitoring','Strong for mid-market and scaleups'],
+x:['Compliance automation focus — not orchestration','Less deep than full enterprise GRC suites','Value tied to the frameworks you need'],
+bf:'Teams automating security and AI compliance evidence'},
+{n:'Glean',ap:'Governed Knowledge + Catalog',c:'#ca8a04',st:'Work AI platform with permissions-aware enterprise search and governed retrieval — grounding agents in enterprise knowledge with access controls intact.',
+dp:'Gives agents trusted, permissions-aware access to enterprise knowledge so retrieval respects who is allowed to see what. Effectively a governed context and discovery layer; pair with policy and identity tooling for full governance.',
+s:['Permissions-aware enterprise search and RAG','Grounds agents in governed enterprise knowledge','Respects existing access controls','Connects across many enterprise apps'],
+x:['Knowledge and retrieval focus — not full GRC','Quality depends on underlying data hygiene','Newer category, evolving fast'],
+bf:'Grounding agents in enterprise knowledge without breaking access controls'}
 ]}
 ];
 let curCat='model',curPlayer=null;
 function renderStack(){
   const el=$('v-landscape');
   const cat=CATS.find(c=>c.id===curCat);
-  el.innerHTML=`<p class="si">Enterprise AI has converged into <strong>5 control planes</strong>: Infrastructure (compute/chips), Model Layer (brains), Platform Layer (where AI runs), Application Layer (where value is realized), and Developer Tools. Enterprises are moving to multi-model, multi-platform portfolio strategies — not single-vendor bets.</p>
+  el.innerHTML=`<p class="si">Enterprise AI has converged into <strong>6 control planes</strong>: Infrastructure (compute/chips), Model Layer (brains), Platform Layer (where AI runs), Application Layer (where value is realized), Developer Tools, and Governance, Orchestration &amp; Risk (the control plane that keeps it all trusted). Enterprises are moving to multi-model, multi-platform portfolio strategies — not single-vendor bets.</p>
 <div id="pb-toggle" class="crd" style="border-left:3px solid var(--aw);cursor:pointer;margin-bottom:20px">
 <div class="crd-h"><div style="flex:1"><div style="font-family:var(--fn);font-size:14px;font-weight:700;color:var(--aw)">🤝 Enterprise "Power Block" Partnerships</div><div style="font-family:var(--fn);font-size:12px;color:var(--tm);margin-top:4px">The 5 dominant vendor alliance patterns for Fortune 500. Click to expand.</div></div><div class="chv" id="pb-chv">▾</div></div>
 <div id="pb-body" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--bs);font-family:var(--fn);font-size:13px;color:var(--t2);line-height:1.65">
@@ -318,6 +410,24 @@ function renderStack(){
   el.querySelectorAll('.cb').forEach(b=>b.onclick=()=>{curCat=b.dataset.c;curPlayer=null;renderStack()});
   el.querySelectorAll('.crd[data-k]').forEach(c=>c.onclick=()=>{const k=c.dataset.k;curPlayer=curPlayer===k?null:k;renderStack()});
   const pbt=$('pb-toggle');if(pbt)pbt.onclick=()=>{const b=$('pb-body'),v=$('pb-chv');if(b.style.display==='none'){b.style.display='block';v.style.transform='rotate(180deg)'}else{b.style.display='none';v.style.transform='rotate(0deg)'}};
+el.insertAdjacentHTML('beforeend',`
+<div class="st" style="margin-top:40px">🌐 Hyperscalers, Deployment Models &amp; Model-Agnostic Architecture</div>
+<p class="si">New in June 2026 — where the cloud giants fit now, why model-agnostic design has become a survival strategy, and how sovereign, edge, and agentic deployment actually differ.</p>
+<div class="hbox prp"><div class="hl">Where Hyperscalers Fit Now</div><div class="ht" style="font-size:14px">
+A hyperscaler is a planet-scale cloud provider — <b>AWS, Microsoft Azure, and Google Cloud</b>, with <b>Oracle</b> and AI-specialized clouds like <b>CoreWeave</b> increasingly in the mix. In the 2026 cycle they are the clearest winners: AI demand drives cloud growth, capacity expansion, and custom-silicon bets, while proprietary chips and model hosting deepen lock-in and margins.<br><br>
+The strategic point for buyers: the winning vendors no longer sell models — they sell the <b>full stack</b> of compute, storage, orchestration, security, and governance. That is also the lock-in risk. Hyperscalers offer the fastest time-to-value and the deepest governance tooling; they are also where switching costs accumulate most quietly. Treat hyperscaler choice as an architecture decision, not just a procurement one.
+</div></div>
+<div class="hbox wrm"><div class="hl">Cross-Platform, Model-Agnostic Architecture</div><div class="ht" style="font-size:14px">
+With models, prices, and vendors changing monthly, designing around any single provider is now technical debt in the making. The defensive pattern: an <b>LLM gateway / router</b> in front of every model, <b>open standards</b> (MCP for tools, A2A for agents) for connectivity, and a <b>governed semantic layer</b> for meaning — so you can swap a model, framework, or cloud without re-engineering your agents.<br><br>
+<b>The test:</b> could you move 30% of your traffic to a different model family next quarter without touching application code? If not, you are locked in. Model-agnostic design is what makes model routing, sovereign deployment, and vendor negotiation possible at all.
+</div></div>
+<div class="st2" style="margin-top:24px">Sovereign vs. Edge vs. Agentic — Three Different Questions</div>
+<p class="si" style="margin-bottom:14px">These terms get blurred, but they answer different questions. Sovereign and edge are about <b>where</b> inference runs; agentic is about <b>what</b> the system does. They are orthogonal — you can run a sovereign, edge-deployed, agentic system.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">
+<div style="background:var(--bgc);border:1px solid var(--bs);border-left:3px solid var(--ab);border-radius:8px;padding:16px"><div style="font-family:var(--fn);font-weight:700;color:var(--ab);font-size:14px;margin-bottom:6px">🔒 Sovereign AI — Control</div><div style="font-family:var(--fn);font-size:13px;color:var(--t2);line-height:1.6">Keeps data, models, and infrastructure within a jurisdiction or organization boundary. Driven by regulation, IP protection, and geopolitical risk. The question: <i>who can legally access this, and where does it live?</i></div></div>
+<div style="background:var(--bgc);border:1px solid var(--bs);border-left:3px solid var(--ac);border-radius:8px;padding:16px"><div style="font-family:var(--fn);font-weight:700;color:var(--ac);font-size:14px;margin-bottom:6px">⚡ Edge AI — Locality</div><div style="font-family:var(--fn);font-size:13px;color:var(--t2);line-height:1.6">Runs inference at or near where data is created. Driven by latency, resilience, bandwidth, and keeping sensitive workloads local. The question: <i>how fast and how close to the source must this run?</i></div></div>
+<div style="background:var(--bgc);border:1px solid var(--bs);border-left:3px solid var(--ap);border-radius:8px;padding:16px"><div style="font-family:var(--fn);font-weight:700;color:var(--ap);font-size:14px;margin-bottom:6px">🤖 Agentic AI — Autonomy</div><div style="font-family:var(--fn);font-size:13px;color:var(--t2);line-height:1.6">Systems that plan, reason, use tools, and execute multi-step work with oversight. Driven by the move from answering to acting. The question: <i>what can this system do on its own, and within what guardrails?</i></div></div>
+</div>`);
 }
 
 // ========== TAB 2: OPEN VS CLOSED & COSTS ==========
@@ -422,7 +532,7 @@ ${[
 <div class="crd" style="cursor:default"><div style="font-size:24px;margin-bottom:6px">🔓</div><div style="font-family:var(--fn);font-size:14px;font-weight:700;color:var(--t1);margin-bottom:4px">True Open-Source</div><div style="font-family:var(--fn);font-size:12px;color:var(--tm);line-height:1.5">Weights + code + data + permissive license (MIT/Apache). Examples: DeepSeek V3.2, Qwen 3.5, Mistral.</div></div>
 </div>
 
-<div class="st2">API Pricing Comparison (May 2026)</div>
+<div class="st2">API Pricing Comparison (June 2026)</div>
 <div class="tbl"><div class="rw hd" style="grid-template-columns:1.4fr 1fr 1.2fr 1.2fr .7fr"><div>Vendor</div><div>Model</div><div>Input/1M</div><div>Output/1M</div><div>Ratio</div></div>
 ${[{v:'OpenAI',m:'GPT-5.4',i:'$2.50',o:'$15.00',r:'6×'},{v:'Anthropic',m:'Sonnet 4.6',i:'$3.00',o:'$15.00',r:'5×'},{v:'Anthropic',m:'Opus 4.6',i:'$15.00',o:'$75.00',r:'5×'},{v:'Google',m:'Gemini 3.1',i:'$2.00',o:'$12.00',r:'6×'},{v:'Mistral',m:'Large 3',i:'$2.00',o:'$6.00',r:'3×'},{v:'DeepSeek',m:'V3.2 API',i:'$0.28',o:'$1.10',r:'4×'},{v:'Self-Hosted',m:'Open-Weight',i:'~$0.004*',o:'~$0.004*',r:'1×'}].map(r=>`<div class="rw" style="grid-template-columns:1.4fr 1fr 1.2fr 1.2fr .7fr"><div class="c1">${r.v}</div><div style="color:var(--tm)">${r.m}</div><div>${r.i}</div><div>${r.o}</div><div style="color:var(--ao)">${r.r}</div></div>`).join('')}</div>
 <p style="font-family:var(--fn);font-size:11px;color:var(--td);margin:-12px 0 20px">*Self-hosted at full utilization. ⚠️ Current API pricing is subsidized — budget conservatively for 30–50% price increases over the next 18 months as vendors move toward sustainable unit economics.</p>
@@ -432,6 +542,22 @@ ${[{v:'OpenAI',m:'GPT-5.4',i:'$2.50',o:'$15.00',r:'6×'},{v:'Anthropic',m:'Sonne
 <b>The metric that matters:</b> Cost per successful business outcome, not cost per token. If an AI agent saves a customer service rep 15 minutes but costs $4.00 in tokens to run, the ROI may be negative.<br><br>
 <b>The governance mandate:</b> Without AI FinOps discipline (token budgets, model routing, chargeback, dashboards), enterprise AI spend will exceed the cost of the employees it was supposed to augment. This is already happening at organizations that scaled agentic workflows without financial governance.<br><br>
 <b>Create a single AI spend view</b> across procurement, cloud billing, SaaS subscriptions, and headcount. Most AI budget fights happen because teams are not talking about the same thing.
+</div></div>
+
+<div class="st" style="margin-top:40px">🧾 Usage-Based AI Billing &amp; the Future of AI Pricing</div>
+<p class="si">New in June 2026 — the SaaS seat is breaking under agentic workloads, and pricing is moving to metered consumption.</p>
+<div class="hbox ylw"><div class="hl">The Shift: From Seats to Tokens</div><div class="ht" style="font-size:14px">
+Flat per-seat pricing assumed predictable, chat-style usage. Agentic workflows broke that assumption: agents consume <b>5–30x more tokens per task</b> than chatbots, and long autonomous sessions resemble cloud usage more than a software seat.<br><br>
+<b>The proof point — GitHub Copilot, June 1, 2026:</b> all plans moved to usage-based billing. Premium-request units were replaced with <b>GitHub AI Credits (1 credit = $0.01)</b>, billed on input, output, and cached tokens at each model rate, with pooled org allowances and admin budget controls. Completions stay included; long agent sessions do not.<br><br>
+<b>The governance proof point — Microsoft:</b> the same economics drove Microsoft to wind down internal Claude Code in favor of GitHub Copilot CLI by June 30 — to stop variable token spend from spilling into the next fiscal year and to keep code inside its own governed cloud. When the company that helped popularize agentic coding pulls a beloved tool over cost and governance, the message is unmistakable.
+</div></div>
+<div class="hbox wrm"><div class="hl">What the Future of AI Pricing Looks Like</div><div class="ht" style="font-size:14px">
+Expect the market to converge on <b>metered credits</b>, <b>pooled and capped spend</b>, <b>workflow-level budgets</b>, and <b>outcome-based pricing</b> tied to resolved tickets or completed tasks rather than seats.<br><br>
+<b>The buyer playbook:</b><br>
+• <b>Model routing is now a billing control</b> — route routine work to small or cheap models, reserve frontier models for hard reasoning. A careless model picker is a billing bug.<br>
+• <b>Budget per workflow, not per user</b> — and alert before overruns, not after.<br>
+• <b>Measure value per token</b> — cost per successful business outcome, not cost per call.<br>
+• <b>Build one AI spend view</b> across API, cloud, SaaS, and headcount so budget fights start from shared numbers.
 </div></div>`}
 
 // ========== TAB 3: DECISION FRAMEWORK ==========
@@ -464,6 +590,14 @@ el.innerHTML=`<p class="si">The question isn't "which model?" — it's "which ec
 {n:'7. Extensibility',d:'How easily can you extend and customize the platform for your needs?',dd:'Evaluate: API completeness and documentation quality, plugin/connector marketplace breadth, custom model support (bring your own fine-tuned models), MCP server ecosystem, integration with your CI/CD and DevOps tooling, community size and third-party tooling availability.',c:'var(--ac)'}
 ].map(t=>`<div class="ti"><div class="tn" style="color:${t.c}">${t.n}</div><div class="td">${t.d}</div>${t.dd?`<div class="gd" onclick="event.stopPropagation();gd(this)">▸ Go deeper</div><div class="gd-body">${t.dd}</div>`:''}</div>`).join('')}</div>
 <div class="hbox wrm" style="margin-top:24px"><div class="hl">Portfolio Strategy (How F500s Actually Buy)</div><div class="ht"><b>Tier 1 — Frontier API:</b> 1–2 proprietary providers for high-stakes tasks.<br><b>Tier 2 — Platform:</b> Enterprise AI (Copilot, Cortex, Bedrock, Mosaic) in existing workflows.<br><b>Tier 3 — Open-Weight:</b> Self-hosted for high-volume internal workloads.<br><b>Tier 4 — Developer:</b> GitHub Copilot default + Cursor/Claude Code for power users.</div></div>
+<div class="hbox prp" style="margin-top:28px"><div class="hl">June 2026 Prioritization Order — Where to Focus First</div><div class="ht" style="font-size:14px">
+With foundations, governance, and economics all demanding attention at once, the market is converging on a clear sequence. Capability sits on top; control, economics, and data sit underneath.<br><br>
+<b>1 · Cost governance</b> — AI FinOps, workflow budgets, model routing. Get spend predictable before you scale, or scaling becomes the thing that breaks you.<br>
+<b>2 · Agent orchestration</b> — a policy-aware control plane (routing + access control + audit + approvals + cost limits). Orchestration without governance does not survive production.<br>
+<b>3 · Sovereignty &amp; edge requirements</b> — decide jurisdiction, residency, and latency constraints early; they shape every downstream architecture choice.<br>
+<b>4 · Data architecture modernization</b> — semantic layer, master data, and tech-debt reduction. The unglamorous work that determines whether anything above it actually works.<br><br>
+<b>The trap:</b> teams that start at step 4 — or skip straight to buying agent platforms — without steps 1 and 2 are the ones whose pilots do not survive contact with production.
+</div></div>
 <div style="margin-top:32px;padding-top:24px;border-top:2px solid var(--bs)"><div style="font-family:var(--fn);font-size:11px;font-weight:600;color:var(--ab);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px">Part 2</div></div>
 <div id="buildbuy-content"></div>`;
 acc.render($('dec-acc'));
@@ -531,6 +665,41 @@ ${[
 ].map(r=>`<div class="rw" style="grid-template-columns:1.3fr 1.5fr 2.5fr"><div class="c1">${r.l}</div><div style="color:var(--ab);font-weight:500">${r.t}</div><div style="color:var(--t2);font-size:12px;line-height:1.5">${r.d}</div></div>`).join('')}</div>
 <div class="hbox wrm"><div class="hl">Data Readiness Checklist for AI</div><div class="ht">Before deploying AI agents, assess: <b>1)</b> Is your data cataloged and discoverable? <b>2)</b> Do you have consistent master data (customers, products)? <b>3)</b> Are access controls and governance policies enforced? <b>4)</b> Can your data platform serve real-time queries (not just batch)? <b>5)</b> Is unstructured data (PDFs, emails, contracts) parsed and indexed? <b>6)</b> Do you have data quality monitoring in place? Organizations that score less than 4/6 should invest in data foundations before scaling AI.</div></div>
 
+<div class="st" style="margin-top:8px">🧠 Context as a Governed Asset (Semantic Layer)</div>
+<p class="si">New in June 2026 — agents need a trusted model of your business, not just access to tables and vectors.</p>
+<div class="hbox prp"><div class="hl">Why Context Is the Real Product for Agents</div><div class="ht" style="font-size:14px">
+Agentic systems fail when they have fluent language but weak business grounding — they produce answers that are <b>directionally wrong</b>. A semantic layer fixes this by encoding the things an agent must not get wrong: <b>entities, relationships, business definitions</b> (what counts as revenue, a customer, an entitlement), and <b>policy constraints</b>.<br><br>
+This is the shift from <b>prompt engineering to context engineering</b>: the decisive question is what data, rules, memory, and permissions the agent sees <i>before</i> it acts. The emerging pattern is three layers working together — a <b>semantic / knowledge layer</b> (meaning), an <b>orchestration layer</b> (routing), and a <b>policy / governance layer</b> (who can do what, when to escalate, how to log). Building blocks: knowledge graphs, ontologies, metadata catalogs, and business-rule engines, made portable through MCP and policy standards like ODRL.
+</div></div>
+<div class="hbox ylw"><div class="hl">The Three Tensions to Manage</div><div class="ht" style="font-size:14px">
+<b>Speed vs. trust</b> — teams want agents fast, but semantic work is slow, domain-specific, and messy. <b>Ownership</b> — the layer sits between data engineering, analytics, architecture, and governance, so no single team naturally owns it; assign an owner explicitly. <b>Centralized vs. federated</b> — large enterprises must decide whether the semantic layer is one shared asset or federated across business units (a common answer: shared definitions, federated production).
+</div></div>
+<div class="st" style="margin-top:32px">🏃 Tech Debt as the AI Blocker — the McKinsey Athlete Mindset</div>
+<p class="si">New in June 2026 — use AI as the catalyst to retire technical debt and reach data readiness, not just another app bolted onto a shaky foundation.</p>
+<div class="hbox wrm"><div class="hl">The Athlete Mindset</div><div class="ht" style="font-size:14px">
+McKinsey frames durable digital and AI transformation like elite athletic performance: it is <b>continuous conditioning, not a one-time fix</b>. Tech debt — legacy integrations, fragmented data, undocumented systems, manual processes, weak governance — is the equivalent of poor conditioning: it quietly caps how fast and how far you can go. The athlete-minded organization treats modernization as ongoing training and uses each AI initiative as a forcing function to retire debt rather than pave over it. Done well, AI becomes the <b>catalyst</b> that finally justifies the architecture and data work leaders have deferred for years.
+</div></div>
+<div class="st2" style="margin-top:20px">Tech Debt → AI Modernization Matrix</div>
+<p class="si" style="margin-bottom:12px">Map each debt type to its drag on AI, then to the AI-as-catalyst move that turns the liability into momentum.</p>
+<div style="overflow-x:auto">
+<table style="width:100%;border-collapse:collapse;font-family:var(--fn);font-size:13px;min-width:560px">
+<thead><tr style="text-align:left;color:var(--tm);border-bottom:1px solid var(--bm)"><th style="padding:8px 10px">Tech Debt</th><th style="padding:8px 10px">Drag on AI</th><th style="padding:8px 10px">AI-as-Catalyst Move</th></tr></thead>
+<tbody>
+<tr style="border-bottom:1px solid var(--bs)"><td style="padding:8px 10px;color:var(--t1)"><b>Legacy integration</b></td><td style="padding:8px 10px;color:var(--t2)">Agents cannot reach systems of record; brittle point-to-point links</td><td style="padding:8px 10px;color:var(--t2)">Adopt MCP servers as a standard integration layer; retire one-off connectors</td></tr>
+<tr style="border-bottom:1px solid var(--bs)"><td style="padding:8px 10px;color:var(--t1)"><b>Fragmented data</b></td><td style="padding:8px 10px;color:var(--t2)">Inconsistent answers to the same question; no single source of truth</td><td style="padding:8px 10px;color:var(--t2)">Stand up master data plus a semantic layer agents can reason over</td></tr>
+<tr style="border-bottom:1px solid var(--bs)"><td style="padding:8px 10px;color:var(--t1)"><b>Undocumented systems</b></td><td style="padding:8px 10px;color:var(--t2)">No reliable grounding; high hallucination risk on internal facts</td><td style="padding:8px 10px;color:var(--t2)">Use AI to generate and maintain living documentation and metadata</td></tr>
+<tr style="border-bottom:1px solid var(--bs)"><td style="padding:8px 10px;color:var(--t1)"><b>Manual processes</b></td><td style="padding:8px 10px;color:var(--t2)">Nothing for agents to orchestrate; tribal knowledge, no audit trail</td><td style="padding:8px 10px;color:var(--t2)">Codify the workflow first, then automate — capture the process as you go</td></tr>
+<tr><td style="padding:8px 10px;color:var(--t1)"><b>Weak governance</b></td><td style="padding:8px 10px;color:var(--t2)">Shadow AI, no access control or audit; agents become a risk surface</td><td style="padding:8px 10px;color:var(--t2)">Introduce agent RBAC, non-human identity, and audit as the entry toll</td></tr>
+</tbody></table>
+</div>
+<div class="hbox prp" style="margin-top:20px"><div class="hl">Tech Debt → Readiness Checklist</div><div class="ht" style="font-size:14px">
+☐ Inventory the debt — name the top 5 legacy systems and data silos blocking your priority use case.<br>
+☐ Pick one use case as the forcing function — let it justify the integration and data work.<br>
+☐ Standardize integration on MCP rather than adding another point-to-point connector.<br>
+☐ Establish master data plus a semantic layer for the entities the use case touches.<br>
+☐ Attach governance from day one — identity, RBAC, audit, cost budget.<br>
+☐ Document as you go using AI; treat conditioning as continuous, not a project with an end date.
+</div></div>
 <div class="st">📊 AI Data Readiness & Quality Assessment</div>
 <p class="si" style="margin-bottom:8px">Score your organization across these 8 dimensions (1–5 each). Your total score determines your AI readiness tier and the specific actions needed to advance. Be honest — overestimating readiness is the #1 cause of failed AI pilots.</p>
 <p class="si" style="margin-bottom:16px;font-style:italic;color:var(--td)">Click each dimension to see the scoring criteria and recommended next steps for each level.</p>
@@ -646,7 +815,7 @@ return `<div data-sc="${l.s}" data-did="${dim.id}" class="score-btn" style="padd
 ${isSel?'<span style="font-size:12px">✓</span>':''}
 </div>
 <div style="font-family:var(--fn);font-size:12px;color:var(--tm);line-height:1.5;margin-top:4px">${l.desc}</div>
-${isSel?`<div style="margin-top:8px;padding:8px 12px;background:rgba(255,255,255,.04);border-radius:6px;border-left:3px solid ${lc}">
+${isSel?`<div style="margin-top:8px;padding:8px 12px;background:rgba(15,23,42,.04);border-radius:6px;border-left:3px solid ${lc}">
 <div style="font-family:var(--fm);font-size:10px;color:${lc};text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">→ Next Steps to Advance</div>
 <div style="font-family:var(--fn);font-size:12px;color:var(--t2);line-height:1.55">${l.next}</div>
 </div>`:''}
@@ -681,7 +850,7 @@ el3.innerHTML=`<div style="border:2px solid ${tierColor};border-radius:12px;padd
 <div style="font-family:var(--fm);font-size:36px;font-weight:700;color:${tierColor}">${avg}</div>
 </div>
 <div style="font-family:var(--fn);font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:14px">${tierDesc}</div>
-<div style="font-family:var(--fn);font-size:13px;color:var(--t2);line-height:1.6;padding:12px 16px;background:rgba(255,255,255,.03);border-radius:8px">${tierActions}</div>
+<div style="font-family:var(--fn);font-size:13px;color:var(--t2);line-height:1.6;padding:12px 16px;background:rgba(15,23,42,.03);border-radius:8px">${tierActions}</div>
 </div>`}
 else{el3.innerHTML=`<div style="font-family:var(--fn);font-size:13px;color:var(--tm);text-align:center;padding:16px;border:1px dashed var(--bs);border-radius:8px">Rate at least 4 of the 8 dimensions above to see your AI Data Readiness tier and recommended actions.</div>`}
 }
@@ -798,7 +967,7 @@ ${U.map((u,i)=>`<div class="crd ${eU===i?'ex':''}" data-i="${i}">
 ${u.sum?`<div class="gd" onclick="event.stopPropagation();gd(this)">▸ Go deeper</div><div class="gd-body">${u.desc}</div>`:''}
 <div style="font-family:var(--fn);font-size:12px;font-weight:600;color:var(--ap);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">Maturity Curve</div>
 ${u.mat.map(m=>{const col=m.lv==='Beginner'?'var(--ag)':m.lv==='Intermediate'?'var(--ab)':'var(--ap)';return`
-<div style="border-left:3px solid ${col};padding:12px 16px;margin-bottom:10px;background:rgba(255,255,255,.02);border-radius:0 8px 8px 0">
+<div style="border-left:3px solid ${col};padding:12px 16px;margin-bottom:10px;background:rgba(15,23,42,.02);border-radius:0 8px 8px 0">
 <div style="font-family:var(--fm);font-size:10px;font-weight:600;color:${col};margin-bottom:4px">${m.lv.toUpperCase()}</div>
 <div style="font-family:var(--fn);font-size:13px;color:var(--t1);line-height:1.5;margin-bottom:6px">${m.d}</div>
 <div style="font-family:var(--fn);font-size:12px;color:var(--tm);line-height:1.5;margin-bottom:4px"><b style="color:var(--t2)">Stack:</b> ${m.tk}</div>
@@ -864,7 +1033,7 @@ pl:'Now the AI can take actions, not just answer questions. It can look up a cus
 {lv:'Level 3',nm:'Single-Agent Workflows',bd:'ADVANCED',c:'#bc8cff',sub:'One agent, multiple steps, autonomous within boundaries.',
 pl:'An AI worker that can handle a complete multi-step task on its own. Give it a goal like "review this compliance report, flag issues, draft a summary, and email the team" — and it plans the steps, executes them, checks its work, and delivers. A human approves high-stakes decisions, but the AI does the heavy lifting. The most successful deployments use a hybrid architecture: fast reactive loops for routine decisions and slower deliberative loops for complex reasoning.',wh:'Agent plans actions, executes, evaluates, iterates. Human-in-loop for high-stakes. GraphRAG for complex reasoning.',ex:'Compliance reviews, pipeline building, onboarding workflows, security audits.',sk:[{l:'LLM',v:'Claude Opus 4.6 as orchestrator'},{l:'Framework',v:'LangGraph, CrewAI, or Anthropic agent loop'},{l:'Memory',v:'Short-term + vector DB long-term + knowledge graph semantic'},{l:'RAG',v:'Hybrid RAG or GraphRAG for relationship-aware retrieval'}],co:'$5K–50K/mo',tl:'2–4 mo pilot, 6+ mo enterprise',tr:'Cost explosion #1 risk. Budget models for workers, frontier for orchestrator. Per-workflow cost ceilings.'},
 {lv:'Level 4',nm:'Multi-Agent Orchestration',bd:'ENTERPRISE',c:'#f0883e',sub:'Specialized agent teams. Agent-to-agent communication.',
-pl:'Think of this as a team of AI specialists working together — the "Puppeteer Pattern" that dominates enterprise deployments in May 2026. Specialized narrow agents handle specific domains (querying databases, validating compliance, drafting documents) while a central orchestrator coordinates their actions, maintains state, and enforces guardrails. Gartner placed this at Peak of Inflated Expectations in Q2 2026 — meaning maximum opportunity but maximum risk of disappointment without proper AgentOps discipline (uptime SLAs, blast radius limits, cost tracking, and auditability).',wh:'Specialized agents coordinate via orchestrator. A2A protocol for cross-framework communication. Agents delegate sub-tasks.',ex:'Deal desk automation, cross-functional PM, fraud detection, clinical trial orchestration.',sk:[{l:'Orchestrator',v:'Claude Opus 4.6 or GPT-5.4 (frontier required)'},{l:'Workers',v:'Sonnet, GPT-4o-mini, or open-weight for sub-tasks'},{l:'Framework',v:'LangGraph, AutoGen, or Bedrock AgentCore'},{l:'Protocols',v:'MCP (tools) + A2A (inter-agent)'},{l:'Data',v:'GraphRAG + Snowflake/Databricks (unified access)'},{l:'Governance',v:'Centralized control plane, RBAC per agent, audit trails, AgentOps (LangSmith, Arize, Datadog)'}],co:'$50K–500K+/mo',tl:'6–12 mo. Requires AI platform team.',tr:'Agent sprawl = security risk. Mandate centralized control planes. Define each agent\'s "blast radius" (what it can access, what actions it can take, what it can spend). No rogue agent scripts. AgentOps is not optional — treat agents like production services with uptime SLAs and rollback capability.'},
+pl:'Think of this as a team of AI specialists working together — the "Puppeteer Pattern" that dominates enterprise deployments in June 2026. Specialized narrow agents handle specific domains (querying databases, validating compliance, drafting documents) while a central orchestrator coordinates their actions, maintains state, and enforces guardrails. Gartner placed this at Peak of Inflated Expectations in Q2 2026 — meaning maximum opportunity but maximum risk of disappointment without proper AgentOps discipline (uptime SLAs, blast radius limits, cost tracking, and auditability).',wh:'Specialized agents coordinate via orchestrator. A2A protocol for cross-framework communication. Agents delegate sub-tasks.',ex:'Deal desk automation, cross-functional PM, fraud detection, clinical trial orchestration.',sk:[{l:'Orchestrator',v:'Claude Opus 4.6 or GPT-5.4 (frontier required)'},{l:'Workers',v:'Sonnet, GPT-4o-mini, or open-weight for sub-tasks'},{l:'Framework',v:'LangGraph, AutoGen, or Bedrock AgentCore'},{l:'Protocols',v:'MCP (tools) + A2A (inter-agent)'},{l:'Data',v:'GraphRAG + Snowflake/Databricks (unified access)'},{l:'Governance',v:'Centralized control plane, RBAC per agent, audit trails, AgentOps (LangSmith, Arize, Datadog)'}],co:'$50K–500K+/mo',tl:'6–12 mo. Requires AI platform team.',tr:'Agent sprawl = security risk. Mandate centralized control planes. Define each agent\'s "blast radius" (what it can access, what actions it can take, what it can spend). No rogue agent scripts. AgentOps is not optional — treat agents like production services with uptime SLAs and rollback capability.'},
 {lv:'Level 5',nm:'Self-Evolving Ecosystems',bd:'FRONTIER (2027–28)',c:'#f85149',sub:'Agents that learn, adapt, improve autonomously.',
 pl:'The future state: AI systems that monitor their own performance and get better over time without human retraining. Think of a supply chain that automatically adjusts to disruptions, or a pricing engine that optimizes in real-time based on market conditions. Most enterprises will reach this level in 2027–2028.',wh:'Meta-agents optimize worker agents. Continuous learning with human safety oversight. Reinforcement from outcomes.',ex:'Self-optimizing supply chains, adaptive pricing, autonomous R&D, self-healing infrastructure.',sk:[{l:'Architecture',v:'Meta-agent optimization layer + RLHF loops'},{l:'Data',v:'Real-time streaming (Kafka/Flink) + knowledge graphs + vector stores'},{l:'Governance',v:'AI Ethics Board, automated red-teaming, continuous safety eval'},{l:'Prereqs',v:'Mature L1–4, dedicated AI COO/CDO, board governance'}],co:'$1M+/yr compute + personnel',tl:'12–24 mo from Level 4',tr:'Autonomy Paradox: harder to secure as autonomy grows. Security = protecting intent, not just network.'}
 ];
@@ -882,7 +1051,13 @@ ${L.map((l,i)=>`<div class="crd ${eL===i?'ex':''}" data-i="${i}" style="border-l
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px"><div class="si2"><div class="sl">Cost</div><div class="sv" style="color:var(--ao)">${l.co}</div></div><div class="si2"><div class="sl">Timeline</div><div class="sv">${l.tl}</div></div></div>
 <div class="warn"><b>⚠ Watch out:</b> ${l.tr}</div>
 </div></div>`).join('')}
-<div class="hbox prp" style="margin-top:24px"><div class="hl">Where to Start (May 2026)</div><div class="ht" style="font-size:14px"><b>Reality check:</b> Gartner placed Agentic AI at "Peak of Inflated Expectations" in Q2 2026. This means maximum vendor promises and maximum risk of disappointment. The enterprises that will navigate the Trough of Disillusionment successfully are those investing in foundations now, not just buying agent platforms.<br><br><b>Just starting:</b> Level 1 RAG pilot. One use case. Managed platform (Cortex, Bedrock, Azure AI Studio). $5K–15K for 90 days. Prove ROI before expanding.<br><br><b>Running RAG:</b> Level 2 — adopt MCP. The highest-leverage upgrade available. Future-proofs your agent infrastructure for any LLM. Turns chatbots into action-takers.<br><br><b>Advanced enterprise:</b> Levels 3–4. Dedicated AI platform engineering team. AgentOps (observability, SLAs, blast radius controls) from day one. AI FinOps mandatory — model routing alone saves 60–80%. Treat AI compute like cloud compute: governed, metered, and optimized.</div></div>`;
+<div class="hbox prp" style="margin-top:24px"><div class="hl">Where to Start (June 2026)</div><div class="ht" style="font-size:14px"><b>Reality check:</b> Gartner placed Agentic AI at "Peak of Inflated Expectations" in Q2 2026. This means maximum vendor promises and maximum risk of disappointment. The enterprises that will navigate the Trough of Disillusionment successfully are those investing in foundations now, not just buying agent platforms.<br><br><b>Just starting:</b> Level 1 RAG pilot. One use case. Managed platform (Cortex, Bedrock, Azure AI Studio). $5K–15K for 90 days. Prove ROI before expanding.<br><br><b>Running RAG:</b> Level 2 — adopt MCP. The highest-leverage upgrade available. Future-proofs your agent infrastructure for any LLM. Turns chatbots into action-takers.<br><br><b>Advanced enterprise:</b> Levels 3–4. Dedicated AI platform engineering team. AgentOps (observability, SLAs, blast radius controls) from day one. AI FinOps mandatory — model routing alone saves 60–80%. Treat AI compute like cloud compute: governed, metered, and optimized.</div></div>
+
+<div class="hbox prp" style="margin-top:24px"><div class="hl">The CLI Moment — Why Terminal-Native Agents Matter</div><div class="ht" style="font-size:14px">
+<b>What it is:</b> a CLI (command-line interface) agent lives in the developer terminal and can read and edit files, run commands, and execute multi-step tasks across a whole repository — Claude Code, GitHub Copilot CLI, and Gemini CLI are the leading examples. It goes well beyond in-editor autocomplete.<br><br>
+<b>When and where it helps:</b> large-codebase refactors, repo-wide changes, running tests, scripting, CI/CD, and migrations — work that spans many files and steps rather than a single suggestion.<br><br>
+<b>Why it matters now:</b> the CLI has become a primary agentic surface, and it sits at the center of the June billing-and-governance story (the Microsoft move from Claude Code to Copilot CLI). The enterprise implication: CLI agents need the same governance as any agent — scoped identity and permissions, audit, cost budgets, and data-residency control. A terminal agent with broad repo access is a powerful worker and a real blast-radius decision.
+</div></div>`;
 el.querySelectorAll('.crd .crd-h').forEach(h=>{const c=h.parentElement;h.onclick=()=>{const idx=+c.dataset.i;eL=eL===idx?null:idx;render()}})};render()}
 
 // ========== ADOPTION INSIGHTS ==========
@@ -936,12 +1111,12 @@ src:'Gartner Hype Cycle Q2 2026, Google/Microsoft/Snowflake/OpenAI'}
 let expA=null;
 const el=$('v-adoption');
 function render(){
-el.innerHTML=`<p class="si">Hard data on where enterprise AI is actually working in May 2026 — real adoption patterns, ROI evidence, cost realities, and the use cases driving measurable results. Updated with the latest from Gartner, Deloitte, Forrester, Anthropic, and a16z.</p>
+el.innerHTML=`<p class="si">Hard data on where enterprise AI is actually working in June 2026 — real adoption patterns, ROI evidence, cost realities, and the use cases driving measurable results. Updated with the latest from Gartner, Deloitte, Forrester, Anthropic, and a16z.</p>
 
 <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap">
-<div style="font-family:var(--fn);font-size:11px;color:var(--tm);background:rgba(255,255,255,.03);border:1px solid var(--bs);border-radius:6px;padding:6px 12px">📊 <a href="https://a16z.com/where-enterprises-are-actually-adopting-ai/" target="_blank" style="color:var(--ab)">a16z Enterprise AI Adoption</a></div>
-<div style="font-family:var(--fn);font-size:11px;color:var(--tm);background:rgba(255,255,255,.03);border:1px solid var(--bs);border-radius:6px;padding:6px 12px">📊 <a href="https://www.anthropic.com" target="_blank" style="color:var(--ab)">Anthropic 2026 State of AI Agents</a></div>
-<div style="font-family:var(--fn);font-size:11px;color:var(--tm);background:rgba(255,255,255,.03);border:1px solid var(--bs);border-radius:6px;padding:6px 12px">📊 Gartner Hype Cycle Q2 2026 · Deloitte · Forrester</div>
+<div style="font-family:var(--fn);font-size:11px;color:var(--tm);background:rgba(15,23,42,.03);border:1px solid var(--bs);border-radius:6px;padding:6px 12px">📊 <a href="https://a16z.com/where-enterprises-are-actually-adopting-ai/" target="_blank" style="color:var(--ab)">a16z Enterprise AI Adoption</a></div>
+<div style="font-family:var(--fn);font-size:11px;color:var(--tm);background:rgba(15,23,42,.03);border:1px solid var(--bs);border-radius:6px;padding:6px 12px">📊 <a href="https://www.anthropic.com" target="_blank" style="color:var(--ab)">Anthropic 2026 State of AI Agents</a></div>
+<div style="font-family:var(--fn);font-size:11px;color:var(--tm);background:rgba(15,23,42,.03);border:1px solid var(--bs);border-radius:6px;padding:6px 12px">📊 Gartner Hype Cycle Q2 2026 · Deloitte · Forrester</div>
 </div>
 
 ${insights.map((ins,i)=>`<div class="crd ${expA===i?'ex':''}" data-i="${i}" style="border-left:3px solid ${ins.src.includes('a16z')?'var(--ag)':ins.src.includes('Gartner')?'var(--ao)':'var(--aw)'}">
@@ -960,6 +1135,29 @@ ${insights.map((ins,i)=>`<div class="crd ${expA===i?'ex':''}" data-i="${i}" styl
 <b>Prepare for the cost reality:</b> Token prices falling does not mean lower bills. Budget for 2–3× your pilot costs at production scale. Implement AI FinOps before the CFO asks why the AI bill tripled.<br><br>
 <b>Build on open standards:</b> MCP and A2A adoption is accelerating across every major platform. Building on these standards now gives you portability and avoids expensive vendor lock-in.<br><br>
 <b>Navigate the hype cycle deliberately:</b> Agentic AI is at Peak Expectations. This means maximum vendor promises and maximum risk of disappointment. The enterprises that invest in architecture and data foundations now will thrive through the Trough of Disillusionment.
+</div></div>
+
+<div class="st" style="margin-top:40px">📊 June 2026 Adoption Reality — the Easy Wins Are Behind Us</div>
+<p class="si">New in June 2026 — fresh figures from the latest reports, plus the market-sentiment debate every board is now having.</p>
+<div class="hbox wrm"><div class="hl">Production Reality</div><div class="ht" style="font-size:14px">
+Adoption is still growing, but scaling now exposes weak data foundations, unclear ownership, poor observability, and inconsistent business value. The biggest challenge is no longer model quality — it is <b>aligning process, data, governance, and cost</b> so the tool survives contact with production. June is less about new capability and more about operational discipline.
+</div></div>
+<div class="st2" style="margin-top:20px">Fresh Data Points (Cited)</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:8px">
+<div style="background:var(--bgc);border:1px solid var(--bs);border-radius:8px;padding:14px"><div style="font-family:var(--fn);font-size:22px;font-weight:800;color:var(--ab)">88%</div><div style="font-family:var(--fn);font-size:12px;color:var(--t2);line-height:1.5">organizational AI adoption, up sharply year over year <span style="color:var(--td)">(Stanford AI Index 2026)</span></div></div>
+<div style="background:var(--bgc);border:1px solid var(--bs);border-radius:8px;padding:14px"><div style="font-family:var(--fn);font-size:22px;font-weight:800;color:var(--ag)">12% → 66%</div><div style="font-family:var(--fn);font-size:12px;color:var(--t2);line-height:1.5">AI agent task-success leap on a key benchmark in one year <span style="color:var(--td)">(Stanford AI Index 2026)</span></div></div>
+<div style="background:var(--bgc);border:1px solid var(--bs);border-radius:8px;padding:14px"><div style="font-family:var(--fn);font-size:22px;font-weight:800;color:var(--aw)">$285.9B</div><div style="font-family:var(--fn);font-size:12px;color:var(--t2);line-height:1.5">U.S. private AI investment in 2025, about 23x China <span style="color:var(--td)">(Stanford AI Index 2026)</span></div></div>
+<div style="background:var(--bgc);border:1px solid var(--bs);border-radius:8px;padding:14px"><div style="font-family:var(--fn);font-size:22px;font-weight:800;color:var(--ap)">25%</div><div style="font-family:var(--fn);font-size:12px;color:var(--t2);line-height:1.5">of leaders say AI now has a major business impact, more than double a year ago <span style="color:var(--td)">(Deloitte State of AI 2026)</span></div></div>
+<div style="background:var(--bgc);border:1px solid var(--bs);border-radius:8px;padding:14px"><div style="font-family:var(--fn);font-size:22px;font-weight:800;color:var(--ar)">66%</div><div style="font-family:var(--fn);font-size:12px;color:var(--t2);line-height:1.5">concerned about reliance on foreign-owned AI — the sovereignty signal <span style="color:var(--td)">(Deloitte State of AI 2026)</span></div></div>
+<div style="background:var(--bgc);border:1px solid var(--bs);border-radius:8px;padding:14px"><div style="font-family:var(--fn);font-size:22px;font-weight:800;color:var(--ac)">86% / 62%</div><div style="font-family:var(--fn);font-size:12px;color:var(--t2);line-height:1.5">report higher CSAT from gen-AI support, yet 62% struggle to measure ROI <span style="color:var(--td)">(Snowflake ROI 2026)</span></div></div>
+</div>
+<div style="font-family:var(--fn);font-size:11px;color:var(--td);margin-bottom:18px">Snowflake also finds only about 20% of enterprise unstructured data is currently usable for AI — the data-readiness gap behind most stalled pilots.</div>
+<div class="hbox ylw"><div class="hl">New: Measuring AI Adoption Itself</div><div class="ht" style="font-size:14px">
+A new tooling category has appeared to answer a question seat counts cannot: <b>is AI actually being used, and is it creating value?</b> Platforms such as <b>Larridin</b> track real adoption, usage depth, and value by team — shifting the conversation from licenses purchased to outcomes delivered. Expect adoption-measurement and AI-value analytics to become a standard line item, much as product analytics did for software.
+</div></div>
+<div class="hbox prp"><div class="hl">Market Temperature — Bubble or Foundation?</div><div class="ht" style="font-size:14px">
+Every board is now asking whether AI spend is a bubble. Jeff Bezos offers a useful frame: this looks like an <b>industrial bubble</b>, not a purely financial one. In industrial bubbles — he points to 1990s biotech — hype and over-investment fund many companies that fail, yet the cycle still produces durable, valuable inventions. His read: AI itself is real and transformative, a <b>horizontal enabling layer</b> whose biggest impact comes through productivity gains across all companies, not just firms branded AI-first.<br><br>
+The complementary caution (echoed in recent Forbes commentary): do not go all-in on a single vendor. The strategist takeaway — <b>invest, but with portability, governance, and cost discipline.</b> A good bubble still bankrupts the undisciplined.
 </div></div>`;
 el.querySelectorAll('.crd .crd-h').forEach(h=>{const c=h.parentElement;h.onclick=()=>{const idx=+c.dataset.i;expA=expA===idx?null:idx;render()}})};render()}
 
@@ -975,7 +1173,7 @@ deep:'Cloud platforms (multi-cloud recommended), GPU/TPU compute for AI training
 plain:'Where your enterprise data lives and how it moves. This is your data warehouse or lakehouse (Snowflake, Databricks, BigQuery) plus the pipelines that keep data fresh.',
 deep:'Centralized lakehouse architecture (Snowflake, Databricks, Fabric, BigQuery). Data ingestion pipelines (Fivetran, Airbyte). Transformation layer (dbt). Workflow orchestration (Airflow, Dagster). Batch and real-time streaming. Data quality checks embedded in pipelines, not added later. Unstructured data management emerging as critical capability.'},
 {id:'semantic',nm:'Semantic Layer',sub:'Meaning, Context & Knowledge',lv:'intermediate',c:'#58a6ff',y:2,
-plain:'Translates raw data into business knowledge that AI can understand. In May 2026, data is transitioning from passive storage to an active semantic memory system — if an agent is going to make autonomous decisions, it needs governed, contextualized data to reason with. Without this layer, your AI agents give inconsistent answers to the same question asked differently.',
+plain:'Translates raw data into business knowledge that AI can understand. In June 2026, data is transitioning from passive storage to an active semantic memory system — if an agent is going to make autonomous decisions, it needs governed, contextualized data to reason with. Without this layer, your AI agents give inconsistent answers to the same question asked differently.',
 deep:'Business ontology and entity definitions. Metrics layer (dbt Semantic Layer) for consistent metric definitions across AI and BI. Knowledge graphs (Neo4j, Neptune) for entity relationships and multi-hop reasoning. Vector stores and embedding services for semantic search. Master data management for golden records. Catalog and metadata management (Collibra, Atlan). The semantic layer is what separates toy AI demos from production-grade enterprise AI. In the agentic era, this layer also provides agents with contextual memory — enabling them to reason about business concepts, not just retrieve raw data.'},
 {id:'aiml',nm:'AI/ML Model Layer',sub:'Models, Training & Inference',lv:'intermediate',c:'#58a6ff',y:3,
 plain:'The "brains" — where AI models are managed as shared enterprise capabilities, not one-off experiments. Includes both the commercial models you call via API (Claude, GPT) and any custom models you train on your own data.',
@@ -987,8 +1185,11 @@ deep:'iPaaS (Boomi, MuleSoft, Workato) for application integration. API manageme
 plain:'Your business applications (CRM, ERP, HRIS, etc.) evolving from monolithic tools into composable services that AI agents can orchestrate. The apps your people use every day.',
 deep:'CRM (Salesforce), ERP (SAP, Oracle, Dynamics), HRIS (Workday), ITSM (ServiceNow), and vertical applications. Evolving from monolithic applications to composable application services with well-defined APIs. Business logic exposed as callable functions for AI agents. Workflow engines and automation (Power Automate, ServiceNow Flow). Applications become tools that agents use, not just interfaces for humans.'},
 {id:'agentic',nm:'Agentic Layer',sub:'Agents, Orchestration & Memory',lv:'advanced',c:'#bc8cff',y:6,
-plain:'The NEW layer that makes an enterprise "agentic." This is where AI agents live — they plan, reason, use tools, remember context, and execute multi-step workflows autonomously (with human oversight for critical decisions). The dominant May 2026 pattern is the "Puppeteer Architecture": specialized narrow agents coordinated by a central orchestrator.',
+plain:'The NEW layer that makes an enterprise "agentic." This is where AI agents live — they plan, reason, use tools, remember context, and execute multi-step workflows autonomously (with human oversight for critical decisions). The dominant June 2026 pattern is the "Puppeteer Architecture": specialized narrow agents coordinated by a central orchestrator.',
 deep:'Agent development and hosting (LangGraph, CrewAI, Bedrock AgentCore, Copilot Studio). Cognitive capabilities: planning, reasoning, memory, tool use, state management. The Puppeteer Pattern dominates: narrow specialist agents (DB query agent, compliance agent, drafting agent) coordinated by a central orchestrator. Hybrid reactive-deliberative architecture: fast reactive loops handle routine decisions in milliseconds while slower deliberative loops reason through complex multi-step problems. Agent lifecycle management and versioning. Agent-to-agent orchestration via A2A protocol. Human-in-the-loop approval patterns for high-stakes actions. AgentOps: observability, tracing (LangSmith, Arize), SLAs, blast radius controls, and rollback capability. This layer does NOT exist in traditional IT architecture — it is the defining addition for the agentic enterprise.'},
+{id:'governance',nm:'Governance, Orchestration & Risk',sub:'Control Plane \u00b7 Policy, Catalog & Risk Intelligence',lv:'advanced',c:'#7c3aed',y:7,
+plain:'The control plane that governs every agent before it acts \u2014 the embedded compliance officer for autonomous AI. It routes and orchestrates work across agents and models while enforcing policy, identity, risk checks, cataloging, and audit. New for 2026: this is where the Risk Intelligence Layer lives \u2014 the checkpoint each agent must consult before executing.',
+deep:'Policy-aware orchestration and agent routing (Dataiku, UiPath, Elementum). AI and agent identity and access \u2014 non-human identities, scoped least-privilege permissions, secrets and privileged access (Okta / Auth0 for agents, CyberArk). AI trust, risk and GRC \u2014 policy management, model and use-case risk registers, EU AI Act mapping, and automated compliance evidence (OneTrust, Vanta), organized under Gartner AI TRiSM (Trust, Risk and Security Management). Cataloging and discovery of data, models, prompts, and agents so nothing runs unregistered (Glean for governed enterprise knowledge; data and model catalogs like Collibra and Atlan). Audit trails, human-in-the-loop approval, blast-radius controls, and cost governance for every agent action. Open standards (MCP, A2A) carry policy with the agent across models and frameworks. The rule: orchestration without governance does not survive contact with production.'},
 {id:'orchestration',nm:'Enterprise Orchestration',sub:'Process Governance & Optimization',lv:'advanced',c:'#bc8cff',y:7,
 plain:'The "conductor" — coordinates complex business processes that span AI agents, humans, and automated systems. Ensures everything works together toward business goals with proper governance and compliance.',
 deep:'End-to-end business process orchestration spanning agents, humans, and deterministic systems. Blended orchestration: agents handle dynamic tasks autonomously while centralized oversight governs the overall process. Process mining and optimization. KPI-aligned workflow management. Compliance and audit trail enforcement. FinOps for AI cost governance. This is the most mature capability — it requires all lower layers to be solid before it delivers value.'},
@@ -1002,7 +1203,7 @@ plain:'Runs through every layer. Authentication, authorization, data encryption,
 deep:'Zero-trust architecture. Dynamic RBAC per agent (scoped to minimum required data). Prompt injection and jailbreak defenses. AI output guardrails and content safety. Data residency and sovereignty. Red teaming and adversarial testing. Audit trails for all AI decisions and actions. Constitutional AI principles. EU AI Act compliance classification.'},
 {id:'observability',nm:'Observability, AgentOps & AI FinOps',lv:'intermediate',c:'#58a6ff',
 plain:'Monitoring everything: system health, AI model performance, agent behavior, cost tracking, and business impact measurement. AgentOps is the new operational discipline — treating AI agents like production services with SLAs, blast radius limits, and rollback capability. You cannot improve what you cannot see, and you cannot govern what you cannot measure.',
-deep:'Infrastructure monitoring (Datadog, Grafana). AI-specific observability: token usage, latency, error rates, hallucination detection. Agent tracing and debugging (LangSmith, Arize, Langfuse). AgentOps discipline: uptime SLAs per agent, blast radius controls (what each agent can access and spend), automated rollback on performance degradation, version management for agent configurations. FinOps: cost allocation by model, agent, team, and use case. Business KPI tracking tied to AI initiatives. Continuous evaluation and A/B testing. The enterprises failing at agentic AI in May 2026 are almost universally those who skipped observability — they cannot diagnose why agents hallucinate, why costs spike, or why business outcomes diverge from expectations.'}
+deep:'Infrastructure monitoring (Datadog, Grafana). AI-specific observability: token usage, latency, error rates, hallucination detection. Agent tracing and debugging (LangSmith, Arize, Langfuse). AgentOps discipline: uptime SLAs per agent, blast radius controls (what each agent can access and spend), automated rollback on performance degradation, version management for agent configurations. FinOps: cost allocation by model, agent, team, and use case. Business KPI tracking tied to AI initiatives. Continuous evaluation and A/B testing. The enterprises failing at agentic AI in June 2026 are almost universally those who skipped observability — they cannot diagnose why agents hallucinate, why costs spike, or why business outcomes diverge from expectations.'}
 ];
 function render(){
 const bC='#3fb950',iC='#58a6ff',aC='#bc8cff';
@@ -1017,7 +1218,7 @@ el.innerHTML=`<p class="si">Enterprise AI requires architecture thinking — bui
 ${layers.slice().reverse().map(l=>{
 const sel=selLayer===l.id;
 const col=l.lv==='beginner'?bC:l.lv==='intermediate'?iC:aC;
-const isNew=l.id==='agentic'||l.id==='orchestration'||l.id==='semantic'||l.id==='aiml';
+const isNew=l.id==='agentic'||l.id==='governance'||l.id==='orchestration'||l.id==='semantic'||l.id==='aiml';
 return `<div data-ly="${l.id}" style="background:${col}12;border:2px solid ${sel?col:col+'44'};border-radius:8px;padding:12px 16px;margin-bottom:6px;cursor:pointer;transition:all .15s;${sel?'transform:scale(1.01);box-shadow:0 2px 12px '+col+'33':''}">
 <div style="display:flex;justify-content:space-between;align-items:center">
 <div>
@@ -1047,7 +1248,7 @@ ${sel?`<div style="margin-top:8px;padding-top:8px;border-top:1px solid ${col}33"
 <div class="gd-body">${cx.deep}</div>
 </div>`:''}
 </div>`}).join('')}
-<div style="margin-top:16px;padding:12px;background:rgba(255,255,255,.03);border:1px solid var(--bs);border-radius:8px">
+<div style="margin-top:16px;padding:12px;background:rgba(15,23,42,.03);border:1px solid var(--bs);border-radius:8px">
 <div style="font-family:var(--fm);font-size:9px;color:var(--tm);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Click any layer</div>
 <div style="font-family:var(--fn);font-size:11px;color:var(--tm);line-height:1.5">Click a layer to see what it does and the technical detail underneath. The diagram reads bottom-up: data foundation at the base, agentic capabilities at the top.</div>
 </div>
@@ -1059,17 +1260,34 @@ ${sel?`<div style="margin-top:8px;padding-top:8px;border-top:1px solid ${col}33"
 <b style="color:${aC}">Phase 3 — Orchestration (Months 12–36):</b> The purple layers are the most mature. Agentic layer for autonomous multi-step agents. Enterprise orchestration for cross-functional process governance. These require all lower layers to be solid. Attempting Level 4–5 agentic maturity without a strong semantic layer and governed data platform is the #1 reason enterprise AI projects fail at scale.
 </div></div>
 <div class="hbox cyn" style="margin-top:20px"><div class="hl" style="color:var(--ac)">Design Principles for the Agentic Enterprise</div><div class="ht" style="font-size:13px">
-<b>Composability & Modularity:</b> Design every layer as modular components with standardized interfaces. Agents should dynamically compose workflows from available services. The architecture has fractured past monolithic scripts and naive Kubernetes pods — composable, event-driven services are the May 2026 standard.<br><br>
+<b>Composability & Modularity:</b> Design every layer as modular components with standardized interfaces. Agents should dynamically compose workflows from available services. The architecture has fractured past monolithic scripts and naive Kubernetes pods — composable, event-driven services are the June 2026 standard.<br><br>
 <b>Data & Semantic First:</b> Data is transitioning from passive storage to an active semantic memory system. Treat data (and metadata) as a product — with quality, lineage, and governance built in from day one. If an agent is going to make autonomous decisions, it needs governed, contextualized data to reason with.<br><br>
 <b>Observability Embedded:</b> End-to-end monitoring, tracing, evaluation, and explainability across every layer. AI agents are non-deterministic — observability is paramount. AgentOps (SLAs, blast radius, rollback) is the new standard for production agents.<br><br>
 <b>Trust Throughout:</b> Dynamic, granular permissions based on agent task intent. Every AI decision logged with verifiable audit trails. Red teaming and adversarial testing as standard practice. Only ~1 in 5 companies has mature governance for autonomous agents — this is where most failures originate.<br><br>
 <b>Agent-First, Human-Oversight:</b> AI agents as the default for eligible use cases. Humans monitor, intervene, and override. The value of human contribution is shifting to system architecture design, agent coordination, and strategic problem decomposition — agents are the workers, humans are the conductors.<br><br>
-<b>Open Ecosystem:</b> Favor open standards (MCP, A2A), well-defined APIs, and interoperability over vendor lock-in. Build to swap any component as the landscape evolves. Organizations building on proprietary agent frameworks in May 2026 are accumulating technical debt.
+<b>Open Ecosystem:</b> Favor open standards (MCP, A2A), well-defined APIs, and interoperability over vendor lock-in. Build to swap any component as the landscape evolves. Organizations building on proprietary agent frameworks in June 2026 are accumulating technical debt.
 </div></div>
 <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap">
-<div style="font-family:var(--fn);font-size:11px;color:var(--tm);background:rgba(255,255,255,.03);border:1px solid var(--bs);border-radius:6px;padding:6px 12px">📐 Framework: <a href="https://architect.salesforce.com/docs/architect/fundamentals/guide/agentic-enterprise-it-architecture" target="_blank" style="color:var(--ab)">Salesforce — Agentic Enterprise IT Architecture</a></div>
-<div style="font-family:var(--fn);font-size:11px;color:var(--tm);background:rgba(255,255,255,.03);border:1px solid var(--bs);border-radius:6px;padding:6px 12px">📐 Framework: <a href="https://www.mckinsey.com/capabilities/mckinsey-technology/our-insights/building-the-foundations-for-agentic-ai-at-scale" target="_blank" style="color:var(--ab)">McKinsey — Building Foundations for Agentic AI at Scale</a></div>
-</div>`;
+<div style="font-family:var(--fn);font-size:11px;color:var(--tm);background:rgba(15,23,42,.03);border:1px solid var(--bs);border-radius:6px;padding:6px 12px">📐 Framework: <a href="https://architect.salesforce.com/docs/architect/fundamentals/guide/agentic-enterprise-it-architecture" target="_blank" style="color:var(--ab)">Salesforce — Agentic Enterprise IT Architecture</a></div>
+<div style="font-family:var(--fn);font-size:11px;color:var(--tm);background:rgba(15,23,42,.03);border:1px solid var(--bs);border-radius:6px;padding:6px 12px">📐 Framework: <a href="https://www.mckinsey.com/capabilities/mckinsey-technology/our-insights/building-the-foundations-for-agentic-ai-at-scale" target="_blank" style="color:var(--ab)">McKinsey — Building Foundations for Agentic AI at Scale</a></div>
+</div>
+
+<div class="st" style="margin-top:40px">🛡️ Governance, Orchestration &amp; Risk Layer</div>
+<p class="si">New in June 2026 — the control plane that governs every agent before it acts: orchestration, identity, risk, cataloging, and audit. This is the deep-dive on the sixth layer in the stack above.</p>
+<div class="st2" style="margin-top:18px">The Governance, Orchestration &amp; Risk Tooling Landscape</div>
+<p class="si" style="margin-bottom:14px">A fast-growing category that maps to five jobs — orchestrate, identify, govern risk, catalog, and observe.</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:12px;margin-bottom:10px"><div style="background:var(--bgc);border:1px solid var(--bs);border-left:3px solid #7c3aed;border-radius:10px;padding:15px 16px;box-shadow:0 1px 2px rgba(15,23,42,.04)"><div style="font-family:var(--fn);font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#7c3aed;margin-bottom:8px">Orchestration & Agent Ops</div><div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px"><span style="font-family:var(--fm);font-size:11px;color:var(--t1);background:#7c3aed14;border:1px solid #7c3aed33;border-radius:5px;padding:3px 8px">Dataiku</span><span style="font-family:var(--fm);font-size:11px;color:var(--t1);background:#7c3aed14;border:1px solid #7c3aed33;border-radius:5px;padding:3px 8px">UiPath</span><span style="font-family:var(--fm);font-size:11px;color:var(--t1);background:#7c3aed14;border:1px solid #7c3aed33;border-radius:5px;padding:3px 8px">Elementum</span></div><div style="font-family:var(--fn);font-size:12.5px;color:var(--t2);line-height:1.5">Route and govern work across agents and models — agentic process orchestration with policy and cost controls built in.</div></div><div style="background:var(--bgc);border:1px solid var(--bs);border-left:3px solid #2563eb;border-radius:10px;padding:15px 16px;box-shadow:0 1px 2px rgba(15,23,42,.04)"><div style="font-family:var(--fn);font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2563eb;margin-bottom:8px">Identity & Access for Agents</div><div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px"><span style="font-family:var(--fm);font-size:11px;color:var(--t1);background:#2563eb14;border:1px solid #2563eb33;border-radius:5px;padding:3px 8px">Okta / Auth0</span><span style="font-family:var(--fm);font-size:11px;color:var(--t1);background:#2563eb14;border:1px solid #2563eb33;border-radius:5px;padding:3px 8px">CyberArk</span></div><div style="font-family:var(--fn);font-size:12.5px;color:var(--t2);line-height:1.5">Non-human identities, scoped least-privilege permissions, secrets and privileged-access management for agents.</div></div><div style="background:var(--bgc);border:1px solid var(--bs);border-left:3px solid #16a34a;border-radius:10px;padding:15px 16px;box-shadow:0 1px 2px rgba(15,23,42,.04)"><div style="font-family:var(--fn);font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#16a34a;margin-bottom:8px">Trust, Risk & Compliance</div><div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px"><span style="font-family:var(--fm);font-size:11px;color:var(--t1);background:#16a34a14;border:1px solid #16a34a33;border-radius:5px;padding:3px 8px">OneTrust</span><span style="font-family:var(--fm);font-size:11px;color:var(--t1);background:#16a34a14;border:1px solid #16a34a33;border-radius:5px;padding:3px 8px">Vanta</span></div><div style="font-family:var(--fn);font-size:12.5px;color:var(--t2);line-height:1.5">AI governance and policy, model and use-case risk registers, EU AI Act mapping, and automated compliance evidence.</div></div><div style="background:var(--bgc);border:1px solid var(--bs);border-left:3px solid #0891b2;border-radius:10px;padding:15px 16px;box-shadow:0 1px 2px rgba(15,23,42,.04)"><div style="font-family:var(--fn);font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#0891b2;margin-bottom:8px">Catalog & Discovery</div><div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px"><span style="font-family:var(--fm);font-size:11px;color:var(--t1);background:#0891b214;border:1px solid #0891b233;border-radius:5px;padding:3px 8px">Glean</span><span style="font-family:var(--fm);font-size:11px;color:var(--t1);background:#0891b214;border:1px solid #0891b233;border-radius:5px;padding:3px 8px">Collibra</span><span style="font-family:var(--fm);font-size:11px;color:var(--t1);background:#0891b214;border:1px solid #0891b233;border-radius:5px;padding:3px 8px">Atlan</span></div><div style="font-family:var(--fn);font-size:12.5px;color:var(--t2);line-height:1.5">Catalog and discover data, models, prompts, and agents — governed enterprise search so nothing runs unregistered.</div></div><div style="background:var(--bgc);border:1px solid var(--bs);border-left:3px solid #b7791f;border-radius:10px;padding:15px 16px;box-shadow:0 1px 2px rgba(15,23,42,.04)"><div style="font-family:var(--fn);font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#b7791f;margin-bottom:8px">Observability & AgentOps</div><div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:9px"><span style="font-family:var(--fm);font-size:11px;color:var(--t1);background:#b7791f14;border:1px solid #b7791f33;border-radius:5px;padding:3px 8px">LangSmith</span><span style="font-family:var(--fm);font-size:11px;color:var(--t1);background:#b7791f14;border:1px solid #b7791f33;border-radius:5px;padding:3px 8px">Arize</span><span style="font-family:var(--fm);font-size:11px;color:var(--t1);background:#b7791f14;border:1px solid #b7791f33;border-radius:5px;padding:3px 8px">Datadog</span></div><div style="font-family:var(--fn);font-size:12.5px;color:var(--t2);line-height:1.5">Trace agent behavior, detect drift and hallucination, and enforce blast-radius and cost budgets in production.</div></div></div><div style="font-family:var(--fn);font-size:12px;color:var(--tm);margin-bottom:4px;padding:8px 12px;background:rgba(15,23,42,.03);border:1px solid var(--bs);border-radius:6px">Most enterprises assemble several of these rather than betting on one. Tie them to the cross-cutting <b>Security</b> and <b>Observability</b> layers above — governance is enforced everywhere, not bolted on. Gartner groups this discipline under <b>AI TRiSM</b> (Trust, Risk &amp; Security Management).</div>
+<div class="hbox prp"><div class="hl">AI Governance &amp; Orchestration (the Control Plane)</div><div class="ht" style="font-size:14px">
+In production, orchestration and governance have fused. The control plane does three jobs at once: <b>routes work</b> across agents and models, <b>enforces policy</b> (access control, human approval, audit logging), and <b>meters cost</b> (per-workflow budgets). Open standards — <b>MCP</b> (agent-to-tool) and <b>A2A</b> (agent-to-agent) — are the preferred backbone because they let you enforce policy while swapping models and frameworks. Governance and orchestration platforms (for example, <b>Dataiku</b>) are positioning here, alongside hyperscaler-native control planes. The rule of thumb: <i>orchestration without governance does not survive contact with production.</i>
+</div></div>
+<div class="hbox ylw"><div class="hl">AI Identity &amp; Security — Govern Agents Like Employees</div><div class="ht" style="font-size:14px">
+Agents <b>take actions</b>, not just generate text — which makes them a new identity and security surface. Each agent needs a <b>non-human identity (NHI)</b> with scoped, least-privilege permissions, secrets management, and full audit, governed like a service account. The fastest-growing risk is <b>shadow AI</b>: ungoverned agents that can reach data and act without oversight.<br><br>
+The emerging stack: identity and access for agents (<b>Okta / Auth0 for agents</b>), privileged access and secrets (<b>CyberArk</b>), and <b>intent-based permissions</b> where an agent gets access for the task, not via a static role. Pair every agent with a defined <b>blast radius</b>: what it can access, what actions it can take, and what it can spend.
+</div></div>
+<div style="font-family:var(--fn);font-size:12px;color:var(--tm);margin-top:14px;padding:8px 12px;background:rgba(15,23,42,.03);border:1px solid var(--bs);border-radius:6px">🔗 This control plane sits on top of the <b>semantic / context layer</b> covered in Data Foundations — meaning underneath, routing and policy on top.</div>
+<div class="st" style="margin-top:38px">🧭 The Agentic Security &amp; Trust Framework</div>
+<p class="si">Adapted from an Adobe Summit 2026 session on enterprise AI architecture. The core idea: before any agent acts, it must consult a <b>Risk Intelligence Layer</b> — an embedded compliance officer that scores intelligence, security, and governance in real time.</p>
+<div style="background:linear-gradient(180deg,rgba(37,99,235,.045),rgba(124,58,237,.03));border:1px solid var(--bs);border-radius:14px;padding:22px;box-shadow:0 2px 12px rgba(15,23,42,.05)"><div style="font-family:var(--fn);font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tm);text-align:center;margin-bottom:10px">Specialized Agents</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px"><div style="background:var(--bgc);border:1px solid var(--bs);border-radius:9px;padding:10px 8px;text-align:center;box-shadow:0 1px 2px rgba(15,23,42,.04)"><div style="font-size:18px;margin-bottom:3px">📣</div><div style="font-family:var(--fn);font-size:10px;font-weight:600;color:var(--t2);letter-spacing:.03em">Marketing Agent</div></div><div style="background:var(--bgc);border:1px solid var(--bs);border-radius:9px;padding:10px 8px;text-align:center;box-shadow:0 1px 2px rgba(15,23,42,.04)"><div style="font-size:18px;margin-bottom:3px">🛒</div><div style="font-family:var(--fn);font-size:10px;font-weight:600;color:var(--t2);letter-spacing:.03em">Commerce Agent</div></div><div style="background:var(--bgc);border:1px solid var(--bs);border-radius:9px;padding:10px 8px;text-align:center;box-shadow:0 1px 2px rgba(15,23,42,.04)"><div style="font-size:18px;margin-bottom:3px">💰</div><div style="font-family:var(--fn);font-size:10px;font-weight:600;color:var(--t2);letter-spacing:.03em">Sales Agent</div></div><div style="background:var(--bgc);border:1px solid var(--bs);border-radius:9px;padding:10px 8px;text-align:center;box-shadow:0 1px 2px rgba(15,23,42,.04)"><div style="font-size:18px;margin-bottom:3px">📊</div><div style="font-family:var(--fn);font-size:10px;font-weight:600;color:var(--t2);letter-spacing:.03em">Analytics Agent</div></div><div style="background:var(--bgc);border:1px solid var(--bs);border-radius:9px;padding:10px 8px;text-align:center;box-shadow:0 1px 2px rgba(15,23,42,.04)"><div style="font-size:18px;margin-bottom:3px">✍️</div><div style="font-family:var(--fn);font-size:10px;font-weight:600;color:var(--t2);letter-spacing:.03em">Content Agent</div></div></div><div style="text-align:center;color:var(--ab);font-size:18px;margin:6px 0 4px">↓</div><div style="font-family:var(--fn);font-size:11.5px;color:var(--tm);text-align:center;margin-bottom:14px;font-style:italic">Every agent must consult the Risk Intelligence Layer before acting</div><div style="background:var(--bgc);border:1px solid var(--bm);border-radius:12px;padding:18px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:5px"><span style="font-family:var(--fm);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ab);background:rgba(37,99,235,.10);border:1px solid rgba(37,99,235,.32);border-radius:20px;padding:5px 12px">● Risk Intelligence Layer</span><span style="font-family:var(--fn);font-size:15px;font-weight:700;color:var(--t1)">Agentic Security &amp; Trust Layer</span></div><div style="font-family:var(--fn);font-size:12px;color:var(--tm);margin-bottom:16px">The embedded compliance officer every agent must consult before executing</div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px"><div style="background:#2563eb0d;border:1px solid #2563eb33;border-radius:10px;padding:14px 15px"><div style="font-family:var(--fn);font-size:26px;font-weight:800;color:#2563eb;line-height:1">IQ</div><div style="font-family:var(--fn);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#2563eb;margin-bottom:9px">Intelligence Quotient</div><div style="font-family:var(--fn);font-size:12.5px;font-weight:600;color:var(--t1);margin-bottom:11px">Is this agent working on good data?</div><div style="display:flex;flex-direction:column;gap:6px"><div style="font-family:var(--fn);font-size:12px;color:var(--t2);display:flex;gap:7px;align-items:flex-start"><span style="color:#2563eb;font-size:13px;line-height:1.15">•</span><span>No hallucinations</span></div><div style="font-family:var(--fn);font-size:12px;color:var(--t2);display:flex;gap:7px;align-items:flex-start"><span style="color:#2563eb;font-size:13px;line-height:1.15">•</span><span>Data quality verified</span></div><div style="font-family:var(--fn);font-size:12px;color:var(--t2);display:flex;gap:7px;align-items:flex-start"><span style="color:#2563eb;font-size:13px;line-height:1.15">•</span><span>Source integrity checked</span></div><div style="font-family:var(--fn);font-size:12px;color:var(--t2);display:flex;gap:7px;align-items:flex-start"><span style="color:#2563eb;font-size:13px;line-height:1.15">•</span><span>Output confidence scored</span></div></div></div><div style="background:#b7791f0d;border:1px solid #b7791f33;border-radius:10px;padding:14px 15px"><div style="font-family:var(--fn);font-size:26px;font-weight:800;color:#b7791f;line-height:1">SQ</div><div style="font-family:var(--fn);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#b7791f;margin-bottom:9px">Security Quotient</div><div style="font-family:var(--fn);font-size:12.5px;font-weight:600;color:var(--t1);margin-bottom:11px">Is data protected from misuse?</div><div style="display:flex;flex-direction:column;gap:6px"><div style="font-family:var(--fn);font-size:12px;color:var(--t2);display:flex;gap:7px;align-items:flex-start"><span style="color:#b7791f;font-size:13px;line-height:1.15">•</span><span>No jailbreak exposure</span></div><div style="font-family:var(--fn);font-size:12px;color:var(--t2);display:flex;gap:7px;align-items:flex-start"><span style="color:#b7791f;font-size:13px;line-height:1.15">•</span><span>Right data, right person</span></div><div style="font-family:var(--fn);font-size:12px;color:var(--t2);display:flex;gap:7px;align-items:flex-start"><span style="color:#b7791f;font-size:13px;line-height:1.15">•</span><span>Shadow AI prevented</span></div><div style="font-family:var(--fn);font-size:12px;color:var(--t2);display:flex;gap:7px;align-items:flex-start"><span style="color:#b7791f;font-size:13px;line-height:1.15">•</span><span>Credential protection</span></div></div></div><div style="background:#16a34a0d;border:1px solid #16a34a33;border-radius:10px;padding:14px 15px"><div style="font-family:var(--fn);font-size:26px;font-weight:800;color:#16a34a;line-height:1">GQ</div><div style="font-family:var(--fn);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#16a34a;margin-bottom:9px">Governance Quotient</div><div style="font-family:var(--fn);font-size:12.5px;font-weight:600;color:var(--t1);margin-bottom:11px">Is this action permissible?</div><div style="display:flex;flex-direction:column;gap:6px"><div style="font-family:var(--fn);font-size:12px;color:var(--t2);display:flex;gap:7px;align-items:flex-start"><span style="color:#16a34a;font-size:13px;line-height:1.15">•</span><span>Within policy boundaries</span></div><div style="font-family:var(--fn);font-size:12px;color:var(--t2);display:flex;gap:7px;align-items:flex-start"><span style="color:#16a34a;font-size:13px;line-height:1.15">•</span><span>Ethically responsible</span></div><div style="font-family:var(--fn);font-size:12px;color:var(--t2);display:flex;gap:7px;align-items:flex-start"><span style="color:#16a34a;font-size:13px;line-height:1.15">•</span><span>Fully auditable</span></div><div style="font-family:var(--fn);font-size:12px;color:var(--t2);display:flex;gap:7px;align-items:flex-start"><span style="color:#16a34a;font-size:13px;line-height:1.15">•</span><span>Human override ready</span></div></div></div></div></div><div style="text-align:center;color:var(--ag);font-size:18px;margin:14px 0">↓</div><div style="background:rgba(22,163,74,.07);border:1px solid rgba(22,163,74,.28);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div style="font-size:24px">✅</div><div style="flex:1;min-width:200px"><div style="font-family:var(--fn);font-size:15px;font-weight:700;color:var(--ag)">Governed Agentic Execution</div><div style="font-family:var(--fn);font-size:13px;color:var(--t2)">Agents act at machine speed — within human-defined boundaries</div></div><div style="display:flex;gap:6px;flex-wrap:wrap"><span style="font-family:var(--fm);font-size:10px;color:var(--ag);background:rgba(22,163,74,.10);border:1px solid rgba(22,163,74,.3);border-radius:20px;padding:4px 11px">trusted</span><span style="font-family:var(--fm);font-size:10px;color:var(--ag);background:rgba(22,163,74,.10);border:1px solid rgba(22,163,74,.3);border-radius:20px;padding:4px 11px">auditable</span><span style="font-family:var(--fm);font-size:10px;color:var(--ag);background:rgba(22,163,74,.10);border:1px solid rgba(22,163,74,.3);border-radius:20px;padding:4px 11px">scalable</span><span style="font-family:var(--fm);font-size:10px;color:var(--ag);background:rgba(22,163,74,.10);border:1px solid rgba(22,163,74,.3);border-radius:20px;padding:4px 11px">on-brand</span></div></div><div style="border-left:3px solid var(--aw);padding:10px 16px;margin-top:18px"><div style="font-family:var(--fs);font-size:16px;font-style:italic;color:var(--t1);line-height:1.5">“Which car will you drive faster on the highway — the one with brakes or the one without?”</div><div style="font-family:var(--fn);font-size:11px;color:var(--tm);margin-top:7px">Framing shared at Adobe Summit 2026 — Aanchal Gupta (Adobe) &amp; Blake Brannon (OneTrust)</div></div></div>`;
 el.querySelectorAll('[data-ly]').forEach(d=>{d.onclick=(e)=>{
 if(e.target.closest('.gd')||e.target.closest('.gd-body'))return;
 selLayer=selLayer===d.dataset.ly?null:d.dataset.ly;render()}})};
@@ -1113,7 +1331,7 @@ ${models.map((m,i)=>`<div class="crd ${expM===i?'ex':''}" data-i="${i}" style="b
 <div><div style="font-family:var(--fn);font-size:11px;font-weight:600;color:var(--ao);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px">Challenges</div>${m.cons.map(c=>`<div style="font-family:var(--fn);font-size:12.5px;color:var(--t2);padding:4px 0;display:flex;gap:8px"><span style="color:var(--ao);flex-shrink:0">△</span>${c}</div>`).join('')}</div>
 </div>
 <div style="margin-bottom:12px;padding:12px 16px;background:${m.color}0c;border:1px solid ${m.color}22;border-radius:8px"><div style="font-family:var(--fn);font-size:10px;font-weight:600;color:${m.color};text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Best For</div><div style="font-family:var(--fn);font-size:13px;color:var(--t1);line-height:1.5">${m.best}</div></div>
-<div style="padding:12px 16px;background:rgba(255,255,255,.03);border-radius:8px"><div style="font-family:var(--fn);font-size:10px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Typical Team Composition</div><div style="font-family:var(--fn);font-size:12.5px;color:var(--t2);line-height:1.55">${m.roles}</div></div>
+<div style="padding:12px 16px;background:rgba(15,23,42,.03);border-radius:8px"><div style="font-family:var(--fn);font-size:10px;font-weight:600;color:var(--tm);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">Typical Team Composition</div><div style="font-family:var(--fn);font-size:12.5px;color:var(--t2);line-height:1.55">${m.roles}</div></div>
 </div></div>`).join('')}
 
 <div class="st">Key AI Roles to Hire (2026)</div>
@@ -1211,7 +1429,25 @@ const G=[
 {t:'Vector Database',d:'Database optimized for storing and searching embedding vectors. Used in RAG for semantic similarity search. Examples: Pinecone, Weaviate, Milvus, Chroma, pgvector. Snowflake and Databricks have native vector search.',a:'Vector Store'},
 {t:'Vertex AI (Google)',d:'Google Cloud\'s managed AI/ML platform. Native Gemini integration, model garden, Agent Builder, and enterprise deployment features. Competitive pricing with committed use discounts.',a:'Google Vertex AI'},
 {t:'Zero-Shot / Few-Shot Learning',d:'Zero-shot: AI performs a task it was not specifically trained for, using only instructions. Few-shot: AI learns from a handful of examples in the prompt. Both are key advantages of modern LLMs over traditional ML.',a:'In-Context Learning'}
+,
+{t:'AI Credits',d:'Token-metered billing currency (e.g., GitHub AI Credits, where 1 credit = $0.01) that ties cost to the input, output, and cached tokens an interaction consumes, priced at each model API rate. Introduced as flat per-seat pricing broke under agentic workloads.',a:'Metered AI Billing'},
+{t:'Context Engineering',d:'The discipline of curating exactly what data, rules, memory, and permissions an AI agent sees before it decides. The 2026 successor to prompt engineering: the important question is the governed context supplied to the agent, not just the wording of the prompt.',a:'Context Curation'},
+{t:'Context Intelligence',d:'A system that continuously supplies trusted, enterprise-specific context (entities, relationships, definitions, policy) so AI can reason, explain, and act reliably. Treats context as a governed asset rather than just retrieval or memory.',a:'System of Context'},
+{t:'Edge AI',d:'Running AI inference at or near where data is created rather than in a centralized cloud. Driven by latency, resilience, bandwidth, and keeping sensitive workloads local. Distinct from sovereign AI (which is about jurisdictional control).',a:'Edge Inference'},
+{t:'Hyperscaler',d:'A large-scale cloud provider (AWS, Microsoft Azure, Google Cloud; Oracle and AI-specialized clouds like CoreWeave) that supplies compute, storage, networking, and increasingly full-stack AI: model hosting, orchestration, security, and governance. The clear infrastructure winners of the 2026 AI cycle.',a:'Cloud Hyperscaler'},
+{t:'Industrial Bubble',d:'A surge of hype and over-investment driven by a genuinely transformative technology, contrasted with a purely financial bubble. Even when many companies fail, the cycle produces durable, valuable inventions (e.g., the 1990s biotech wave). Used to describe the 2026 AI investment climate.',a:'Good Bubble'},
+{t:'Model Routing',d:'Directing each request to the most cost-appropriate model: cheap or small models for routine tasks, frontier models for complex reasoning. The highest-ROI cost optimization in 2026 and, under usage-based billing, also a billing control.',a:'LLM Routing'},
+{t:'Non-Human Identity (NHI)',d:'A machine identity for an AI agent, service, or workload, governed with scoped permissions, secrets, and audit like a service account. As agents take actions (not just generate text), NHI governance becomes central to AI security.',a:'Machine Identity, Agent Identity'},
+{t:'ODRL',d:'Open Digital Rights Language. A W3C standard for expressing permissions, prohibitions, and obligations as machine-readable policy. Of growing interest as a way to make semantic context and agent permissions portable across tools.',a:'Open Digital Rights Language'},
+{t:'Policy-Aware Orchestration',d:'Coordinating work across multiple agents and models while simultaneously enforcing access control, audit logging, human approval, and cost budgets. The 2026 production standard: orchestration without governance is considered unacceptable.',a:'Governed Orchestration'},
+{t:'Shadow AI',d:'Ungoverned use of AI tools and agents outside official policy and oversight. A top enterprise risk because such usage can access data and take actions without audit, controls, or accountability.',a:'Rogue AI'},
+{t:'Sovereign AI',d:'Keeping AI data, models, and infrastructure under a specific jurisdiction or organization control, for compliance, IP protection, and geopolitical risk. About control and residency, whereas edge AI is about latency and locality.',a:'AI Sovereignty'},
+{t:'Usage-Based Billing',d:'Pricing AI by actual consumption (tokens or credits) rather than per seat. Adopted because long, autonomous agent sessions resemble cloud usage more than a SaaS seat. Pairs with pooled allowances, budget caps, and outcome-based pricing.',a:'Consumption-Based Pricing, Metered Billing'},
+{t:'AI TRiSM',d:'Gartner framework for AI Trust, Risk and Security Management. Covers model governance, trustworthiness, fairness, reliability, data protection, and runtime security for AI and agents. The analyst backbone for the governance, orchestration and risk layer.',a:'AI Trust Risk and Security Management'},
+{t:'GRC',d:'Governance, Risk and Compliance. The discipline and tooling category for managing policy, risk registers, controls, and audit evidence. In AI it extends to model risk, use-case risk, and regulatory mapping such as the EU AI Act. Tools include OneTrust and Vanta.',a:'Governance, Risk and Compliance'},
+{t:'Risk Intelligence Layer',d:'A control-plane checkpoint every agent must consult before acting, scoring three things in real time: intelligence (is the data good?), security (is it protected from misuse?), and governance (is the action permissible?). An embedded compliance officer for autonomous AI.',a:'Agentic Security and Trust Layer'}
 ];
+G.sort((a,b)=>a.t.localeCompare(b.t));
 
 $('v-glossary').innerHTML=`<p class="si">Comprehensive reference for all AI terminology used throughout this framework. Terms are ordered alphabetically for quick lookup.</p>
 <div style="margin-bottom:16px"><input type="text" id="gls-search" placeholder="Search terms..." style="font-family:var(--fn);font-size:14px;padding:10px 16px;background:var(--bgc);border:1px solid var(--bm);border-radius:8px;color:var(--t1);width:100%;max-width:400px;outline:none" oninput="filterGlossary()"></div>
@@ -1224,8 +1460,34 @@ function filterGlossary(){const q=$('gls-search').value.toLowerCase();document.q
 
 // ========== AI TRENDS TAB ==========
 function renderTrends(){
-let _tExp=null;
-const trends=[
+let _tExp=null,_mayOpen=false;
+const juneTrends=[
+{icon:'\u{1F4B8}',title:'Usage-Based Billing Goes Live \u2014 the SaaS Seat Starts to Crack',
+summary:'On June 1, GitHub Copilot moved every plan to token-metered billing. It is the clearest signal yet that flat per-seat pricing breaks once agents run long, autonomous sessions.',
+detail:'GitHub replaced premium-request units with GitHub AI Credits (1 credit = $0.01), billed on input, output, and cached tokens at each model API rate, with pooled organization allowances and admin budget controls. Code completions stay included; long agentic sessions do not. The deeper signal: the more useful agentic coding becomes, the worse the old subscription math gets, because a long autonomous session resembles cloud usage more than a SaaS seat. Expect more vendors to move to metered credits, capped and pooled spend, and outcome-based pricing. For buyers, model routing, workflow-level budgets, and value-per-token become core operating disciplines \u2014 a careless model picker is now a billing bug.',
+src:'GitHub Blog and GitHub Docs (June 2026), Fortune, Visual Studio Magazine'},
+{icon:'\u{1F500}',title:'Microsoft Pulls Internal Claude Code to Copilot CLI \u2014 the Governance Tell',
+summary:'Microsoft is winding down most internal Claude Code licenses in its Experiences + Devices division by June 30 and steering engineers to GitHub Copilot CLI \u2014 despite strong internal enthusiasm for Claude Code.',
+detail:'This is not Microsoft dropping Anthropic: the broader Microsoft and Anthropic relationship (Foundry, Copilot Cowork in Microsoft 365) stays intact. The drivers fuse the June 2026 themes into one case study: cost control (token-based spend colliding with fiscal-year budgets), standardization (use the agent you sell), and data governance and security (keep proprietary code inside your own governed cloud rather than third-party endpoints). The lesson for Fortune 500 leaders: even enthusiastic, bottom-up tool adoption gets overridden by cost predictability, standardization, and identity and data-residency control. Build tool strategy around governance and economics, not capability alone.',
+src:'Windows Forum, WinBuzzer, Developer-Tech reporting (May\u2013June 2026)'},
+{icon:'\u{1F6E1}',title:'Policy-Aware Orchestration Becomes Table Stakes',
+summary:'Orchestration without governance is now unacceptable in production. The new pattern routes work across agents and models while enforcing access control, audit logs, human approval, and cost budgets at the same time.',
+detail:'June shifted the question from can agents coordinate to can they coordinate within policy. Buying criteria now center on model routing, human-in-the-loop checkpoints, auditability, non-human identity, and cost-aware execution across many agents and tools. Open interoperability stacks \u2014 MCP for agent-to-tool and A2A for agent-to-agent \u2014 keep showing up as the preferred backbone, because they let enterprises enforce policy while swapping models and frameworks. The control plane is becoming three jobs at once: route the work, enforce the policy, and meter the cost.',
+src:'TekSystems, Promethium, BP-3, current research synthesis (June 2026)'},
+{icon:'\u{1F9E0}',title:'Context Intelligence \u2014 Semantic Layers as the Control Surface',
+summary:'Context, not a bigger model, is becoming the real product. The conversation is shifting from prompt engineering to context engineering: what data, rules, memory, and permissions an agent sees before it decides.',
+detail:'Agentic systems fail when they have fluent language but weak business grounding, producing answers that are directionally wrong. Semantic layers \u2014 encoding entities, relationships, business definitions like revenue and customer and entitlement, plus policy \u2014 are being reframed from a BI convenience into core agentic infrastructure: a semantic OS or control surface for enterprise AI. The emerging architecture is three-part: a semantic and knowledge layer for meaning, an orchestration layer for routing, and a policy and governance layer for who can do what, when to escalate, and how to log. Building blocks include knowledge graphs, ontologies, metadata catalogs, and business-rule engines, with portability via MCP and policy standards such as ODRL.',
+src:'Reltio, Qlik, AtScale, Arion Research, Matillion (2026)'},
+{icon:'\u{1F30D}',title:'Sovereign and Edge AI Accelerate',
+summary:'More inference is moving to controlled, distributed, jurisdiction-aware deployments. Sovereign AI is about control and compliance; edge AI is about latency and resilience \u2014 together they push enterprises toward distributed rather than centralized AI.',
+detail:'Sovereignty concern has gone mainstream: 66% of leaders report at least moderate concern about reliance on foreign-owned AI (Deloitte State of AI 2026). Europe NimbleAI consortium wrapped in early June with a focus on secure, energy-efficient edge AI and technological sovereignty. The market message: centralized cloud AI still dominates, but regulated industries, public sector, healthcare, and financial services increasingly deploy AI closer to where data lives. Architecturally this rewards model-agnostic, portable stacks (MCP and A2A) that can run across cloud, sovereign, and edge environments without re-engineering.',
+src:'Deloitte State of AI 2026, Nutanix, NimbleAI (Design-Reuse), Spectro Cloud'},
+{icon:'\u2699',title:'From AI Features to AI Operations',
+summary:'June defining shift is operational. The hard part is no longer model quality \u2014 it is running agents in production without blowing up cost, security, or data integrity. Agentic AI amplifies data-quality, governance, and hidden-cost problems fast.',
+detail:'The practical bottlenecks are data access, approval workflows, observability, and stopping agents from doing things that look efficient but violate policy. This is showing up across billing, architecture, and procurement at the same time. The convergence order the market is settling on: cost governance, then agent orchestration, then sovereignty and edge, then data architecture modernization. AI capability sits on top; operational control, economics, and data sit underneath. Winners pair adoption with explicit workflow design, model abstraction, and budget-aware orchestration rather than trying to AI-enable everything at once.',
+src:'Current research synthesis; Deloitte, Snowflake, Spectro Cloud (June 2026)'}
+];
+const mayTrends=[
 {icon:'🤖',title:'Multi-Agent Ecosystems Go Production',
 summary:'The conversation has shifted from "should we use AI agents?" to "how do we orchestrate teams of specialized agents at scale?" Multi-agent architectures are now the dominant enterprise pattern.',
 detail:'Gartner placed Agentic AI at the "Peak of Inflated Expectations" in Q2 2026. Enterprises are deploying orchestrator architectures where specialized narrow agents handle specific domains while a central layer coordinates actions. Open standards — MCP (tool connectivity) and A2A (inter-agent communication) — are becoming the backbone. Key launches in April/May: Google Cloud Gemini Enterprise Agent Platform, Microsoft Agent Framework v1.0, Snowflake Cortex agent expansions, and OpenAI Workspace Agents. The reality check: agents are workers executing tasks, but humans are the conductors — setting strategy, designing workflows, and managing outcomes.',
@@ -1260,12 +1522,9 @@ detail:'MCP (Anthropic) standardizes how AI agents connect to tools and data sou
 src:'Anthropic, Google, Microsoft/Snowflake/Databricks announcements'}
 ];
 const el=$('v-trends');
-function render(){
-el.innerHTML=`<p class="si">What is driving the enterprise AI conversation in May 2026 — the real trends, not the hype. Sourced from Gartner, Deloitte, Forrester, Anthropic, a16z, and industry analysis.</p>
-<div style="font-family:var(--fn);font-size:12px;color:var(--tm);margin-bottom:20px;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid var(--bs);border-radius:6px"><b style="color:var(--aw)">The overarching theme of May 2026:</b> The technology is ready, but enterprise architecture and data foundations often are not. The winners are doing the foundational, unglamorous work of preparing their infrastructure for an autonomous future.</div>
-${trends.map((tr,i)=>{
-const sel=_tExp===i;
-return `<div class="crd ${sel?'ex':''}" data-i="${i}" style="border-left:3px solid var(--aw)">
+function cardHtml(tr,key){
+const sel=_tExp===key;
+return `<div class="crd ${sel?'ex':''}" data-key="${key}" style="border-left:3px solid var(--aw)">
 <div class="crd-h"><div style="flex:1">
 <div style="font-family:var(--fn);font-size:15px;font-weight:700;color:var(--t1)">${tr.icon} ${tr.title}</div>
 <div style="font-family:var(--fn);font-size:13px;color:var(--tm);margin-top:4px;line-height:1.5">${tr.summary}</div>
@@ -1273,20 +1532,46 @@ return `<div class="crd ${sel?'ex':''}" data-i="${i}" style="border-left:3px sol
 <div class="crd-d">
 <div style="font-family:var(--fn);font-size:13px;color:var(--t2);line-height:1.65;margin-bottom:10px">${tr.detail}</div>
 <div style="font-family:var(--fm);font-size:10px;color:var(--td)">Sources: ${tr.src}</div>
-</div></div>`}).join('')}
-
-<div class="hbox wrm" style="margin-top:24px"><div class="hl">What This Means for Your AI Strategy</div><div class="ht" style="font-size:14px">
-<b>The cost model has fundamentally changed.</b> AI is not software licensing — it is closer to payroll. Budget for consumption, not licenses. Implement AI FinOps before your next budget cycle.<br><br>
-<b>Architecture is your competitive moat.</b> Model capabilities are commoditizing. The enterprises winning are those with governed data foundations, semantic layers, and composable integration architectures (MCP/A2A) that let them swap components as the landscape evolves.<br><br>
-<b>Start with model routing.</b> If you do one thing this quarter, implement model routing: frontier models for complex tasks, budget models for everything else. This single optimization typically saves 60-80% on inference costs.<br><br>
-<b>Govern or be governed.</b> Shadow AI is an existential risk. Lock down ungoverned AI usage, implement agent RBAC, and build audit trails before regulators mandate it.
+</div></div>`;}
+function render(){
+el.innerHTML=`<p class="si">A living timeline of what is driving the enterprise AI conversation — newest at the top. June 2026 is expanded; open the May 2026 archive below to see how we got here. Sourced from the Stanford AI Index 2026, Deloitte, Snowflake, McKinsey, GitHub, Anthropic, and current industry analysis.</p>
+<div style="font-family:var(--fn);font-size:12px;color:var(--tm);margin-bottom:24px;padding:10px 14px;background:rgba(15,23,42,.03);border:1px solid var(--bs);border-radius:6px"><b style="color:var(--aw)">The overarching theme of June 2026:</b> The question has moved from "can we use AI?" to "how do we operate it?" Billing, governance, identity, and sovereignty are now first-class architecture concerns. The market is converging on a layer cake: AI capability on top, operational control, economics, and data underneath.</div>
+<div style="position:relative;padding-left:28px">
+<div style="position:absolute;left:7px;top:6px;bottom:40px;width:2px;background:linear-gradient(180deg,var(--aw),var(--bs))"></div>
+<div style="position:relative;margin-bottom:14px">
+<div style="position:absolute;left:-28px;top:2px;width:16px;height:16px;border-radius:50%;background:var(--aw);box-shadow:0 0 0 4px rgba(212,165,116,.18)"></div>
+<div style="font-family:var(--fn);font-size:18px;font-weight:700;color:var(--t1)">June 2026</div>
+<div style="font-family:var(--fn);font-size:12px;color:var(--tm)">The operations era begins — billing, governance, identity, and sovereignty go mainstream.</div>
+</div>
+${juneTrends.map((tr,i)=>cardHtml(tr,'j'+i)).join('')}
+<div style="position:relative;margin-top:28px">
+<div style="position:absolute;left:-28px;top:4px;width:16px;height:16px;border-radius:50%;background:var(--bg1);border:2px solid var(--tm)"></div>
+<div id="may-toggle" style="cursor:pointer;display:flex;align-items:center;gap:10px">
+<div><div style="font-family:var(--fn);font-size:18px;font-weight:700;color:var(--t2)">May 2026</div>
+<div style="font-family:var(--fn);font-size:12px;color:var(--tm)">Preserved archive — the trends that set up where we are now.</div></div>
+<div style="margin-left:auto;font-family:var(--fn);font-size:12px;color:var(--ab);white-space:nowrap">${_mayOpen?'▴ Collapse':'▾ Expand'}</div>
+</div>
+<div style="margin-top:14px;display:${_mayOpen?'block':'none'}">
+${mayTrends.map((tr,i)=>cardHtml(tr,'m'+i)).join('')}
+</div>
+</div>
+</div>
+<div class="hbox wrm" style="margin-top:28px"><div class="hl">What This Means for Your AI Strategy</div><div class="ht" style="font-size:14px">
+<b>Operate, do not just adopt.</b> The differentiator in June 2026 is operational control: token budgets, policy-aware orchestration, agent identity, and data residency. Capability is commoditizing; operations are the moat.<br><br>
+<b>Treat AI billing like cloud billing.</b> Usage-based pricing is now the norm. Implement AI FinOps — model routing, workflow budgets, value-per-token — before your next budget cycle.<br><br>
+<b>Govern agents like employees.</b> Agents take actions, so give them scoped identities (NHI), least-privilege permissions, audit trails, and blast-radius limits. Lock down shadow AI before regulators or incidents force the issue.<br><br>
+<b>Build for portability.</b> Favor model-agnostic, open-standard (MCP/A2A) architectures and a governed semantic layer so you can run across cloud, sovereign, and edge — and swap vendors as the landscape churns.
 </div></div>`;
-el.querySelectorAll('.crd .crd-h').forEach(h=>{const c=h.parentElement;h.onclick=()=>{
-const idx=+c.dataset.i;_tExp=_tExp===idx?null:idx;render()}})};
-render()}
+el.querySelectorAll('.crd .crd-h').forEach(h=>{const c=h.parentElement;h.onclick=()=>{const k=c.dataset.key;_tExp=_tExp===k?null:k;render()}});
+const mt=$('may-toggle');if(mt)mt.onclick=()=>{_mayOpen=!_mayOpen;render()};}
+render();}
 
 // ========== INIT ==========
 renderStack();renderTaxonomy();renderDecisions();renderData();renderUseCases();renderAgentic();renderAdoption();renderArch();renderOrgModel();renderGlossary();renderTrends();
 </script>
+<div class="footer">
+<div>Authored by <b style="color:var(--t1)">Thomas Hill</b> · Enterprise AI Strategist · <a href="https://www.linkedin.com/in/thomaslhill" target="_blank" style="color:var(--ab);text-decoration:none">linkedin.com/in/thomaslhill</a></div>
+<div style="color:var(--td)">v3.0 · June 2026 · Updated monthly</div>
+</div>
 </body>
 </html>
