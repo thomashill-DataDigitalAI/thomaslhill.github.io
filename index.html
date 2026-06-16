@@ -10,1055 +10,340 @@
 <meta property="og:description" content="Decision frameworks and tools for Fortune 500 leaders navigating AI strategy, adoption, and organizational readiness.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://thomaslhill.github.io">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0a0a;
-    --bg2: #111111;
-    --bg3: #181818;
-    --border: rgba(255,255,255,0.07);
-    --border-accent: rgba(212,175,98,0.3);
-    --gold: #d4af62;
-    --gold-light: #e8c97a;
-    --gold-dim: rgba(212,175,98,0.15);
-    --text: #f0ece4;
-    --text-mid: #a09a8e;
-    --text-dim: #5a554e;
-    --white: #ffffff;
-    --mono: 'DM Mono', monospace;
-    --serif: 'Cormorant Garamond', Georgia, serif;
-    --sans: 'Instrument Sans', sans-serif;
-    --radius: 2px;
-    --transition: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 15px;
-    line-height: 1.6;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* NOISE TEXTURE OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.4;
-  }
-
-  /* GRID BACKGROUND */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(212,175,98,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(212,175,98,0.03) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* ─── LAYOUT ─── */
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 40px;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* ─── NAV ─── */
-  nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    padding: 20px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: linear-gradient(180deg, rgba(10,10,10,0.95) 0%, transparent 100%);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  .nav-logo {
-    font-family: var(--mono);
-    font-size: 12px;
-    font-weight: 400;
-    color: var(--text-mid);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    text-decoration: none;
-  }
-
-  .nav-logo span { color: var(--gold); }
-
-  .nav-links {
-    display: flex;
-    gap: 32px;
-    list-style: none;
-  }
-
-  .nav-links a {
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 400;
-    color: var(--text-dim);
-    text-decoration: none;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    transition: color var(--transition);
-  }
-
-  .nav-links a:hover { color: var(--gold); }
-
-  /* ─── HERO ─── */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 120px 0 80px;
-    position: relative;
-  }
-
-  .hero-eyebrow {
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 400;
-    color: var(--gold);
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    margin-bottom: 32px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.2s forwards;
-  }
-
-  .hero-eyebrow::before {
-    content: '';
-    display: inline-block;
-    width: 32px;
-    height: 1px;
-    background: var(--gold);
-    vertical-align: middle;
-    margin-right: 16px;
-    opacity: 0.6;
-  }
-
-  .hero-title {
-    font-family: var(--serif);
-    font-size: clamp(52px, 7vw, 96px);
-    font-weight: 300;
-    line-height: 1.0;
-    letter-spacing: -0.01em;
-    color: var(--white);
-    margin-bottom: 8px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.35s forwards;
-  }
-
-  .hero-title em {
-    font-style: italic;
-    color: var(--gold);
-    font-weight: 300;
-  }
-
-  .hero-subtitle {
-    font-family: var(--serif);
-    font-size: clamp(28px, 4vw, 52px);
-    font-weight: 300;
-    color: var(--text-mid);
-    line-height: 1.1;
-    margin-bottom: 48px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.5s forwards;
-  }
-
-  .hero-desc {
-    font-family: var(--sans);
-    font-size: 16px;
-    font-weight: 400;
-    color: var(--text-mid);
-    max-width: 560px;
-    line-height: 1.75;
-    margin-bottom: 52px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.65s forwards;
-  }
-
-  .hero-ctas {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.8s forwards;
-  }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 28px;
-    background: var(--gold);
-    color: #0a0a0a;
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: all var(--transition);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn-primary::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: white;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .btn-primary:hover::after { opacity: 0.15; }
-  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(212,175,98,0.3); }
-
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 13px 28px;
-    background: transparent;
-    color: var(--text-mid);
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    text-decoration: none;
-    border: 1px solid var(--border);
-    cursor: pointer;
-    transition: all var(--transition);
-  }
-
-  .btn-secondary:hover {
-    border-color: var(--gold);
-    color: var(--gold);
-    transform: translateY(-1px);
-  }
-
-  /* HERO DECORATION */
-  .hero-decoration {
-    position: absolute;
-    right: -60px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 480px;
-    height: 480px;
-    opacity: 0;
-    animation: fadeIn 1.5s 1s forwards;
-    pointer-events: none;
-  }
-
-  /* ─── SECTION HEADERS ─── */
-  .section {
-    padding: 100px 0;
-    position: relative;
-    z-index: 1;
-  }
-
-  .section-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    font-weight: 400;
-    color: var(--gold);
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .section-label::after {
-    content: '';
-    flex: 1;
-    max-width: 60px;
-    height: 1px;
-    background: var(--gold);
-    opacity: 0.4;
-  }
-
-  .section-title {
-    font-family: var(--serif);
-    font-size: clamp(32px, 4vw, 52px);
-    font-weight: 300;
-    line-height: 1.1;
-    color: var(--white);
-    margin-bottom: 16px;
-  }
-
-  .section-title em {
-    font-style: italic;
-    color: var(--gold);
-  }
-
-  .section-desc {
-    font-size: 15px;
-    color: var(--text-mid);
-    max-width: 520px;
-    line-height: 1.7;
-    margin-bottom: 56px;
-  }
-
-  /* ─── DIVIDER ─── */
-  .divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
-    margin: 0;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* ─── TOOLS GRID ─── */
-  .tools-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-  }
-
-  .tool-card {
-    background: var(--bg);
-    padding: 40px;
-    text-decoration: none;
-    color: inherit;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    position: relative;
-    overflow: hidden;
-    transition: background var(--transition);
-    cursor: pointer;
-  }
-
-  .tool-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--gold);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform var(--transition);
-  }
-
-  .tool-card:hover { background: var(--bg3); }
-  .tool-card:hover::before { transform: scaleX(1); }
-
-  .tool-card-status {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-family: var(--mono);
-    font-size: 10px;
-    font-weight: 400;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-  }
-
-  .status-live { color: #5ec98a; }
-  .status-soon { color: var(--text-dim); }
-
-  .status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: currentColor;
-  }
-
-  .status-live .status-dot {
-    animation: pulse 2s infinite;
-  }
-
-  .tool-card-number {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    letter-spacing: 0.1em;
-  }
-
-  .tool-card-title {
-    font-family: var(--serif);
-    font-size: 26px;
-    font-weight: 300;
-    color: var(--white);
-    line-height: 1.2;
-    transition: color var(--transition);
-  }
-
-  .tool-card:hover .tool-card-title { color: var(--gold-light); }
-
-  .tool-card-desc {
-    font-size: 14px;
-    color: var(--text-mid);
-    line-height: 1.65;
-    flex: 1;
-  }
-
-  .tool-card-tabs {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .tab-chip {
-    font-family: var(--mono);
-    font-size: 9px;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 4px 8px;
-    border: 1px solid var(--border);
-    color: var(--text-dim);
-    transition: all var(--transition);
-  }
-
-  .tool-card:hover .tab-chip {
-    border-color: var(--border-accent);
-    color: var(--gold);
-  }
-
-  .tool-card-cta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--gold);
-    padding-top: 8px;
-    border-top: 1px solid var(--border);
-    transition: gap var(--transition);
-  }
-
-  .tool-card:hover .tool-card-cta { gap: 14px; }
-
-  /* COMING SOON CARD */
-  .tool-card.coming-soon {
-    opacity: 0.5;
-    cursor: default;
-  }
-
-  .tool-card.coming-soon:hover { background: var(--bg); }
-  .tool-card.coming-soon:hover::before { transform: scaleX(0); }
-  .tool-card.coming-soon .tool-card-title { color: var(--text-mid); }
-
-  /* ─── CHANGELOG ─── */
-  .changelog {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    border: 1px solid var(--border);
-  }
-
-  .changelog-item {
-    display: grid;
-    grid-template-columns: 160px 1fr;
-    gap: 40px;
-    padding: 28px 36px;
-    border-bottom: 1px solid var(--border);
-    transition: background var(--transition);
-  }
-
-  .changelog-item:last-child { border-bottom: none; }
-  .changelog-item:hover { background: var(--bg3); }
-
-  .changelog-date {
-    font-family: var(--mono);
-    font-size: 11px;
-    font-weight: 400;
-    color: var(--gold);
-    letter-spacing: 0.1em;
-    padding-top: 2px;
-  }
-
-  .changelog-tool {
-    font-family: var(--mono);
-    font-size: 9px;
-    font-weight: 400;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    margin-bottom: 6px;
-  }
-
-  .changelog-text {
-    font-size: 14px;
-    color: var(--text-mid);
-    line-height: 1.6;
-  }
-
-  .changelog-text strong {
-    color: var(--text);
-    font-weight: 500;
-  }
-
-  /* ─── ABOUT ─── */
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: start;
-  }
-
-  .about-text {
-    font-family: var(--serif);
-    font-size: 20px;
-    font-weight: 300;
-    color: var(--text-mid);
-    line-height: 1.7;
-  }
-
-  .about-text strong {
-    color: var(--text);
-    font-weight: 400;
-  }
-
-  .about-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-  }
-
-  .meta-item {
-    padding: 24px;
-    border: 1px solid var(--border);
-    transition: border-color var(--transition);
-  }
-
-  .meta-item:hover { border-color: var(--border-accent); }
-
-  .meta-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    font-weight: 400;
-    color: var(--gold);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-
-  .meta-value {
-    font-size: 14px;
-    color: var(--text-mid);
-    line-height: 1.5;
-  }
-
-  /* ─── FOOTER ─── */
-  footer {
-    padding: 48px 0;
-    border-top: 1px solid var(--border);
-    position: relative;
-    z-index: 1;
-  }
-
-  .footer-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-
-  .footer-brand {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    letter-spacing: 0.12em;
-  }
-
-  .footer-brand span { color: var(--gold); }
-
-  .footer-links {
-    display: flex;
-    gap: 24px;
-    list-style: none;
-  }
-
-  .footer-links a {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-dim);
-    text-decoration: none;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    transition: color var(--transition);
-  }
-
-  .footer-links a:hover { color: var(--gold); }
-
-  .footer-version {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-dim);
-    letter-spacing: 0.1em;
-  }
-
-  /* ─── ANIMATIONS ─── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  @keyframes rotate {
-    from { transform: translateY(-50%) rotate(0deg); }
-    to { transform: translateY(-50%) rotate(360deg); }
-  }
-
-  /* ─── SCROLL REVEAL ─── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 768px) {
-    .container { padding: 0 24px; }
-    nav { padding: 16px 24px; }
-    .nav-links { display: none; }
-    .hero-decoration { display: none; }
-    .about-grid { grid-template-columns: 1fr; gap: 40px; }
-    .changelog-item { grid-template-columns: 1fr; gap: 8px; }
-    .footer-inner { flex-direction: column; align-items: flex-start; }
-  }
+:root {
+  --paper:#FFFFFF; --paper-2:#F5F6F8; --paper-3:#ECEEF2;
+  --ink:#0D1422; --ink-2:#28324A; --slate:#5A6679; --muted:#8A93A6;
+  --line:#E2E6EC; --line-2:#EDF0F4;
+  --blue:#1E50FF; --blue-2:#1741D6; --blue-wash:#EAF0FF;
+  --accent:#00B386;
+  --display:'Fraunces',Georgia,serif;
+  --body:'Inter Tight',system-ui,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --ease:cubic-bezier(0.25,0.46,0.45,0.94);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:0 48px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--ink);text-decoration:none;letter-spacing:0.06em}
+.nav-logo span{color:var(--blue)}
+.nav-links{display:flex;align-items:center;gap:0;list-style:none}
+.nav-links a{font-family:var(--body);font-size:13px;font-weight:500;color:var(--slate);text-decoration:none;padding:8px 14px;border-radius:6px;transition:all 0.2s}
+.nav-links a:hover{color:var(--ink);background:var(--paper-2)}
+.nav-cta{padding:8px 18px !important;background:var(--ink) !important;color:white !important;border-radius:6px !important;margin-left:6px}
+.nav-cta:hover{background:var(--blue) !important}
+
+/* HERO */
+.hero{padding:120px 48px 80px;max-width:1200px;margin:0 auto;min-height:auto}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--blue);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:24px;padding:6px 12px;background:var(--blue-wash);border-radius:999px}
+.hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--blue)}
+.hero-title{font-family:var(--display);font-size:clamp(52px,6.5vw,88px);font-weight:300;line-height:0.96;letter-spacing:-0.03em;color:var(--ink);margin-bottom:24px}
+.hero-title em{font-style:italic;color:var(--blue)}
+.hero-desc{font-size:17px;color:var(--slate);line-height:1.7;max-width:520px;margin-bottom:36px}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;background:var(--ink);color:white;font-family:var(--body);font-size:13px;font-weight:600;text-decoration:none;border-radius:8px;border:1.5px solid var(--ink);transition:all 0.2s var(--ease)}
+.btn-primary:hover{background:var(--blue);border-color:var(--blue);transform:translateY(-1px);box-shadow:0 6px 20px rgba(30,80,255,0.2)}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;background:transparent;color:var(--ink-2);font-family:var(--body);font-size:13px;font-weight:500;text-decoration:none;border-radius:8px;border:1.5px solid var(--line);transition:all 0.2s var(--ease)}
+.btn-secondary:hover{border-color:var(--ink);color:var(--ink);transform:translateY(-1px)}
+
+/* HERO STAT STRIP */
+.hero-stats{display:flex;align-items:center;gap:0;margin-top:40px;padding-top:32px;border-top:1px solid var(--line);flex-wrap:wrap}
+.stat-item{display:flex;align-items:baseline;gap:8px;padding:0 28px 0 0;margin:0 28px 0 0;border-right:1px solid var(--line)}
+.stat-item:first-child{padding-left:0}
+.stat-item:last-child{border-right:none;padding-right:0;margin-right:0}
+.stat-num{font-family:var(--display);font-size:28px;font-weight:300;line-height:1;color:var(--ink);letter-spacing:-0.03em}
+.stat-num em{font-style:italic;color:var(--blue)}
+.stat-label{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase}
+.stat-divider{display:none}
+.stat-note{display:none}
+
+/* LAYOUT */
+.page-divider{height:1px;background:var(--line);margin:0 48px}
+.section{max-width:1200px;margin:0 auto;padding:88px 48px}
+.section-eyebrow{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--blue);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:14px}
+.section-title{font-family:var(--display);font-size:clamp(32px,3.5vw,48px);font-weight:300;line-height:1.08;letter-spacing:-0.025em;color:var(--ink);margin-bottom:14px}
+.section-title em{font-style:italic;color:var(--blue)}
+.section-lead{font-size:16px;color:var(--slate);line-height:1.7;max-width:560px;margin-bottom:48px}
+
+/* TOOLS */
+.tools-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.tool-card{background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:32px;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:16px;position:relative;overflow:hidden;transition:all 0.25s var(--ease)}
+.tool-card::after{content:'';position:absolute;inset:0;border-radius:12px;border:1.5px solid var(--blue);opacity:0;transition:opacity 0.25s;pointer-events:none}
+.tool-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(13,20,34,0.08)}
+.tool-card:hover::after{opacity:1}
+.tool-card.coming-soon{background:var(--paper-2);cursor:default;opacity:0.6}
+.tool-card.coming-soon:hover{transform:none;box-shadow:none}
+.tool-card.coming-soon:hover::after{opacity:0}
+.tool-card-header{display:flex;justify-content:space-between;align-items:flex-start}
+.tool-status{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;font-weight:500;letter-spacing:0.06em;padding:4px 10px;border-radius:999px}
+.tool-status.live{background:rgba(0,179,134,0.1);color:var(--accent)}
+.tool-status.soon{background:var(--paper-3);color:var(--muted)}
+.tool-status .dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.tool-status.live .dot{animation:pulse 2s infinite}
+.tool-num{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.tool-title{font-family:var(--display);font-size:26px;font-weight:300;line-height:1.15;color:var(--ink);letter-spacing:-0.02em;transition:color 0.2s}
+.tool-card:hover .tool-title{color:var(--blue)}
+.tool-desc{font-size:14px;color:var(--slate);line-height:1.65;flex:1}
+.tool-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-family:var(--mono);font-size:10px;font-weight:500;padding:3px 9px;border-radius:999px;background:var(--paper-2);color:var(--slate);border:1px solid var(--line);letter-spacing:0.04em;transition:all 0.2s}
+.tool-card:hover .chip{background:var(--blue-wash);color:var(--blue);border-color:rgba(30,80,255,0.2)}
+.tool-cta{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--blue);padding-top:12px;border-top:1px solid var(--line);transition:gap 0.2s}
+.tool-card:hover .tool-cta{gap:14px}
+
+/* CHANGELOG */
+.changelog{border:1.5px solid var(--line);border-radius:12px;overflow:hidden}
+.cl-item{display:grid;grid-template-columns:160px 1fr;gap:32px;padding:28px 32px;border-bottom:1px solid var(--line-2);transition:background 0.2s}
+.cl-item:last-child{border-bottom:none}
+.cl-item:hover{background:var(--paper-2)}
+.cl-date{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--blue);letter-spacing:0.08em;padding-top:2px}
+.cl-tool{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+.cl-text{font-size:14px;color:var(--slate);line-height:1.65}
+.cl-text strong{color:var(--ink-2);font-weight:600}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:80px;align-items:start}
+.about-body{font-family:var(--display);font-size:21px;font-weight:300;color:var(--ink-2);line-height:1.65;font-style:italic}
+.about-body strong{font-style:normal;font-weight:400;color:var(--ink)}
+.about-ctas{display:flex;gap:12px;margin-top:36px;flex-wrap:wrap}
+.meta-cards{display:flex;flex-direction:column;gap:12px}
+.meta-card{background:var(--paper-2);border:1px solid var(--line);border-radius:10px;padding:20px 24px;transition:border-color 0.2s}
+.meta-card:hover{border-color:var(--blue)}
+.meta-label{font-family:var(--mono);font-size:10px;font-weight:500;color:var(--blue);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:6px}
+.meta-value{font-size:13px;color:var(--slate);line-height:1.55}
+
+/* FOOTER */
+footer{background:var(--ink);padding:44px 48px}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.footer-brand{font-family:var(--mono);font-size:12px;color:rgba(255,255,255,0.4);letter-spacing:0.06em}
+.footer-brand span{color:white}
+.footer-links{display:flex;gap:4px;list-style:none}
+.footer-links a{font-size:13px;color:rgba(255,255,255,0.5);text-decoration:none;padding:6px 12px;border-radius:6px;transition:all 0.2s;font-weight:500}
+.footer-links a:hover{color:white;background:rgba(255,255,255,0.08)}
+.footer-version{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,0.3);letter-spacing:0.06em}
+
+/* ANIMATION */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity 0.6s ease,transform 0.6s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  nav{padding:0 24px}
+  .nav-links{display:none}
+  .hero{padding:100px 24px 56px}
+  .hero-stats{gap:0}
+  .stat-item{padding:0 20px 0 0;margin:0 20px 0 0}
+  .page-divider{margin:0 24px}
+  .section{padding:64px 24px}
+  .tools-grid{grid-template-columns:1fr}
+  .about-grid{grid-template-columns:1fr;gap:40px}
+  .cl-item{grid-template-columns:1fr;gap:6px}
+  footer{padding:36px 24px}
+  .footer-inner{flex-direction:column;align-items:flex-start}
+}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <a class="nav-logo" href="#"><span>T</span>HOMAS HILL</a>
   <ul class="nav-links">
     <li><a href="#tools">Tools</a></li>
     <li><a href="#changelog">Updates</a></li>
     <li><a href="#about">About</a></li>
-    <li><a href="https://linkedin.com/in/thomaslhill" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+    <li><a href="https://thomaslhill.com/" target="_blank" rel="noopener">Website ↗</a></li>
+    <li><a href="https://linkedin.com/in/thomaslhill" target="_blank" rel="noopener" class="nav-cta">LinkedIn ↗</a></li>
   </ul>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
-  <div class="container">
-    <p class="hero-eyebrow">Enterprise AI Strategy</p>
-    <h1 class="hero-title">Thomas <em>Hill</em></h1>
-    <p class="hero-subtitle">Frameworks for the<br>AI-Native Enterprise</p>
-    <p class="hero-desc">
-      Decision tools for Fortune 500 leaders navigating AI strategy, 
-      vendor selection, organizational readiness, and the emerging 
-      agentic era — built for practitioners, not theorists.
-    </p>
-    <div class="hero-ctas">
-      <a href="#tools" class="btn-primary">
-        <span>Explore Tools</span>
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-      <a href="https://linkedin.com/in/thomaslhill" target="_blank" rel="noopener" class="btn-secondary">
-        <span>Connect on LinkedIn</span>
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H4M11 1v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
+  <div class="hero-tag">Enterprise AI Strategy</div>
+  <h1 class="hero-title">Thomas<br><em>Hill</em></h1>
+  <p class="hero-desc">Decision frameworks for Fortune 500 leaders navigating AI strategy, vendor selection, organizational readiness, and the emerging agentic enterprise — built for practitioners, not theorists.</p>
+  <div class="hero-ctas">
+    <a href="#tools" class="btn-primary">Explore Tools <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <a href="https://thomaslhill.com/" target="_blank" rel="noopener" class="btn-secondary">Personal Website <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H4M11 1v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <a href="https://linkedin.com/in/thomaslhill" target="_blank" rel="noopener" class="btn-secondary">LinkedIn <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H4M11 1v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-num"><em>3</em></div>
+      <div class="stat-label">Live Frameworks</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><em>F500</em></div>
+      <div class="stat-label">Audience</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num"><em>Monthly</em></div>
+      <div class="stat-label">Update Cadence</div>
     </div>
   </div>
-
-  <!-- DECORATIVE SVG -->
-  <svg class="hero-decoration" viewBox="0 0 480 480" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="240" cy="240" r="200" stroke="rgba(212,175,98,0.06)" stroke-width="1"/>
-    <circle cx="240" cy="240" r="160" stroke="rgba(212,175,98,0.05)" stroke-width="1"/>
-    <circle cx="240" cy="240" r="120" stroke="rgba(212,175,98,0.08)" stroke-width="1"/>
-    <circle cx="240" cy="240" r="80" stroke="rgba(212,175,98,0.06)" stroke-width="1"/>
-    <!-- Radial lines -->
-    <line x1="240" y1="40" x2="240" y2="440" stroke="rgba(212,175,98,0.04)" stroke-width="1"/>
-    <line x1="40" y1="240" x2="440" y2="240" stroke="rgba(212,175,98,0.04)" stroke-width="1"/>
-    <line x1="98" y1="98" x2="382" y2="382" stroke="rgba(212,175,98,0.04)" stroke-width="1"/>
-    <line x1="382" y1="98" x2="98" y2="382" stroke="rgba(212,175,98,0.04)" stroke-width="1"/>
-    <!-- Dots at intersections -->
-    <circle cx="240" cy="40" r="3" fill="rgba(212,175,98,0.3)"/>
-    <circle cx="240" cy="440" r="3" fill="rgba(212,175,98,0.3)"/>
-    <circle cx="40" cy="240" r="3" fill="rgba(212,175,98,0.3)"/>
-    <circle cx="440" cy="240" r="3" fill="rgba(212,175,98,0.3)"/>
-    <circle cx="240" cy="240" r="6" fill="rgba(212,175,98,0.2)"/>
-    <circle cx="240" cy="240" r="3" fill="rgba(212,175,98,0.6)"/>
-    <!-- Outer markers -->
-    <path d="M240 20 L244 32 L236 32 Z" fill="rgba(212,175,98,0.4)"/>
-    <path d="M240 460 L244 448 L236 448 Z" fill="rgba(212,175,98,0.4)"/>
-    <path d="M20 240 L32 244 L32 236 Z" fill="rgba(212,175,98,0.4)"/>
-    <path d="M460 240 L448 244 L448 236 Z" fill="rgba(212,175,98,0.4)"/>
-  </svg>
 </section>
 
-<div class="divider"></div>
+<div class="page-divider"></div>
 
-<!-- TOOLS -->
 <section class="section" id="tools">
-  <div class="container">
-    <p class="section-label reveal">Tools & Frameworks</p>
-    <h2 class="section-title reveal">Built for <em>decisions,</em><br>not decks</h2>
-    <p class="section-desc reveal">
-      Each tool is a self-contained framework designed for hands-on use — 
-      not a slide to screenshot, but an instrument to work with.
-      Updated on a regular cadence as the landscape evolves.
-    </p>
+  <div class="section-eyebrow reveal">Tools &amp; Frameworks</div>
+  <h2 class="section-title reveal">Built for <em>decisions,</em><br>not decks.</h2>
+  <p class="section-lead reveal">Each tool is a self-contained working framework — not a slide to screenshot, but an instrument to use. Updated on a regular cadence as the landscape evolves.</p>
+  <div class="tools-grid reveal">
 
-    <div class="tools-grid reveal">
-
-      <!-- TOOL 01: AI LANDSCAPE — LIVE -->
-      <a class="tool-card" href="./ai-landscape/" aria-label="Open Enterprise AI Landscape tool">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span class="tool-card-number">01</span>
-          <span class="tool-card-status status-live">
-            <span class="status-dot"></span>
-            Live · Updated June 2026
-          </span>
-        </div>
-        <div>
-          <div class="tool-card-title">Enterprise AI<br>Landscape</div>
-        </div>
-        <p class="tool-card-desc">
-          An end-to-end decision framework covering AI stack architecture, 
-          agentic playbooks, use case mapping, build vs. buy analysis, 
-          data foundations, org design, vendor costs, and a full AI glossary.
-          Built for Fortune 500 strategy teams.
-        </p>
-        <div class="tool-card-tabs">
-          <span class="tab-chip">AI Stack</span>
-          <span class="tab-chip">Agentic AI</span>
-          <span class="tab-chip">Use Cases</span>
-          <span class="tab-chip">Build vs Buy</span>
-          <span class="tab-chip">Data Readiness</span>
-          <span class="tab-chip">Architecture</span>
-          <span class="tab-chip">AI Org & Talent</span>
-          <span class="tab-chip">Costs</span>
-          <span class="tab-chip">Glossary</span>
-        </div>
-        <div class="tool-card-cta">
-          Open Framework
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-      </a>
-
-      <!-- TOOL 02: B2B DATA PROVIDERS — LIVE -->
-      <a class="tool-card" href="./data-provider-landscape-ls-dx/" aria-label="Open B2B Data Providers Landscape tool">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span class="tool-card-number">02</span>
-          <span class="tool-card-status status-live">
-            <span class="status-dot"></span>
-            Live · June 2026
-          </span>
-        </div>
-        <div>
-          <div class="tool-card-title">B2B Data Providers<br>Landscape</div>
-        </div>
-        <p class="tool-card-desc">
-          A comprehensive vendor intelligence tool for evaluating third-party 
-          data providers across Healthcare, Diagnostics, and Life Sciences. 
-          Maps 12 data layers — from claims and EHR to genomics and 
-          clinical trials — with side-by-side comparison, overlap analysis, 
-          a procurement governance checklist, and a full glossary of 
-          industry terms.
-        </p>
-        <div class="tool-card-tabs">
-          <span class="tab-chip">Claims & RWD</span>
-          <span class="tab-chip">EHR / EMR</span>
-          <span class="tab-chip">Genomics</span>
-          <span class="tab-chip">Clinical Trials</span>
-          <span class="tab-chip">Lab & Dx</span>
-          <span class="tab-chip">Physician Data</span>
-          <span class="tab-chip">Rx & Pharma</span>
-          <span class="tab-chip">Overlap & Fit</span>
-          <span class="tab-chip">Governance</span>
-          <span class="tab-chip">Glossary</span>
-        </div>
-        <div class="tool-card-cta">
-          Open Framework
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-      </a>
-
-      <!-- TOOL 03: DCX-OS — LIVE -->
-      <a class="tool-card" href="./dcx-os/" aria-label="Open DCX-OS Field Guide tool">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span class="tool-card-number">03</span>
-          <span class="tool-card-status status-live">
-            <span class="status-dot"></span>
-            Live · June 2026
-          </span>
-        </div>
-        <div>
-          <div class="tool-card-title">Digital CX<br>Operating System</div>
-        </div>
-        <p class="tool-card-desc">
-          A B2B enterprise field guide for designing the AI-powered Digital 
-          Customer Experience operating model. Maps macro forces reshaping 
-          B2B CX in 2026, the full customer journey, common architecture 
-          patterns, tech stack layers, the three core enablers, a maturity 
-          curve with self-assessment, and org design frameworks — all in 
-          one navigable reference.
-        </p>
-        <div class="tool-card-tabs">
-          <span class="tab-chip">Macro Forces</span>
-          <span class="tab-chip">B2B Service</span>
-          <span class="tab-chip">Customer Journey</span>
-          <span class="tab-chip">Architecture</span>
-          <span class="tab-chip">Tech Stack</span>
-          <span class="tab-chip">Enablers</span>
-          <span class="tab-chip">Measurement</span>
-          <span class="tab-chip">Maturity Curve</span>
-          <span class="tab-chip">Assessment</span>
-          <span class="tab-chip">Org Design</span>
-        </div>
-        <div class="tool-card-cta">
-          Open Framework
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-      </a>
-
-      <!-- TOOL 04: COMING SOON PLACEHOLDER -->
-      <div class="tool-card coming-soon" aria-label="Coming soon">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <span class="tool-card-number">04</span>
-          <span class="tool-card-status status-soon">
-            <span class="status-dot"></span>
-            Coming Soon
-          </span>
-        </div>
-        <div>
-          <div class="tool-card-title">Next Framework</div>
-        </div>
-        <p class="tool-card-desc">
-          A fourth tool is in development.
-          Follow on LinkedIn for updates when it launches.
-        </p>
-        <div class="tool-card-tabs">
-          <span class="tab-chip">TBD</span>
-        </div>
-        <div class="tool-card-cta" style="color: var(--text-dim);">
-          In Development
-        </div>
+    <a class="tool-card" href="./ai-landscape/">
+      <div class="tool-card-header">
+        <span class="tool-num">01</span>
+        <span class="tool-status live"><span class="dot"></span> Live · June 2026</span>
       </div>
+      <div class="tool-title">Enterprise AI<br>Landscape</div>
+      <p class="tool-desc">An end-to-end decision framework covering AI stack architecture, agentic playbooks, use case mapping, build vs. buy analysis, data foundations, org design, vendor costs, and a full AI glossary. Built for Fortune 500 strategy teams.</p>
+      <div class="tool-chips">
+        <span class="chip">AI Stack</span><span class="chip">Agentic AI</span><span class="chip">Use Cases</span><span class="chip">Build vs Buy</span><span class="chip">Data Readiness</span><span class="chip">Architecture</span><span class="chip">AI Org &amp; Talent</span><span class="chip">Costs</span><span class="chip">Glossary</span>
+      </div>
+      <div class="tool-cta">Open Framework <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </a>
 
+    <a class="tool-card" href="./data-provider-landscape-ls-dx/">
+      <div class="tool-card-header">
+        <span class="tool-num">02</span>
+        <span class="tool-status live"><span class="dot"></span> Live · June 2026</span>
+      </div>
+      <div class="tool-title">B2B Data Providers<br>Landscape</div>
+      <p class="tool-desc">Vendor intelligence for evaluating third-party data providers across Healthcare, Diagnostics, and Life Sciences. Maps 12 data layers — claims, EHR, genomics, clinical trials, and more — with side-by-side comparison, overlap analysis, a procurement governance checklist, and full glossary.</p>
+      <div class="tool-chips">
+        <span class="chip">Claims &amp; RWD</span><span class="chip">EHR / EMR</span><span class="chip">Genomics</span><span class="chip">Clinical Trials</span><span class="chip">Lab &amp; Dx</span><span class="chip">Physician Data</span><span class="chip">Rx &amp; Pharma</span><span class="chip">Overlap &amp; Fit</span><span class="chip">Governance</span><span class="chip">Glossary</span>
+      </div>
+      <div class="tool-cta">Open Framework <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </a>
+
+    <a class="tool-card" href="./dcx-os/">
+      <div class="tool-card-header">
+        <span class="tool-num">03</span>
+        <span class="tool-status live"><span class="dot"></span> Live · June 2026</span>
+      </div>
+      <div class="tool-title">Digital CX<br>Operating System</div>
+      <p class="tool-desc">A B2B enterprise field guide for designing the AI-powered Digital Customer Experience operating model. Maps macro forces reshaping B2B CX in 2026, the full customer journey, common architecture patterns, tech stack layers, the three core enablers, a maturity curve with self-assessment, and org design frameworks.</p>
+      <div class="tool-chips">
+        <span class="chip">Macro Forces</span><span class="chip">B2B Service</span><span class="chip">Customer Journey</span><span class="chip">Architecture</span><span class="chip">Tech Stack</span><span class="chip">Enablers</span><span class="chip">Measurement</span><span class="chip">Maturity Curve</span><span class="chip">Assessment</span><span class="chip">Org Design</span>
+      </div>
+      <div class="tool-cta">Open Framework <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </a>
+
+    <div class="tool-card coming-soon">
+      <div class="tool-card-header">
+        <span class="tool-num">04</span>
+        <span class="tool-status soon"><span class="dot"></span> Coming Soon</span>
+      </div>
+      <div class="tool-title" style="color:var(--muted)">Next Framework</div>
+      <p class="tool-desc">A fourth tool is in development. Follow on LinkedIn for updates when it launches.</p>
+      <div class="tool-chips"><span class="chip">TBD</span></div>
+      <div class="tool-cta" style="color:var(--muted)">In Development</div>
     </div>
+
   </div>
 </section>
 
-<div class="divider"></div>
+<div class="page-divider"></div>
 
-<!-- CHANGELOG -->
 <section class="section" id="changelog">
-  <div class="container">
-    <p class="section-label reveal">Changelog</p>
-    <h2 class="section-title reveal">What's <em>new</em></h2>
-    <p class="section-desc reveal">
-      Tools are updated on a regular cadence. Bookmark this page — 
-      your link to the latest version never changes.
-    </p>
-
-    <div class="changelog reveal">
-      <div class="changelog-item">
-        <div class="changelog-date">June 2026</div>
-        <div>
-          <div class="changelog-tool">DCX Operating System · v1.0</div>
-          <p class="changelog-text">
-            <strong>New tool launched.</strong> AI-powered Digital Customer Experience 
-            field guide for B2B enterprise. Covers eight macro forces reshaping CX in 2026, 
-            the full B2B customer journey, common architecture patterns, tech stack layers, 
-            the three core enablers, a measurement framework, maturity curve, 
-            self-assessment, and org design — all in one navigable reference.
-          </p>
-        </div>
-      </div>
-          <p class="changelog-text">
-            <strong>New tool launched.</strong> Comprehensive vendor intelligence 
-            framework for Healthcare, Diagnostics, and Life Sciences. Covers 12 
-            data layers including claims, EHR, genomics, clinical trials, lab & Dx, 
-            physician data, and Rx. Includes interactive provider explorer, 
-            side-by-side comparison, overlap & fit analysis, a 6-step procurement 
-            governance checklist, and full glossary.
-          </p>
-        </div>
-      </div>
-      <div class="changelog-item">
-        <div class="changelog-date">June 2026</div>
-        <div>
-          <div class="changelog-tool">B2B Data Providers Landscape · v1.0</div>
-          <p class="changelog-text">
-            <strong>New tool launched.</strong> Comprehensive vendor intelligence 
-            framework for Healthcare, Diagnostics, and Life Sciences. Covers 12 
-            data layers including claims, EHR, genomics, clinical trials, lab & Dx, 
-            physician data, and Rx. Includes interactive provider explorer, 
-            side-by-side comparison, overlap & fit analysis, a 6-step procurement 
-            governance checklist, and full glossary.
-          </p>
-        </div>
-      </div>
-      <div class="changelog-item">
-        <div class="changelog-date">June 2026</div>
-        <div>
-          <div class="changelog-tool">Enterprise AI Landscape · v2.1</div>
-          <p class="changelog-text">
-            <strong>Content refresh.</strong> Updated to reflect latest market 
-            developments. Add your specific update notes here when publishing 
-            this cycle.
-          </p>
-        </div>
-      </div>
-      <div class="changelog-item">
-        <div class="changelog-date">May 2026</div>
-        <div>
-          <div class="changelog-tool">Enterprise AI Landscape · v2.0</div>
-          <p class="changelog-text">
-            <strong>Major refresh.</strong> Adoption Insights tab rebuilt from 
-            Anthropic's 2026 State of AI Agents Report data. Agentic Playbook 
-            expanded with new enterprise patterns. Power Block Partnerships section 
-            added to AI Stack. Data Readiness Assessment launched with scored 
-            dimensions and tiered results.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ABOUT -->
-<section class="section" id="about">
-  <div class="container">
-    <p class="section-label reveal">About</p>
-    <div class="about-grid">
+  <div class="section-eyebrow reveal">Changelog</div>
+  <h2 class="section-title reveal">What's <em>new</em></h2>
+  <p class="section-lead reveal">Tools are updated on a regular cadence. Your bookmark always points to the latest version.</p>
+  <div class="changelog reveal">
+    <div class="cl-item">
+      <div class="cl-date">June 2026</div>
       <div>
-        <h2 class="section-title reveal">Built by a<br><em>practitioner</em></h2>
-        <p class="about-text reveal" style="margin-top: 32px;">
-          These tools exist because <strong>enterprise AI decisions are hard</strong> — 
-          and the frameworks available are often too theoretical, too vendor-biased, 
-          or too far removed from the realities of large-organization change.
-          <br><br>
-          Each framework is designed to help <strong>senior leaders and their teams</strong> 
-          move from ambiguity to action — with the rigor that Fortune 500 
-          strategy demands.
-        </p>
-        <div style="margin-top: 40px;" class="reveal">
-          <a href="https://linkedin.com/in/thomaslhill" target="_blank" rel="noopener" class="btn-secondary">
-            <span>Connect on LinkedIn</span>
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H4M11 1v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-        </div>
+        <div class="cl-tool">DCX Operating System · v1.0</div>
+        <p class="cl-text"><strong>New tool launched.</strong> AI-powered Digital Customer Experience field guide for B2B enterprise. Covers eight macro forces reshaping CX in 2026, the full B2B customer journey, common architecture patterns, tech stack layers, the three core enablers, a measurement framework, maturity curve, self-assessment, and org design.</p>
       </div>
-      <div class="about-meta reveal">
-        <div class="meta-item">
-          <div class="meta-label">Audience</div>
-          <div class="meta-value">Fortune 500 executives, enterprise strategy teams, AI program leads, and technology decision-makers</div>
-        </div>
-        <div class="meta-item">
-          <div class="meta-label">Update Cadence</div>
-          <div class="meta-value">Tools are refreshed regularly as the AI landscape evolves — your bookmark always points to the latest version</div>
-        </div>
-        <div class="meta-item">
-          <div class="meta-label">Reference Frameworks</div>
-          <div class="meta-value">a16z enterprise AI research · Anthropic State of AI Agents · Salesforce Architect · McKinsey AI</div>
-        </div>
-        <div class="meta-item">
-          <div class="meta-label">Author</div>
-          <div class="meta-value">Thomas Hill · linkedin.com/in/thomaslhill</div>
-        </div>
+    </div>
+    <div class="cl-item">
+      <div class="cl-date">June 2026</div>
+      <div>
+        <div class="cl-tool">B2B Data Providers Landscape · v1.0</div>
+        <p class="cl-text"><strong>New tool launched.</strong> Comprehensive vendor intelligence framework for Healthcare, Diagnostics, and Life Sciences. Covers 12 data layers including claims, EHR, genomics, clinical trials, lab &amp; Dx, physician data, and Rx. Includes interactive provider explorer, side-by-side comparison, overlap &amp; fit analysis, a 6-step procurement governance checklist, and full glossary.</p>
+      </div>
+    </div>
+    <div class="cl-item">
+      <div class="cl-date">June 2026</div>
+      <div>
+        <div class="cl-tool">Enterprise AI Landscape · v2.1</div>
+        <p class="cl-text"><strong>Content refresh.</strong> Updated to reflect latest market developments across AI stack, agentic patterns, and adoption data.</p>
+      </div>
+    </div>
+    <div class="cl-item">
+      <div class="cl-date">May 2026</div>
+      <div>
+        <div class="cl-tool">Enterprise AI Landscape · v2.0</div>
+        <p class="cl-text"><strong>Major refresh.</strong> Adoption Insights tab rebuilt from Anthropic's 2026 State of AI Agents Report data. Agentic Playbook expanded with new enterprise patterns. Power Block Partnerships section added to AI Stack. Data Readiness Assessment launched with scored dimensions and tiered results.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-  <div class="container">
-    <div class="footer-inner">
-      <div class="footer-brand"><span>Thomas Hill</span> · Enterprise AI Strategy</div>
-      <ul class="footer-links">
-        <li><a href="#tools">Tools</a></li>
-        <li><a href="#changelog">Updates</a></li>
-        <li><a href="https://linkedin.com/in/thomaslhill" target="_blank" rel="noopener">LinkedIn ↗</a></li>
-      </ul>
-      <div class="footer-version">Last updated June 2026</div>
+<div class="page-divider"></div>
+
+<section class="section" id="about">
+  <div class="section-eyebrow reveal">About</div>
+  <div class="about-grid">
+    <div>
+      <h2 class="section-title reveal">Built by a<br><em>practitioner</em></h2>
+      <p class="about-body reveal" style="margin-top:28px">These tools exist because <strong>enterprise AI decisions are hard</strong> — and the frameworks available are often too theoretical, too vendor-biased, or too removed from the realities of large-organization change.<br><br>Each framework is designed to help <strong>senior leaders and their teams</strong> move from ambiguity to action — with the rigor that Fortune 500 strategy demands.</p>
+      <div class="about-ctas reveal">
+        <a href="https://thomaslhill.com/" target="_blank" rel="noopener" class="btn-primary">Visit Website <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H4M11 1v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="https://linkedin.com/in/thomaslhill" target="_blank" rel="noopener" class="btn-secondary">Connect on LinkedIn <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 11L11 1M11 1H4M11 1v7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
     </div>
+    <div class="meta-cards reveal">
+      <div class="meta-card">
+        <div class="meta-label">Audience</div>
+        <div class="meta-value">Fortune 500 executives, enterprise strategy teams, AI program leads, and technology decision-makers</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-label">Update Cadence</div>
+        <div class="meta-value">Tools are refreshed regularly as the AI landscape evolves — your bookmark always points to the latest version</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-label">Reference Frameworks</div>
+        <div class="meta-value">a16z enterprise AI research · Anthropic State of AI Agents · Salesforce Architect · McKinsey AI</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-label">Author</div>
+        <div class="meta-value">Thomas Hill · thomaslhill.com · linkedin.com/in/thomaslhill</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand"><span>Thomas Hill</span> · Enterprise AI Strategy</div>
+    <ul class="footer-links">
+      <li><a href="#tools">Tools</a></li>
+      <li><a href="#changelog">Updates</a></li>
+      <li><a href="https://thomaslhill.com/" target="_blank" rel="noopener">Website ↗</a></li>
+      <li><a href="https://linkedin.com/in/thomaslhill" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+    </ul>
+    <div class="footer-version">Last updated June 2026</div>
   </div>
 </footer>
 
 <script>
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 60);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-  reveals.forEach(el => observer.observe(el));
-
-  // Smooth nav highlight
-  const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
-  const sectionObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        navLinks.forEach(a => {
-          a.style.color = a.getAttribute('href') === `#${entry.target.id}` 
-            ? 'var(--gold)' : '';
-        });
-      }
-    });
-  }, { threshold: 0.4 });
-  sections.forEach(s => sectionObserver.observe(s));
+const reveals=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach((entry,i)=>{
+    if(entry.isIntersecting){
+      setTimeout(()=>entry.target.classList.add('visible'),i*80);
+      obs.unobserve(entry.target);
+    }
+  });
+},{threshold:0.08,rootMargin:'0px 0px -32px 0px'});
+reveals.forEach(el=>obs.observe(el));
 </script>
 </body>
 </html>
