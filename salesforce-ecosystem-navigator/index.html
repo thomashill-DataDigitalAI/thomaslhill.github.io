@@ -9,115 +9,55 @@
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#0F1B2E;
-    --ink-soft:#2A3854;
-    --muted:#647089;
-    --faint:#93A0B5;
-    --bg:#F3F5F9;
-    --bg-2:#EAEEF5;
-    --card:#FFFFFF;
-    --line:#E1E7F0;
-    --line-2:#D2DAE7;
-    --primary:#2C56E0;
-    --primary-deep:#1B388F;
-    --primary-wash:#EDF1FE;
-    --core:#0E9D6A;       /* core strength */
-    --core-wash:#E6F6EF;
-    --care:#C2820C;       /* integrate with care */
-    --care-wash:#FBF3E0;
-    --eval:#D1455F;       /* evaluate carefully */
-    --eval-wash:#FBEAED;
-    --new:#6B4FE0;        /* new / pending */
-    --new-wash:#F0ECFD;
+    --ink:#0F1B2E;--ink-soft:#2A3854;--muted:#647089;--faint:#93A0B5;
+    --bg:#F3F5F9;--bg-2:#EAEEF5;--card:#FFFFFF;--line:#E1E7F0;--line-2:#D2DAE7;
+    --primary:#2C56E0;--primary-deep:#1B388F;--primary-wash:#EDF1FE;
+    --core:#0E9D6A;--core-wash:#E6F6EF;
+    --care:#C2820C;--care-wash:#FBF3E0;
+    --eval:#D1455F;--eval-wash:#FBEAED;
+    --new:#6B4FE0;--new-wash:#F0ECFD;
+    --risk:#D93838;--risk-wash:#FDEBEB;
     --shadow:0 1px 2px rgba(16,27,46,.04), 0 8px 28px rgba(16,27,46,.06);
     --shadow-lg:0 24px 60px rgba(16,27,46,.18);
-    --r:14px;
-    --r-sm:10px;
-    --sidebar-w:264px;
+    --r:14px;--r-sm:10px;--sidebar-w:264px;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
-  body{
-    font-family:'Inter',system-ui,sans-serif;
-    background:var(--bg);
-    color:var(--ink);
-    -webkit-font-smoothing:antialiased;
-    line-height:1.55;
-  }
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.55;}
   ::selection{background:#D6E0FF;}
 
-  /* ---------- Layout ---------- */
   .app{display:flex;min-height:100vh;}
-  .sidebar{
-    width:var(--sidebar-w);
-    flex:0 0 var(--sidebar-w);
-    position:fixed;top:0;left:0;bottom:0;
-    background:linear-gradient(180deg,#0F1B2E 0%,#16243C 100%);
-    color:#E7ECF5;
-    display:flex;flex-direction:column;
-    padding:22px 18px;
-    z-index:40;
-  }
+  .sidebar{width:var(--sidebar-w);flex:0 0 var(--sidebar-w);position:fixed;top:0;left:0;bottom:0;background:linear-gradient(180deg,#0F1B2E 0%,#16243C 100%);color:#E7ECF5;display:flex;flex-direction:column;padding:22px 18px;z-index:40;overflow-y:auto;}
   .brand{padding:4px 6px 16px;border-bottom:1px solid rgba(255,255,255,.09);}
-  .brand .logo{
-    display:flex;align-items:center;gap:10px;margin-bottom:12px;
-  }
-  .brand .mark{
-    width:34px;height:34px;border-radius:9px;flex:0 0 34px;
-    background:linear-gradient(135deg,#2C56E0,#5B8BFF);
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 6px 16px rgba(44,86,224,.45);
-  }
+  .brand .logo{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+  .brand .mark{width:34px;height:34px;border-radius:9px;flex:0 0 34px;background:linear-gradient(135deg,#2C56E0,#5B8BFF);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(44,86,224,.45);}
   .brand .mark svg{width:19px;height:19px;}
   .brand .title{font-family:'Bricolage Grotesque';font-weight:700;font-size:15px;letter-spacing:-.01em;line-height:1.15;color:#fff;}
   .brand .name{font-size:12.5px;color:#fff;font-weight:600;}
   .brand .role{font-size:11px;color:#9FB0CC;line-height:1.35;margin-top:3px;}
-
   .nav{margin-top:14px;display:flex;flex-direction:column;gap:3px;flex:1;}
   .nav-label{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:#7C8BA8;padding:4px 10px 8px;font-weight:600;}
-  .nav-item{
-    display:flex;align-items:center;gap:11px;
-    padding:9px 11px;border-radius:9px;cursor:pointer;
-    color:#C3CEE2;font-size:13.5px;font-weight:500;
-    border:1px solid transparent;transition:all .15s;
-    text-align:left;width:100%;background:none;font-family:inherit;
-  }
+  .nav-item{display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:9px;cursor:pointer;color:#C3CEE2;font-size:13.5px;font-weight:500;border:1px solid transparent;transition:all .15s;text-align:left;width:100%;background:none;font-family:inherit;}
   .nav-item .ico{width:17px;height:17px;flex:0 0 17px;opacity:.85;}
   .nav-item .num{font-family:'IBM Plex Mono';font-size:10.5px;color:#6E7E9C;margin-left:auto;}
   .nav-item:hover{background:rgba(255,255,255,.05);color:#fff;}
   .nav-item.active{background:rgba(44,86,224,.22);border-color:rgba(91,139,255,.4);color:#fff;}
   .nav-item.active .ico{opacity:1;}
   .nav-item.active .num{color:#9FB6FF;}
-
   .side-foot{border-top:1px solid rgba(255,255,255,.09);padding-top:14px;margin-top:8px;}
   .sig{font-family:'Caveat';font-size:27px;color:#fff;line-height:1;margin:2px 4px 12px;opacity:.95;}
-  .li-btn{
-    display:flex;align-items:center;justify-content:center;gap:8px;
-    width:100%;padding:9px;border-radius:9px;
-    background:#fff;color:#0A66C2;font-weight:600;font-size:12.5px;
-    text-decoration:none;transition:all .15s;
-  }
+  .li-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:9px;border-radius:9px;background:#fff;color:#0A66C2;font-weight:600;font-size:12.5px;text-decoration:none;transition:all .15s;}
   .li-btn:hover{background:#EAF1FB;transform:translateY(-1px);}
   .li-btn svg{width:15px;height:15px;}
 
   .main{margin-left:var(--sidebar-w);flex:1;min-width:0;}
-  .topbar{
-    position:sticky;top:0;z-index:30;
-    background:rgba(243,245,249,.86);backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--line);
-    padding:20px 40px 18px;
-  }
+  .topbar{position:sticky;top:0;z-index:30;background:rgba(243,245,249,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:20px 40px 18px;}
   .eyebrow{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--primary);font-weight:600;}
   .topbar h1{font-family:'Bricolage Grotesque';font-weight:700;font-size:25px;letter-spacing:-.02em;margin:5px 0 4px;color:var(--ink);}
-  .topbar p{margin:0;color:var(--muted);font-size:13.5px;max-width:760px;}
+  .topbar p{margin:0;color:var(--muted);font-size:13.5px;max-width:780px;}
   .content{padding:28px 40px 80px;max-width:1180px;}
 
-  /* ---------- Verdict chips ---------- */
-  .chip{
-    display:inline-flex;align-items:center;gap:6px;
-    font-size:11px;font-weight:600;padding:3px 9px;border-radius:100px;
-    border:1px solid;white-space:nowrap;font-family:'Inter';
-  }
+  .chip{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:100px;border:1px solid;white-space:nowrap;font-family:'Inter';}
   .chip .dot{width:7px;height:7px;border-radius:50%;flex:0 0 7px;}
   .chip.core{color:#0A7A52;background:var(--core-wash);border-color:#BCE7D5;}
   .chip.core .dot{background:var(--core);}
@@ -128,13 +68,8 @@
   .chip.new{color:#5638C4;background:var(--new-wash);border-color:#D7CCF7;}
   .chip.new .dot{background:var(--new);}
 
-  /* ---------- Generic cards ---------- */
   .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);}
-  .lede{
-    background:linear-gradient(135deg,#fff 60%,#F7F9FF);
-    border:1px solid var(--line);border-radius:var(--r);
-    padding:24px 26px;box-shadow:var(--shadow);margin-bottom:24px;
-  }
+  .lede{background:linear-gradient(135deg,#fff 60%,#F7F9FF);border:1px solid var(--line);border-radius:var(--r);padding:24px 26px;box-shadow:var(--shadow);margin-bottom:24px;}
   .lede p{margin:0 0 11px;color:var(--ink-soft);font-size:14.5px;line-height:1.65;}
   .lede p:last-child{margin-bottom:0;}
   .lede strong{color:var(--ink);font-weight:600;}
@@ -142,54 +77,43 @@
   h2.sec{font-family:'Bricolage Grotesque';font-weight:700;font-size:18px;letter-spacing:-.01em;margin:30px 0 14px;color:var(--ink);display:flex;align-items:center;gap:9px;}
   h2.sec .bar{width:4px;height:18px;border-radius:3px;background:var(--primary);}
 
-  /* ---------- Legend ---------- */
   .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:8px;}
   .legend .lg{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:13px 14px;display:flex;gap:11px;align-items:flex-start;}
   .legend .lg .swatch{width:11px;height:11px;border-radius:3px;margin-top:4px;flex:0 0 11px;}
   .legend .lg b{font-size:13px;display:block;margin-bottom:2px;color:var(--ink);}
   .legend .lg span{font-size:12px;color:var(--muted);line-height:1.45;}
 
-  /* ---------- Stat / orientation grid ---------- */
   .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
   .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
   .infocard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);}
   .infocard h3{font-family:'Bricolage Grotesque';font-size:15px;font-weight:700;margin:0 0 7px;color:var(--ink);}
   .infocard p{margin:0;font-size:13px;color:var(--muted);line-height:1.6;}
-  .bignum{font-family:'Bricolage Grotesque';font-weight:800;font-size:34px;letter-spacing:-.03em;color:var(--primary);line-height:1;}
-  .bignum span{font-size:15px;color:var(--muted);font-weight:600;margin-left:3px;}
 
-  /* ---------- Filter chips ---------- */
   .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;align-items:center;}
-  .fchip{
-    font-size:12.5px;font-weight:500;padding:7px 14px;border-radius:100px;cursor:pointer;
-    background:var(--card);border:1px solid var(--line-2);color:var(--ink-soft);transition:all .15s;font-family:inherit;
-  }
+  .fchip{font-size:12.5px;font-weight:500;padding:7px 14px;border-radius:100px;cursor:pointer;background:var(--card);border:1px solid var(--line-2);color:var(--ink-soft);transition:all .15s;font-family:inherit;}
   .fchip:hover{border-color:var(--primary);color:var(--primary);}
   .fchip.active{background:var(--ink);border-color:var(--ink);color:#fff;}
 
-  .search{
-    display:flex;align-items:center;gap:10px;background:var(--card);
-    border:1px solid var(--line-2);border-radius:var(--r-sm);padding:11px 15px;
-    box-shadow:var(--shadow);margin-bottom:18px;max-width:520px;
-  }
+  .search{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line-2);border-radius:var(--r-sm);padding:11px 15px;box-shadow:var(--shadow);margin-bottom:18px;max-width:520px;}
   .search svg{width:17px;height:17px;color:var(--faint);flex:0 0 17px;}
   .search input{border:none;outline:none;font-family:inherit;font-size:14px;width:100%;color:var(--ink);background:none;}
   .search input::placeholder{color:var(--faint);}
 
-  /* ---------- Timeline ---------- */
+  .pb-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;}
+  .pb{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:17px 18px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+  .pb:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--primary),#5B8BFF);}
+  .pb .pn{font-family:'IBM Plex Mono';font-size:11px;color:var(--faint);font-weight:600;}
+  .pb b{font-family:'Bricolage Grotesque';font-size:14.5px;font-weight:700;display:block;margin:4px 0 6px;color:var(--ink);line-height:1.2;}
+  .pb p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.55;}
+
   .era{margin-bottom:14px;}
-  .era-head{
-    display:flex;align-items:center;gap:14px;margin:26px 0 16px;
-  }
+  .era-head{display:flex;align-items:center;gap:14px;margin:26px 0 16px;}
   .era-head .yr{font-family:'IBM Plex Mono';font-size:12px;font-weight:600;color:#fff;background:var(--ink);padding:5px 11px;border-radius:7px;letter-spacing:.02em;flex:0 0 auto;}
   .era-head .et{font-family:'Bricolage Grotesque';font-weight:700;font-size:16px;color:var(--ink);}
   .era-head .ed{font-size:12.5px;color:var(--muted);}
   .era-head .line{flex:1;height:1px;background:var(--line-2);}
   .tl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:13px;}
-  .acq{
-    background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);
-    padding:15px 16px;cursor:pointer;transition:all .16s;position:relative;overflow:hidden;
-  }
+  .acq{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:15px 16px;cursor:pointer;transition:all .16s;position:relative;overflow:hidden;}
   .acq:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--line-2);transition:background .16s;}
   .acq.core:before{background:var(--core);}
   .acq.care:before{background:var(--care);}
@@ -203,7 +127,6 @@
   .acq .bc{font-size:12.5px;color:var(--muted);line-height:1.5;}
   .acq .bc b{color:var(--ink-soft);font-weight:600;}
 
-  /* ---------- Architecture ---------- */
   .stack{display:flex;flex-direction:column;gap:10px;}
   .layer{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;}
   .layer.foundation{border-color:var(--primary);box-shadow:0 0 0 1px var(--primary-wash),var(--shadow);}
@@ -218,15 +141,32 @@
   .layer-body{display:none;padding:0 20px 18px 60px;}
   .layer.open .layer-body{display:block;}
   .prod-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:4px;}
-  .prod{
-    border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 13px;cursor:pointer;transition:all .15s;background:#FCFDFF;
-  }
+  .prod{border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 13px;cursor:pointer;transition:all .15s;background:#FCFDFF;}
   .prod:hover{border-color:var(--primary);background:#fff;box-shadow:var(--shadow);}
   .prod .ph{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:5px;}
   .prod .ph b{font-size:13.5px;color:var(--ink);font-weight:600;}
   .prod .pn{font-size:12px;color:var(--muted);line-height:1.45;}
 
-  /* ---------- Use cases ---------- */
+  .pillar{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden;}
+  .pillar-head{display:flex;gap:14px;align-items:flex-start;padding:18px 20px;border-bottom:1px solid var(--line);background:linear-gradient(135deg,#fff,#F7F9FF);}
+  .pillar-head .pico{width:38px;height:38px;flex:0 0 38px;border-radius:10px;background:var(--primary-wash);display:flex;align-items:center;justify-content:center;}
+  .pillar-head .pico svg{width:20px;height:20px;color:var(--primary);}
+  .pillar-head .pt{flex:1;}
+  .pillar-head .pt b{font-family:'Bricolage Grotesque';font-size:17px;font-weight:700;color:var(--ink);display:block;}
+  .pillar-head .pt .tag{font-family:'IBM Plex Mono';font-size:11px;color:var(--primary);font-weight:600;letter-spacing:.03em;}
+  .pillar-head .pt p{margin:6px 0 0;font-size:12.5px;color:var(--muted);line-height:1.5;}
+  .pillar-body{padding:14px 20px 18px;}
+  .tax-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:9px;}
+  .taxitem{border:1px solid var(--line);border-radius:var(--r-sm);padding:11px 12px;cursor:pointer;transition:all .15s;background:#FCFDFF;}
+  .taxitem:hover{border-color:var(--primary);background:#fff;box-shadow:var(--shadow);}
+  .taxitem .th{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .taxitem .th b{font-size:13px;color:var(--ink);font-weight:600;}
+  .taxitem .old{font-family:'IBM Plex Mono';font-size:10.5px;color:var(--faint);margin-top:2px;}
+  .menumap{display:flex;flex-direction:column;gap:8px;}
+  .mm{display:grid;grid-template-columns:200px 1fr;gap:14px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:12px 16px;}
+  .mm .ml{font-weight:600;font-size:13px;color:var(--ink);}
+  .mm .mr{font-size:12.5px;color:var(--muted);line-height:1.5;}
+
   .uc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;}
   .uc{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 19px;cursor:pointer;transition:all .16s;box-shadow:var(--shadow);}
   .uc:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 14px 30px rgba(16,27,46,.10);}
@@ -246,7 +186,6 @@
   .uc .watch{font-size:12.5px;color:var(--muted);line-height:1.5;border-top:1px dashed var(--line-2);padding-top:10px;}
   .uc .watch b{color:var(--care);font-weight:600;}
 
-  /* ---------- Headless ---------- */
   .ingredients{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin:6px 0 8px;}
   .ing{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:17px;box-shadow:var(--shadow);position:relative;}
   .ing .ico{width:30px;height:30px;border-radius:8px;background:var(--primary-wash);display:flex;align-items:center;justify-content:center;margin-bottom:11px;}
@@ -262,19 +201,31 @@
 
   .callout{display:flex;gap:13px;background:var(--care-wash);border:1px solid #EEDDB0;border-radius:var(--r);padding:16px 18px;margin:18px 0;}
   .callout.blue{background:var(--primary-wash);border-color:#CFDBFB;}
+  .callout.red{background:var(--risk-wash);border-color:#F5C6C6;}
   .callout .ci{flex:0 0 20px;width:20px;height:20px;margin-top:1px;}
   .callout b{display:block;font-size:13.5px;margin-bottom:3px;color:var(--ink);}
   .callout p{margin:0;font-size:13px;color:var(--ink-soft);line-height:1.6;}
 
-  /* ---------- Drawer ---------- */
+  .breach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  .breach{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px 19px;box-shadow:var(--shadow);border-top:3px solid var(--risk);cursor:pointer;transition:all .16s;}
+  .breach:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(16,27,46,.10);}
+  .breach .bt{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+  .breach .bt b{font-family:'Bricolage Grotesque';font-size:16px;font-weight:700;color:var(--ink);}
+  .breach .bt .dt{font-family:'IBM Plex Mono';font-size:11px;color:var(--risk);font-weight:600;}
+  .breach .sev{font-size:10.5px;font-weight:600;color:#B32020;background:var(--risk-wash);border:1px solid #F3C4C4;border-radius:6px;padding:2px 8px;display:inline-block;margin:8px 0 10px;}
+  .breach .field{margin-bottom:9px;}
+  .breach .field .fl{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:600;font-family:'IBM Plex Mono';margin-bottom:2px;}
+  .breach .field .fv{font-size:12.5px;color:var(--ink-soft);line-height:1.45;}
+  .bt-timeline{display:flex;flex-direction:column;gap:0;background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden;}
+  .bt-row{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:13px 18px;border-bottom:1px solid var(--line);}
+  .bt-row:last-child{border-bottom:none;}
+  .bt-row .bd{font-family:'IBM Plex Mono';font-size:11.5px;color:var(--risk);font-weight:600;padding-top:1px;}
+  .bt-row .bw{font-size:13px;color:var(--ink-soft);line-height:1.5;}
+  .bt-row .bw b{color:var(--ink);font-weight:600;}
+
   .overlay{position:fixed;inset:0;background:rgba(15,27,46,.42);backdrop-filter:blur(2px);opacity:0;visibility:hidden;transition:all .25s;z-index:50;}
   .overlay.show{opacity:1;visibility:visible;}
-  .drawer{
-    position:fixed;top:0;right:0;bottom:0;width:min(480px,92vw);
-    background:var(--bg);box-shadow:var(--shadow-lg);
-    transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
-    z-index:60;display:flex;flex-direction:column;
-  }
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:min(480px,92vw);background:var(--bg);box-shadow:var(--shadow-lg);transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);z-index:60;display:flex;flex-direction:column;}
   .drawer.show{transform:translateX(0);}
   .dr-head{padding:24px 26px 18px;border-bottom:1px solid var(--line);background:var(--card);}
   .dr-head .deyebrow{font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--primary);font-weight:600;}
@@ -303,12 +254,9 @@
   .view{display:none;}
   .view.active{display:block;animation:fade .35s ease;}
   @keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-
   .mobile-bar{display:none;}
 
-  @media (max-width:1080px){
-    .grid-3,.ingredients{grid-template-columns:1fr 1fr;}
-  }
+  @media (max-width:1080px){.grid-3,.ingredients,.pb-grid,.breach-grid{grid-template-columns:1fr 1fr;}}
   @media (max-width:860px){
     .sidebar{transform:translateX(-100%);transition:transform .25s;width:248px;flex-basis:248px;}
     .sidebar.open{transform:translateX(0);}
@@ -317,9 +265,11 @@
     .mobile-bar button{background:rgba(255,255,255,.12);border:none;color:#fff;width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
     .mobile-bar b{font-family:'Bricolage Grotesque';font-size:15px;}
     .topbar,.content{padding-left:20px;padding-right:20px;}
-    .grid-3,.grid-2,.ingredients{grid-template-columns:1fr;}
+    .grid-3,.grid-2,.ingredients,.pb-grid,.breach-grid{grid-template-columns:1fr;}
     .rmrow{grid-template-columns:1fr;gap:4px;text-align:left;}
     .rmrow .arr{display:none;}
+    .mm{grid-template-columns:1fr;gap:3px;}
+    .bt-row{grid-template-columns:80px 1fr;gap:10px;}
   }
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 </style>
@@ -327,16 +277,11 @@
 <body>
 <div class="app">
 
-  <!-- ============ SIDEBAR ============ -->
   <aside class="sidebar" id="sidebar">
     <div class="brand">
       <div class="logo">
-        <div class="mark">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M5 14a4 4 0 0 1 .8-7.9 5 5 0 0 1 9.4-1.2A4.2 4.2 0 0 1 20 9a3.5 3.5 0 0 1-.6 7H6.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <div>
-          <div class="title">Salesforce<br>Ecosystem Navigator</div>
-        </div>
+        <div class="mark"><svg viewBox="0 0 24 24" fill="none"><path d="M5 14a4 4 0 0 1 .8-7.9 5 5 0 0 1 9.4-1.2A4.2 4.2 0 0 1 20 9a3.5 3.5 0 0 1-.6 7H6.5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div><div class="title">Salesforce<br>Ecosystem Navigator</div></div>
       </div>
       <div class="name">Thomas Hill</div>
       <div class="role">Enterprise Data, AI, &amp; Digital Strategy Leader</div>
@@ -344,42 +289,22 @@
 
     <nav class="nav" id="nav">
       <div class="nav-label">Navigate the stack</div>
-      <button class="nav-item active" data-view="start">
-        <svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M12 3 4 9v11h16V9l-8-6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 20v-6h6v6" stroke="currentColor" stroke-width="1.8"/></svg>
-        Start here<span class="num">00</span>
-      </button>
-      <button class="nav-item" data-view="timeline">
-        <svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M5 4v16M5 7h11M5 12h14M5 17h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        Acquisition timeline<span class="num">01</span>
-      </button>
-      <button class="nav-item" data-view="architecture">
-        <svg class="ico" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="4.5" rx="1.2" stroke="currentColor" stroke-width="1.7"/><rect x="4" y="10" width="16" height="4.5" rx="1.2" stroke="currentColor" stroke-width="1.7"/><rect x="4" y="16" width="16" height="4" rx="1.2" stroke="currentColor" stroke-width="1.7"/></svg>
-        Architecture<span class="num">02</span>
-      </button>
-      <button class="nav-item" data-view="decoder">
-        <svg class="ico" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-        Name decoder<span class="num">03</span>
-      </button>
-      <button class="nav-item" data-view="usecases">
-        <svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M9 11l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/></svg>
-        Use cases<span class="num">04</span>
-      </button>
-      <button class="nav-item" data-view="headless">
-        <svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/></svg>
-        The headless era<span class="num">05</span>
-      </button>
+      <button class="nav-item active" data-view="start"><svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M12 3 4 9v11h16V9l-8-6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 20v-6h6v6" stroke="currentColor" stroke-width="1.8"/></svg>Start here<span class="num">00</span></button>
+      <button class="nav-item" data-view="timeline"><svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M5 4v16M5 7h11M5 12h14M5 17h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Acquisition timeline<span class="num">01</span></button>
+      <button class="nav-item" data-view="platform"><svg class="ico" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="13" y="4" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="4" y="13" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.7"/><rect x="13" y="13" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.7"/></svg>Platform map<span class="num">02</span></button>
+      <button class="nav-item" data-view="architecture"><svg class="ico" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="4.5" rx="1.2" stroke="currentColor" stroke-width="1.7"/><rect x="4" y="10" width="16" height="4.5" rx="1.2" stroke="currentColor" stroke-width="1.7"/><rect x="4" y="16" width="16" height="4" rx="1.2" stroke="currentColor" stroke-width="1.7"/></svg>Architecture<span class="num">03</span></button>
+      <button class="nav-item" data-view="decoder"><svg class="ico" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Name decoder<span class="num">04</span></button>
+      <button class="nav-item" data-view="usecases"><svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M9 11l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.8"/></svg>Use cases<span class="num">05</span></button>
+      <button class="nav-item" data-view="headless"><svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/></svg>The headless era<span class="num">06</span></button>
+      <button class="nav-item" data-view="risk"><svg class="ico" viewBox="0 0 24 24" fill="none"><path d="M12 3 4 6v5c0 4.5 3.2 8.2 8 10 4.8-1.8 8-5.5 8-10V6l-8-3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M12 8v4M12 15h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Risk &amp; breaches<span class="num">07</span></button>
     </nav>
 
     <div class="side-foot">
       <div class="sig">Thomas Hill</div>
-      <a class="li-btn" href="https://www.linkedin.com/in/thomaslhill/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2ZM8.34 18H5.67V9.67h2.67V18ZM7 8.5A1.55 1.55 0 1 1 7 5.4a1.55 1.55 0 0 1 0 3.1ZM18.34 18h-2.67v-4.05c0-.97-.02-2.22-1.35-2.22s-1.56 1.06-1.56 2.15V18h-2.67V9.67h2.56v1.14h.04a2.8 2.8 0 0 1 2.53-1.39c2.7 0 3.2 1.78 3.2 4.1V18Z"/></svg>
-        Connect on LinkedIn
-      </a>
+      <a class="li-btn" href="https://www.linkedin.com/in/thomaslhill/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2ZM8.34 18H5.67V9.67h2.67V18ZM7 8.5A1.55 1.55 0 1 1 7 5.4a1.55 1.55 0 0 1 0 3.1ZM18.34 18h-2.67v-4.05c0-.97-.02-2.22-1.35-2.22s-1.56 1.06-1.56 2.15V18h-2.67V9.67h2.56v1.14h.04a2.8 2.8 0 0 1 2.53-1.39c2.7 0 3.2 1.78 3.2 4.1V18Z"/></svg>Connect on LinkedIn</a>
     </div>
   </aside>
 
-  <!-- ============ MAIN ============ -->
   <main class="main">
     <div class="mobile-bar">
       <button id="menuBtn" aria-label="Open menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
@@ -394,7 +319,6 @@
 
     <div class="content">
 
-      <!-- ===== START ===== -->
       <section class="view active" id="view-start">
         <div class="lede">
           <p>Salesforce started as a single CRM in 1999. Since roughly 2010 it has bought its way into nearly every adjacent category, marketing, commerce, integration, analytics, collaboration, data, and now AI agents, to become a full customer platform rather than a system of record. Most of the products you hear named are acquisitions that were renamed and folded toward the core.</p>
@@ -413,29 +337,44 @@
           <div><b>These signals are practitioner heuristics, not endorsements.</b><p>They reflect general adoption experience and integration maturity, not a verdict on any single deployment. Fit always depends on your existing stack, data quality, budget, and implementation partner. Use them to ask sharper questions, not to skip evaluation.</p></div>
         </div>
 
-        <h2 class="sec"><span class="bar"></span>The six things this tool helps you do</h2>
+        <h2 class="sec"><span class="bar"></span>What the eight tabs help you do</h2>
         <div class="grid-3">
-          <div class="infocard"><h3>See the buying waves</h3><p>Twenty-five years of acquisitions grouped into clear eras, from the developer platform era to today's agent land-grab. Click any deal for the detail.</p></div>
-          <div class="infocard"><h3>Map the architecture</h3><p>Where each product sits in the sales and marketing stack, from the data foundation to the experience layer, with an honest read on each one.</p></div>
+          <div class="infocard"><h3>See the buying waves</h3><p>Twenty-five years of acquisitions grouped into clear eras, plus the M&amp;A patterns behind them. Click any deal for detail.</p></div>
+          <div class="infocard"><h3>Read the new taxonomy</h3><p>The "Cloud" names are gone. See how the whole portfolio now hangs off Agentforce 360 and Data 360, and cut through the website menu.</p></div>
+          <div class="infocard"><h3>Map the architecture</h3><p>Where each product sits in the sales and marketing stack, from the data foundation to the experience layer, with an honest read on each.</p></div>
           <div class="infocard"><h3>Translate the names</h3><p>Pardot, Genie, Data Cloud, Sales Cloud. Type any old name and get what it is called today plus its full lineage.</p></div>
-          <div class="infocard"><h3>Match products to goals</h3><p>Pick a sales or marketing job to be done and see which products fit, plus the watch-outs before you commit.</p></div>
-          <div class="infocard"><h3>Understand the headless turn</h3><p>What Agentforce 360, Data 360, and Headless 360 actually mean for how you architect on Salesforce now.</p></div>
-          <div class="infocard"><h3>Decide what to skip</h3><p>The whole point. Knowing where Salesforce genuinely leads and where a best-of-breed tool may serve you better.</p></div>
+          <div class="infocard"><h3>Match products to goals</h3><p>Pick a marketing, sales, service, commerce, or RevOps job and see which products fit, plus the watch-outs.</p></div>
+          <div class="infocard"><h3>Weigh the risk</h3><p>The security reality: the platform is rarely breached directly, but the connected-app attack surface is real. Know it before you bolt more on.</p></div>
         </div>
 
         <div class="footnote">
-          Built as an interactive companion to the practitioner explainers at <a href="https://www.salesforceben.com/" target="_blank" rel="noopener">Salesforce Ben</a>, whose histories of Marketing Cloud, Pardot, and Data Cloud naming inform several entries here. Deal facts are drawn from Salesforce press releases and investor filings and reputable trade coverage. All assessments are independent and paraphrased. Current as of June 2026. Not affiliated with or endorsed by Salesforce or Salesforce Ben.
+          Built as an interactive companion to the practitioner explainers at <a href="https://www.salesforceben.com/" target="_blank" rel="noopener">Salesforce Ben</a>, whose histories, M&amp;A analysis, and breach tracking inform several sections here. Deal facts are drawn from Salesforce press releases and investor filings and reputable trade coverage. All assessments are independent and paraphrased. Current as of August 2026. Not affiliated with or endorsed by Salesforce or Salesforce Ben.
         </div>
       </section>
 
-      <!-- ===== TIMELINE ===== -->
       <section class="view" id="view-timeline">
+        <h2 class="sec" style="margin-top:4px"><span class="bar"></span>The M&amp;A playbook, in six patterns</h2>
+        <div class="pb-grid" id="pbGrid"></div>
+        <div class="footnote" style="margin-top:14px;margin-bottom:6px;">Patterns synthesized from Salesforce Ben's <a href="https://www.salesforceben.com/salesforces-ma-playbook-lessons-from-25-years-of-acquisitions/" target="_blank" rel="noopener">M&amp;A Playbook: Lessons from 25 Years of Acquisitions</a> (Henry Martin, Aug 2026), paraphrased.</div>
+
+        <h2 class="sec"><span class="bar"></span>The deals, by era</h2>
         <div class="filters" id="tlFilters"></div>
         <div id="tlContainer"></div>
         <div class="footnote">Deal values are approximate where reported and omitted where undisclosed. Sources: Salesforce press releases and investor filings, plus trade coverage from TechCrunch, Bloomberg, CNBC, CMSWire, and <a href="https://www.salesforceben.com/" target="_blank" rel="noopener">Salesforce Ben</a>. Click any card for what it became and how to think about it.</div>
       </section>
 
-      <!-- ===== ARCHITECTURE ===== -->
+      <section class="view" id="view-platform">
+        <div class="lede">
+          <p>At Dreamforce 2025 Salesforce retired the "Cloud" naming it had used for two decades. There is no more Sales Cloud or Service Cloud on the pricing page. Everything now hangs off two pillars: <strong>Agentforce 360</strong>, the AI and application layer, and <strong>Data 360</strong>, the data layer, with <strong>Slack</strong> as the interface. Salesforce frames these as the four ingredients of "the agentic enterprise."</p>
+          <p>The trouble is the website menu has not caught up with the story. It still lists dozens of overlapping names, editions, and add-ons. Here is the actual scope, grouped the way the platform is now organized. Click any product for the honest read.</p>
+        </div>
+        <div id="pillars"></div>
+
+        <h2 class="sec"><span class="bar"></span>Cut through the marketing menu</h2>
+        <div class="menumap" id="menuMap"></div>
+        <div class="footnote">Naming reflects the Dreamforce 2025 and 2026 rebrands. Because names still churn, use the <b>Name decoder</b> tab to resolve anything you see in a contract, a rep's deck, or the docs.</div>
+      </section>
+
       <section class="view" id="view-architecture">
         <div class="lede">
           <p>Read the stack from the bottom up. Everything depends on the <strong>data and integration foundation</strong>. The familiar clouds sit in the middle as systems of record and engagement. <strong>AI and agents</strong> now cut across all of it, and the <strong>experience layer</strong> sits on top. Click a layer to open it, then click any product for the honest read.</p>
@@ -449,30 +388,27 @@
         <div class="stack" id="stack"></div>
       </section>
 
-      <!-- ===== DECODER ===== -->
       <section class="view" id="view-decoder">
         <div class="lede">
           <p>Salesforce renames things constantly. Your contract says one name, your rep says another, the docs say a third. Type any name you have heard, old or new, and find what it is called today, what it does, and the full trail of names it has carried.</p>
         </div>
         <div class="search">
           <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <input id="decoderSearch" type="text" placeholder="Try Pardot, Genie, Data Cloud, Sales Cloud, Datorama...">
+          <input id="decoderSearch" type="text" placeholder="Try Pardot, Genie, Data Cloud, CPQ, Field Service...">
         </div>
         <div class="tl-grid" id="decoderGrid"></div>
         <div class="footnote">Naming histories cross-checked against Salesforce announcements and the practitioner explainers at <a href="https://www.salesforceben.com/" target="_blank" rel="noopener">Salesforce Ben</a>. The community site renameforce also tracks these changes.</div>
       </section>
 
-      <!-- ===== USE CASES ===== -->
       <section class="view" id="view-usecases">
         <div class="lede">
-          <p>Start from the job you are trying to do, not the product catalog. Each card shows what Salesforce would point you to, with a verdict on each piece and a plain watch-out. Where a best-of-breed alternative is commonly weighed, the detail view says so.</p>
+          <p>Start from the job you are trying to do, not the product catalog. Each card shows what Salesforce would point you to, with a verdict on each piece and a plain watch-out. Filter by the team that owns the outcome.</p>
         </div>
         <div class="filters" id="ucFilters"></div>
         <div class="uc-grid" id="ucGrid"></div>
         <div class="footnote">Recommendations reflect typical Salesforce guidance plus independent practitioner judgment. They are starting points for evaluation, not implementation advice for your specific environment.</div>
       </section>
 
-      <!-- ===== HEADLESS ===== -->
       <section class="view" id="view-headless">
         <div class="lede">
           <p>At Dreamforce in October 2025, Salesforce did something bigger than another product launch. It started retiring the word "Cloud." Sales Cloud became Agentforce Sales, Service Cloud became Agentforce Service, Data Cloud became Data 360, and the whole thing was wrapped as <strong>Agentforce 360</strong>. Marc Benioff has openly mused that the company itself might one day be called Agentforce. The pitch is a move from software you click through to autonomous agents that act on your behalf.</p>
@@ -489,12 +425,13 @@
 
         <h2 class="sec"><span class="bar"></span>The Dreamforce 2025 rename, at a glance</h2>
         <div class="renamemap">
-          <div class="rmrow"><div class="from">Sales Cloud</div><div class="arr">→</div><div class="to">Agentforce Sales</div></div>
-          <div class="rmrow"><div class="from">Service Cloud</div><div class="arr">→</div><div class="to">Agentforce Service</div></div>
-          <div class="rmrow"><div class="from">Marketing Cloud</div><div class="arr">→</div><div class="to">Agentforce Marketing (umbrella)</div></div>
-          <div class="rmrow"><div class="from">Commerce Cloud</div><div class="arr">→</div><div class="to">Agentforce Commerce</div></div>
-          <div class="rmrow"><div class="from">Data Cloud</div><div class="arr">→</div><div class="to">Data 360</div></div>
-          <div class="rmrow"><div class="from">Agentforce (1, 2, 3)</div><div class="arr">→</div><div class="to">Agentforce 360 Platform</div></div>
+          <div class="rmrow"><div class="from">Sales Cloud</div><div class="arr">&rarr;</div><div class="to">Agentforce Sales</div></div>
+          <div class="rmrow"><div class="from">Service Cloud</div><div class="arr">&rarr;</div><div class="to">Agentforce Service</div></div>
+          <div class="rmrow"><div class="from">Marketing Cloud</div><div class="arr">&rarr;</div><div class="to">Agentforce Marketing (umbrella)</div></div>
+          <div class="rmrow"><div class="from">Commerce Cloud</div><div class="arr">&rarr;</div><div class="to">Agentforce Commerce</div></div>
+          <div class="rmrow"><div class="from">Revenue Cloud</div><div class="arr">&rarr;</div><div class="to">Agentforce Revenue Management</div></div>
+          <div class="rmrow"><div class="from">Data Cloud</div><div class="arr">&rarr;</div><div class="to">Data 360</div></div>
+          <div class="rmrow"><div class="from">Agentforce (1, 2, 3)</div><div class="arr">&rarr;</div><div class="to">Agentforce 360 Platform</div></div>
         </div>
 
         <h2 class="sec"><span class="bar"></span>What "headless" actually means here</h2>
@@ -503,17 +440,46 @@
         </div>
         <div class="callout blue">
           <svg class="ci" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#2C56E0" stroke-width="1.7"/><path d="M12 8v5M12 16h.01" stroke="#2C56E0" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <div><b>The architect's reality check</b><p>This vision spans at least three pending or newly acquired pieces (Contentful, Fin, parts of Informatica) plus a rebrand that is still settling. The promise is coherent. The integration is not yet proven at the depth the keynote implies. If your data foundation already lives in a warehouse, the most durable pattern is to let that stay the source of truth and treat Data 360 plus Agentforce as an activation and orchestration layer via zero-copy, rather than re-platforming your data into Salesforce.</p></div>
+          <div><b>The architect's reality check</b><p>This vision spans several pending or newly acquired pieces (Contentful, Fin, m3ter, parts of Informatica) plus a rebrand that is still settling. The promise is coherent. The integration is not yet proven at the depth the keynote implies. If your data foundation already lives in a warehouse, the most durable pattern is to let that stay the source of truth and treat Data 360 plus Agentforce as an activation and orchestration layer via zero-copy, rather than re-platforming your data into Salesforce.</p></div>
+        </div>
+        <div class="footnote">Rebrand and headless details from Salesforce's Dreamforce 2025 and 2026 announcements and trade coverage, with practitioner context from <a href="https://www.salesforceben.com/" target="_blank" rel="noopener">Salesforce Ben</a>.</div>
+      </section>
+
+      <section class="view" id="view-risk">
+        <div class="lede">
+          <p>This section is here because the average enterprise leader underrates one thing about a platform this large: the attack surface grows with every app you connect to it. Across 2025 and 2026, the pattern in the headlines is consistent, and it is worth understanding clearly.</p>
+          <p>In most of these incidents, <strong>Salesforce's core platform was not breached directly</strong>. The two real exposures were <strong>over-permissive configuration</strong> (public Experience Cloud sites left too open) and <strong>the third-party connected-app attack surface</strong>. Attackers stole OAuth tokens from trusted integrations and used that borrowed trust to pull data through the API. For a sales or marketing tech leader, that reframes the buying question: every tool you bolt on is another set of keys to your CRM.</p>
         </div>
 
-        <div class="footnote">Rebrand and headless details from Salesforce's Dreamforce 2025 and 2026 announcements and trade coverage, with practitioner context from <a href="https://www.salesforceben.com/" target="_blank" rel="noopener">Salesforce Ben</a>.</div>
+        <div class="callout red">
+          <svg class="ci" viewBox="0 0 24 24" fill="none"><path d="M12 3 4 6v5c0 4.5 3.2 8.2 8 10 4.8-1.8 8-5.5 8-10V6l-8-3Z" stroke="#D93838" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 8v4M12 15h.01" stroke="#D93838" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <div><b>The third-party integration playbook, once</b><p>An attacker compromises a trusted SaaS app that holds OAuth tokens into many customers' Salesforce orgs. Using those tokens, they query the API and export records, often combing support-case text for embedded secrets like cloud keys and warehouse tokens. It looks like a normal integration doing normal work, so it evades typical defenses. Security researchers put the blast radius of this pattern at roughly ten times a direct attack, because one compromised vendor reaches hundreds of downstream orgs.</p></div>
+        </div>
+
+        <h2 class="sec"><span class="bar"></span>The three integration breaches to know</h2>
+        <div class="breach-grid" id="breachGrid"></div>
+
+        <h2 class="sec"><span class="bar"></span>The 2026 direct campaign: Experience Cloud guest users</h2>
+        <div class="lede" style="margin-bottom:16px;">
+          <p>Separately from the OAuth thefts, 2026 saw a wave of data theft that abused customers' own <strong>Experience Cloud guest-user settings</strong> on public-facing sites. The extortion group ShinyHunters has claimed roughly a hundred high-profile targets. Many victims disclose it only as a "third-party CRM" incident. A condensed timeline of what has been reported.</p>
+        </div>
+        <div class="bt-timeline" id="btTimeline"></div>
+
+        <h2 class="sec"><span class="bar"></span>What to actually do about it</h2>
+        <div class="grid-2">
+          <div class="infocard"><h3>Harden the configuration</h3><p>Audit guest-user profiles down to the minimum objects and fields. Set org-wide defaults to Private for external users. Disable the guest profile's API access. Turn off portal and site user visibility. Disable self-registration if your site does not truly need it.</p></div>
+          <div class="infocard"><h3>Govern the integrations</h3><p>Inventory every connected app with OAuth access. Scope each token to the least it needs. Rotate and revoke aggressively, especially dormant and legacy credentials. Monitor API usage for unusual bulk exports. Treat support-case text as sensitive, because attackers mine it for secrets.</p></div>
+        </div>
+
+        <div class="footnote">
+          Breach details paraphrased from Salesforce Ben's <a href="https://www.salesforceben.com/salesforce-hacks-2026-everything-we-know-so-far/" target="_blank" rel="noopener">Salesforce Hacks 2026 tracker</a> and its OAuth-breach coverage, plus threat reporting from Google Threat Intelligence, Unit 42, ReliaQuest, and Huntress. These are third-party and configuration issues rather than breaks of the Salesforce platform itself, and the situation is ongoing. This is an awareness summary, not security advice for your specific org.
+        </div>
       </section>
 
     </div>
   </main>
 </div>
 
-<!-- ===== DRAWER ===== -->
 <div class="overlay" id="overlay"></div>
 <aside class="drawer" id="drawer">
   <button class="dr-close" id="drClose" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
@@ -526,9 +492,6 @@
 </aside>
 
 <script>
-/* ============================================================
-   DATA
-   ============================================================ */
 const VERDICT = {
   core:{label:'Core strength', note:'Mature, deeply native, generally delivers.'},
   care:{label:'Capable, integrate with care', note:'Works, but it is a bolt-on or adds real cost and complexity.'},
@@ -536,71 +499,97 @@ const VERDICT = {
   new:{label:'New or pending', note:'Just announced or not yet closed. Roadmap unproven.'}
 };
 
-/* ---- Acquisitions (timeline) ---- */
+const PLAYBOOK = [
+  {t:'Buy a layer beyond CRM', d:'The early deals pushed the definition of CRM outward, one adjacent category at a time: service, then marketing, commerce, and integration.'},
+  {t:'Three fates of an acquisition', d:'It becomes the chassis of a product line (ExactTarget to Marketing Cloud), gets folded in and retired once the core matures (Desk.com, Do.com, Audience Studio, Social Studio), or stays independent as best in category (Tableau, MuleSoft).'},
+  {t:'Buy maturity, not just tech', d:'ExactTarget was 13 years old with about 2,000 staff and had just bought Pardot. Salesforce chose it over Eloqua and Marketo because it was buying a running business, not a feature.'},
+  {t:'Data brands never keep their name', d:'Data.com, Audience Studio, and Data Cloud were all renamed and re-platformed to match the story of the day, now Data 360. The tech stays strategic even when the brand disappears.'},
+  {t:'From platforms to components', d:'The AI era flipped the strategy. Instead of buying whole categories, Salesforce now buys narrow capabilities that feed one system, Agentforce. Faster, cheaper, quieter, more frequent.'},
+  {t:'Slack is the exception', d:'Most acquisitions get absorbed and lose their identity. Slack is being positioned as the front door to the whole platform, taking the role Chatter once held.'}
+];
+
 const ERAS = [
-  {key:'platform', yr:'2010–2014', title:'Platform & developer era', desc:'Build the platform and the first data and marketing footholds.'},
-  {key:'experience', yr:'2015–2018', title:'Experience, commerce & integration', desc:'Add channels and the API backbone for Customer 360.'},
-  {key:'analytics', yr:'2019–2021', title:'Analytics, collaboration & verticals', desc:'The three mega-deals: Tableau, Vlocity, Slack.'},
-  {key:'agents', yr:'2022–2026', title:'The AI agent land-grab', desc:'Everything now feeds Agentforce: data, knowledge, agents, pipeline.'}
+  {key:'platform', yr:'2008-2014', title:'Foundations & developer era', desc:'Build the platform and the first data, service, and marketing footholds.'},
+  {key:'experience', yr:'2015-2018', title:'Experience, commerce, AI & integration', desc:'Add channels, the API backbone, CPQ, and the seeds of Einstein.'},
+  {key:'analytics', yr:'2019-2021', title:'Analytics, field service, verticals & Slack', desc:'The mega-deals: Tableau, ClickSoftware, Vlocity, Slack.'},
+  {key:'agents', yr:'2022-2026', title:'The AI agent land-grab', desc:'Everything now feeds Agentforce: data, knowledge, agents, pipeline, billing.'}
 ];
 
 const ACQ = [
+  {era:'platform', year:'2008', name:'InStranet', price:'~$32M', cat:'Knowledge base', verdict:'core',
+    became:'Became the foundation of Service Cloud Knowledge.',
+    detail:'An early, formative acquisition. Salesforce Ben frames InStranet as the seed that grew into an entire product line, Service Cloud. It is a clear example of Salesforce buying a technical foundation it could build a platform on, rather than buying market share.'},
   {era:'platform', year:'2010', name:'Heroku', price:'~$212M', cat:'Developer platform', verdict:'core',
     became:'Still Heroku, the platform-as-a-service for app development.',
-    detail:'Salesforce\'s entry into developer infrastructure. It remains a credible PaaS, somewhat separate from the core CRM world but used for custom apps and now agent back-ends.'},
+    detail:'Salesforce entry into developer infrastructure. It remains a credible PaaS, somewhat separate from the core CRM world but used for custom apps and now agent back-ends.'},
   {era:'platform', year:'2010', name:'Jigsaw', price:'undisclosed', cat:'Contact data', verdict:'eval',
     became:'Became Data.com, since retired.',
-    detail:'A crowdsourced B2B contact database. It became Data.com and was eventually sunset, an early example of an acquisition that did not survive integration.'},
+    detail:'A crowdsourced B2B contact database that became Data.com and was eventually sunset. A textbook case of the pattern that data-asset brands rarely survive; the technology gets renamed and re-platformed, and the name disappears.'},
   {era:'platform', year:'2011', name:'Radian6', price:'~$326M', cat:'Social listening', verdict:'eval',
     became:'Folded into Marketing Cloud as Social Studio, since retired.',
-    detail:'Social listening that became part of Social Studio. Salesforce wound Social Studio down in 2024, so this capability is no longer offered natively.'},
+    detail:'Social listening that became part of Social Studio. Salesforce wound Social Studio down in 2024 and now points customers to partners like Sprout Social, so this capability is no longer offered natively.'},
+  {era:'platform', year:'2011', name:'Assistly', price:'~$50M', cat:'SMB support', verdict:'eval',
+    became:'Relaunched as Desk.com, retired in 2020.',
+    detail:'Bought to reach smaller businesses, relaunched as Desk.com, then retired in 2020 with customers migrated to Service Cloud. The classic land-and-expand pattern: buy a simple tool for a segment, then absorb it once the core product matures.'},
   {era:'platform', year:'2012', name:'Buddy Media', price:'~$689M', cat:'Social marketing', verdict:'eval',
     became:'Folded into Marketing Cloud (Social Studio), since retired.',
-    detail:'Social publishing that joined Radian6 inside Social Studio. Also wound down. Social management is now a gap you fill with third-party tools.'},
+    detail:'Social publishing that joined Radian6 inside Social Studio, and was wound down with it. Native social management is now a gap you fill with third-party tools.'},
   {era:'platform', year:'2013', name:'ExactTarget', price:'~$2.5B', cat:'Marketing automation', verdict:'care',
     became:'Became Marketing Cloud, the email and journey engine now called Marketing Cloud Engagement.',
-    detail:'The cornerstone of B2C marketing at Salesforce, and the deal that also brought Pardot inside. Powerful but historically complex and SQL-heavy, with a learning curve admins still feel.'},
+    detail:'The cornerstone of B2C marketing at Salesforce, and the deal that also brought Pardot inside. Salesforce Ben notes this was buying maturity: ExactTarget was a 13-year-old, 2,000-person company, which is why Salesforce chose it over Eloqua or Marketo. Powerful but historically complex and SQL-heavy.'},
   {era:'platform', year:'2013', name:'Pardot', price:'(in ExactTarget deal)', cat:'B2B marketing automation', verdict:'care',
     became:'Renamed Marketing Cloud Account Engagement in 2022.',
-    detail:'Came along with ExactTarget but kept its own identity for years. It is solid for B2B lead nurture and scoring, though the interface feels dated and it sits somewhat apart from the core. Many B2B shops weigh it against HubSpot or Marketo.'},
+    detail:'Came along with ExactTarget but kept its own identity for years. Solid for B2B lead nurture and scoring, though the interface feels dated and it sits somewhat apart from the core. Many B2B shops weigh it against HubSpot or Marketo.'},
   {era:'platform', year:'2014', name:'RelateIQ', price:'~$390M', cat:'Relationship intelligence', verdict:'care',
     became:'Became SalesforceIQ; its ideas seeded Einstein.',
-    detail:'An early machine-learning play on relationship data. The standalone product faded, but it was an intellectual precursor to Einstein and today\'s agents.'},
+    detail:'An early machine-learning play on relationship data. The standalone product faded, but it was an intellectual precursor to Einstein and today agents.'},
 
+  {era:'experience', year:'2016', name:'SteelBrick', price:'~$360M', cat:'CPQ / quote-to-cash', verdict:'eval',
+    became:'Became Salesforce CPQ, now part of Revenue Cloud (renamed Agentforce Revenue Management).',
+    detail:'A native, 100% on-platform configure-price-quote tool, rebranded as Salesforce CPQ at Dreamforce 2016. Functionally capable but CPQ remains one of the most complex, consultant-heavy implementations in the suite. Now sits inside Agentforce Revenue Management alongside the new m3ter billing tech.'},
+  {era:'experience', year:'2016', name:'Einstein origins', price:'3 deals', cat:'AI foundations', verdict:'core',
+    became:'MetaMind, PredictionIO, and BeyondCore became the basis of Einstein.',
+    detail:'In 2016 Salesforce quietly bought three AI companies: MetaMind (deep learning, ~$33M), PredictionIO (an open-source ML server, later donated to Apache), and BeyondCore (~$110M, smart analytics that became Einstein Discovery). Together they seeded Einstein, unveiled at Dreamforce 2016, which is the direct intellectual ancestor of today Agentforce.'},
   {era:'experience', year:'2016', name:'Demandware', price:'~$2.8B', cat:'B2C commerce', verdict:'core',
     became:'Became Commerce Cloud, now Agentforce Commerce.',
-    detail:'A strong, proven B2C ecommerce platform and a real category leader. Capable but premium-priced, and B2C and B2B commerce have different histories inside the suite.'},
+    detail:'A strong, proven B2C ecommerce platform and a real category leader. Salesforce was buying a well-engineered product with an enterprise customer base to enter the B2C market. Capable but premium-priced.'},
   {era:'experience', year:'2016', name:'Krux', price:'~$700M', cat:'Data management (DMP)', verdict:'eval',
     became:'Became Salesforce DMP, then Audience Studio, since wound down.',
-    detail:'A demand-side data management platform for advertising audiences. The DMP category collapsed industry-wide as cookies declined; its role was absorbed by the CDP and Data Cloud story.'},
+    detail:'A data management platform for advertising audiences. The DMP category collapsed industry-wide as cookies declined; its role was absorbed into the CDP and Data 360 story.'},
   {era:'experience', year:'2016', name:'Quip', price:'~$750M', cat:'Docs & collaboration', verdict:'eval',
-    became:'Still Quip, but largely overshadowed by Slack.',
-    detail:'Collaborative documents and spreadsheets. After the Slack acquisition its strategic role narrowed considerably.'},
+    became:'Reaching end of life; no renewals after March 2027. Tech lives on in Slack Canvas.',
+    detail:'Collaborative documents and spreadsheets, once the basis of the Salesforce Anywhere project. After the Slack acquisition its role narrowed, and in 2026 Salesforce announced end of life for Quip. The technology continues inside Slack Canvas.'},
   {era:'experience', year:'2018', name:'MuleSoft', price:'~$6.5B', cat:'Integration & APIs', verdict:'core',
     became:'Still MuleSoft, the integration backbone of Customer 360.',
-    detail:'Enterprise integration and API management. Genuinely important and powerful, this is how data moves between Salesforce and everything else. It is also expensive and requires real integration expertise to run well.'},
+    detail:'Enterprise integration and API management. Genuinely important and powerful, this is how data moves between Salesforce and everything else, including on-premise systems. Kept its name and function; also expensive and needs real expertise.'},
   {era:'experience', year:'2018', name:'CloudCraze', price:'undisclosed', cat:'B2B commerce', verdict:'care',
     became:'Folded into Commerce Cloud as the B2B foundation.',
-    detail:'Native B2B ecommerce built on the platform. It became Commerce Cloud B2B. Capable for connected B2B buying, though it is a different lineage from the Demandware B2C side.'},
+    detail:'Native B2B ecommerce built on the platform. Capable for connected B2B buying, though it is a different lineage from the Demandware B2C side.'},
   {era:'experience', year:'2018', name:'Datorama', price:'~$800M', cat:'Marketing analytics', verdict:'care',
     became:'Became Marketing Cloud Intelligence.',
-    detail:'Cross-channel marketing analytics and spend reporting. Useful for agencies and large marketing teams, but it is a specialized tool that overlaps with Tableau and general BI.'},
+    detail:'Cross-channel marketing analytics and spend reporting. Useful for agencies and large marketing teams, but a specialized tool that overlaps with Tableau and general BI.'},
   {era:'experience', year:'2018', name:'Rebel', price:'undisclosed', cat:'Interactive email', verdict:'eval',
     became:'Folded into Marketing Cloud as interactive email content.',
     detail:'A small tuck-in for live, interactive email. Absorbed as a feature rather than a standalone product.'},
 
   {era:'analytics', year:'2019', name:'Tableau', price:'~$15.7B', cat:'Analytics & BI', verdict:'core',
     became:'Still Tableau; also underpins CRM Analytics and Data 360 semantics.',
-    detail:'A best-in-class analytics platform and one of Salesforce\'s strongest assets. It runs standalone and increasingly powers the semantic layer inside Data 360. Few reasons to look elsewhere for visual analytics if you are already invested.'},
+    detail:'A best-in-class analytics platform and one of Salesforce strongest assets. Salesforce Ben calls it the clearest example of choosing acquisition over internal competition: it bought Tableau even though Einstein Analytics competed with it, then rebranded its own product twice. Few reasons to look elsewhere for visual analytics if you are already invested.'},
+  {era:'analytics', year:'2019', name:'ClickSoftware', price:'~$1.35B', cat:'Field service', verdict:'core',
+    became:'Became Field Service, now Agentforce Field Service.',
+    detail:'A field-service-management pioneer active since 1997. The ClickSoftware team built out Field Service Lightning, so the acquisition was a matter of when, not if. It got a boost during COVID for no-contact and scheduling scenarios and is now the go-to for mobile workforces, renamed Salesforce Field Service and then Agentforce Field Service.'},
   {era:'analytics', year:'2020', name:'Vlocity', price:'~$1.33B', cat:'Industry clouds', verdict:'care',
-    became:'Became Salesforce Industries (industry-specific clouds).',
-    detail:'Pre-built data models and processes for telecom, insurance, health, public sector, and more. Valuable if your industry is covered, but the industry clouds are heavy, opinionated, and a significant implementation commitment.'},
+    became:'Became Salesforce Industries (Agentforce Media, Agentforce Communications, and more).',
+    detail:'Pre-built data models and processes for telecom, insurance, health, utilities, and public sector. Valuable if your industry is covered, but the industry clouds are heavy, opinionated, and a significant implementation commitment. Now being renamed under the Agentforce umbrella.'},
   {era:'analytics', year:'2020', name:'Evergage', price:'undisclosed', cat:'Personalization', verdict:'care',
     became:'Became Interaction Studio, then Marketing Cloud Personalization.',
-    detail:'Real-time personalization and 1:1 web and email experiences. Capable, but it is one of the more complex Marketing Cloud modules to operate and often underused relative to its license cost.'},
+    detail:'Real-time personalization and 1:1 web and email experiences. Capable, but one of the more complex Marketing Cloud modules to operate and often underused relative to its license cost.'},
+  {era:'analytics', year:'2020', name:'Mobify', price:'undisclosed', cat:'Headless commerce', verdict:'care',
+    became:'Folded into Commerce Cloud as headless / PWA storefront tech.',
+    detail:'Progressive web app and headless storefront technology. A small deal, but an early piece of the composable-commerce story that now connects directly to the Headless 360 direction.'},
   {era:'analytics', year:'2021', name:'Slack', price:'~$27.7B', cat:'Collaboration', verdict:'core',
-    became:'Still Slack, now positioned as the "agentic operating system."',
-    detail:'Salesforce\'s largest acquisition ever. A genuinely strong collaboration product, now the front-end where humans and Agentforce agents are meant to work together. Strategic value is high; whether it becomes the agent hub Salesforce describes is still unfolding.'},
+    became:'Still Slack, now positioned as the front door to the platform (Slack CRM, 2026).',
+    detail:'Salesforce largest acquisition ever. A genuinely strong product being positioned to replace Chatter and become the single pane of glass over the platform. In 2026 Salesforce launched Slack CRM, folding both products into one tab. Strategic value is high; the full agent-hub vision is still unfolding.'},
 
   {era:'agents', year:'2023', name:'Airkit.ai', price:'undisclosed', cat:'AI service flows', verdict:'care',
     became:'Feeds Agentforce for Service (low-code conversational flows).',
@@ -613,7 +602,7 @@ const ACQ = [
     detail:'Conversational voice technology that strengthens the digital voice agent and contact-center side of Agentforce. A capability play, not a standalone product.'},
   {era:'agents', year:'2024', name:'Own Company', price:'~$1.9B', cat:'Data backup & governance', verdict:'core',
     became:'Backup, recovery, and data resilience for the platform.',
-    detail:'Formerly OwnBackup. Production data protection, archiving, and recovery for Salesforce orgs. A sensible foundation purchase and a real need most large orgs have.'},
+    detail:'Formerly OwnBackup. Production data protection, archiving, and recovery for Salesforce orgs. A sensible foundation purchase, and its archive of historical data positioned it as more than backup in the AI era.'},
   {era:'agents', year:'2024', name:'Zoomin', price:'undisclosed', cat:'Knowledge & docs', verdict:'care',
     became:'Feeds Agentforce knowledge ("agent as product expert").',
     detail:'Product documentation and knowledge experiences. Structures unstructured content so support agents can use it reliably. Most valuable in service and adoption scenarios.'},
@@ -622,38 +611,103 @@ const ACQ = [
     detail:'Modern mobile point-of-sale and retail experiences. A substrate for store-associate and in-store commerce agents.'},
   {era:'agents', year:'2025', name:'Convergence.ai', price:'undisclosed', cat:'AI agents', verdict:'care',
     became:'London startup feeding Agentforce reasoning and talent.',
-    detail:'An agent and reasoning acqui-hire that adds technical depth to Agentforce. Announced May 2025.'},
+    detail:'An agent and reasoning acqui-hire that also seeded a Salesforce AI R&D lab in London. Announced May 2025.'},
   {era:'agents', year:'2025', name:'Informatica', price:'~$8B', cat:'Data management & MDM', verdict:'care',
     became:'The enterprise data foundation under Data 360. Closed November 2025.',
-    detail:'A major deal bringing best-in-class data integration, quality, governance, metadata, and master data management. Strategically central to making agents safe at scale. The caution is integration: bolting a large, mature, standalone data platform onto Data 360 is a multi-year effort, and there is overlap with MuleSoft and with your own warehouse tooling. For a Snowflake-centric shop already using a dedicated MDM, evaluate carefully where Informatica adds versus duplicates.'},
+    detail:'Salesforce third-largest acquisition ever, behind Slack and Tableau. It brings best-in-class data integration, quality, governance, metadata, and master data management, and is the clear big bet of the "Year of Agentforce." The caution is integration: bolting a large, mature, standalone data platform onto Data 360 is a multi-year effort, with overlap against MuleSoft and your own warehouse tooling. For a Snowflake-centric shop with a dedicated MDM, evaluate carefully where Informatica adds versus duplicates.'},
+  {era:'agents', year:'2025', name:'Waii', price:'undisclosed', cat:'Natural-language-to-SQL', verdict:'care',
+    became:'Text-to-SQL and a semantic layer for Agentforce analytics.',
+    detail:'Turns plain-language questions into accurate SQL using a metadata knowledge graph, so users and agents can query any data source without technical skill. Announced August 2025. A semantic-layer piece for the data foundation.'},
   {era:'agents', year:'2025', name:'Spindle AI', price:'undisclosed', cat:'Agentic analytics', verdict:'new',
     became:'Agentic forecasting and scenario analytics.',
     detail:'A November 2025 tuck-in for AI-driven forecasting and decision analytics that feed agent reasoning. Very new.'},
+  {era:'agents', year:'2025', name:'Doti', price:'undisclosed', cat:'Enterprise search', verdict:'new',
+    became:'Agentic enterprise search delivered through Slack.',
+    detail:'An Israeli startup for AI-powered enterprise search that makes internal knowledge instantly accessible inside Slack. Announced November 2025, joining Salesforce Israel AI hub.'},
   {era:'agents', year:'2025', name:'Regrello', price:'undisclosed', cat:'Workflow orchestration', verdict:'new',
-    became:'Process orchestration for agents.',
-    detail:'Workflow automation that lets agents understand and run multi-step business processes. Recent and not yet deeply integrated.'},
+    became:'Process orchestration and supply-chain collaboration for agents.',
+    detail:'AI-powered operations and workflow automation that lets agents understand and run multi-step business processes. Recent and not yet deeply integrated.'},
   {era:'agents', year:'2025', name:'Apromore', price:'undisclosed', cat:'Process mining', verdict:'new',
     became:'Process mining announced at Dreamforce 2025.',
-    detail:'Process mining so agents can discover and optimize how work actually flows. A piece of the "agents that understand your processes" story, still early.'},
+    detail:'Process mining so agents can discover and optimize how work actually flows. Part of the "agents that understand your processes" story, still early.'},
   {era:'agents', year:'2025', name:'Bluebirds', price:'undisclosed', cat:'Prospecting data', verdict:'new',
-    became:'Prospecting and enrichment for Agentforce Sales.',
+    became:'AI prospecting and enrichment for Agentforce Sales.',
     detail:'Signal and enrichment data to help sales agents prioritize leads, alongside partnerships with ZoomInfo and 6sense. Newly absorbed.'},
-  {era:'agents', year:'2025–26', name:'Qualified', price:'undisclosed', cat:'Agentic marketing', verdict:'care',
+  {era:'agents', year:'2025-26', name:'Qualified', price:'undisclosed', cat:'Agentic marketing', verdict:'care',
     became:'The AI SDR layer (Piper) for Agentforce. Closed April 2026.',
-    detail:'A Salesforce-native platform that turns website visitors into pipeline with its Piper AI SDR agent: intent, conversation, and meeting booking. Announced December 2025, closed April 2026. Genuinely native and focused, but it is a young capability competing with Drift-style tools, so validate Piper against your own funnel before betting on it.'},
+    detail:'A Salesforce-native platform that turns website visitors into pipeline with its Piper AI SDR agent: intent, conversation, and meeting booking. Announced December 2025, closed April 2026. Genuinely native and focused, but young as a Salesforce product and competing with Drift-style tools, so validate Piper against your own funnel before betting on it.'},
+  {era:'agents', year:'2026', name:'Cimulate', price:'undisclosed', cat:'Agentic commerce', verdict:'care',
+    became:'Product discovery for Agentforce Commerce. Closed March 2026.',
+    detail:'AI product discovery (its "CommerceGPT") that moves retail search from keywords to intent-driven, conversational discovery. The first Salesforce acquisition to close in 2026, feeding Agentforce Commerce.'},
+  {era:'agents', year:'2026', name:'Momentum', price:'undisclosed', cat:'Conversation intelligence', verdict:'new',
+    became:'Conversation insights and revenue orchestration for Agentforce and Slack.',
+    detail:'Captures call data from Zoom and Google Meet and turns unstructured conversation into structured CRM action, so agents can incorporate what customers actually said. Announced February 2026.'},
   {era:'agents', year:'2026', name:'Contentful', price:'undisclosed', cat:'Composable CMS (DXP)', verdict:'new',
-    became:'The content layer for Headless 360. Announced June 1, 2026, expected to close in Q3 of FY27.',
+    became:'The content layer for Headless 360. Announced June 1, 2026; expected to close in Q3 of FY27.',
     detail:'A leading composable, headless content platform used by 4,800+ brands. It fills a long-standing content gap and anchors the Headless 360 story: Data 360 supplies context, Agentforce decides what to say, Contentful holds the approved blocks. Not yet closed, integration is a promise, and German-founded data-residency questions have been raised. Existing Contentful customers should watch contract and roadmap signals closely.'},
+  {era:'agents', year:'2026', name:'m3ter', price:'undisclosed', cat:'Usage-based billing', verdict:'new',
+    became:'Consumption billing for Revenue Cloud (Agentforce Revenue Management). Closed July 1, 2026.',
+    detail:'A London metering-and-rating platform for consumption and outcome-based pricing. Announced June 8, closed July 1, 2026. It is central to billing for AI-agent and usage-based models, the pricing shift Salesforce sees for the AI era, and slots into Agentforce Revenue Management alongside the old SteelBrick CPQ lineage.'},
   {era:'agents', year:'2026', name:'Fin', price:'~$3.6B', cat:'AI service agent', verdict:'new',
-    became:'Turnkey customer service agent for Agentforce. Announced June 15, 2026, expected to close in Q4 of FY27.',
+    became:'Turnkey customer service agent for Agentforce. Announced June 15, 2026; expected to close in Q4 of FY27.',
     detail:'Formerly Intercom. Fin is a ready-made AI service agent powered by a proprietary support-tuned model called Apex, claimed to resolve around 76% of support volume across chat, email, WhatsApp, SMS, phone, and Slack, with roughly 30,000 customers. It gives Agentforce a proven out-of-the-box agent rather than only tooling to build one. Very new and not yet closed; resolution claims should be piloted on your real ticket volume before you trust the headline number.'}
 ];
 
-/* ---- Architecture layers ---- */
+const PILLARS = [
+  {name:'Agentforce 360 Platform', tag:'THE AI + AGENT LAYER',
+   icon:'<circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+   blurb:'The reasoning engine and builder for autonomous agents. This is the brand Salesforce now leads with, and the layer everything else feeds.',
+   items:[
+     {name:'Agentforce 360 Platform', old:'was Agentforce 1-3', verdict:'eval', note:'The agent builder and Atlas reasoning engine. The flagship bet, young and heavily marketed. Pilot on contained use cases.'},
+     {name:'Einstein', old:'the predictive/gen AI in apps', verdict:'care', note:'The AI woven into the apps. More proven than the autonomous-agent layer.'},
+     {name:'Prompt / Model Builder', old:'Agentforce tooling', verdict:'care', note:'Low-code tools to configure prompts, models, and agent actions.'}
+   ]},
+  {name:'Data 360', tag:'THE DATA LAYER',
+   icon:'<ellipse cx="12" cy="6" rx="7" ry="3" stroke="currentColor" stroke-width="1.7"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3" stroke="currentColor" stroke-width="1.7"/>',
+   blurb:'The unified, real-time data foundation that gives agents trusted context. Agents are only as good as this layer.',
+   items:[
+     {name:'Data 360', old:'was Data Cloud / Genie', verdict:'care', note:'The CDP and real-time data layer. Zero-copy federation with Snowflake, Databricks, and BigQuery. Powerful but a major lift.'},
+     {name:'MuleSoft', old:'acquired 2018', verdict:'core', note:'The integration and API backbone. Capable, expensive, needs expertise.'},
+     {name:'Informatica', old:'closed Nov 2025', verdict:'care', note:'Enterprise data management, governance, and MDM. Central, but integration is multi-year and overlaps existing tooling.'},
+     {name:'Own Company', old:'acquired 2024', verdict:'core', note:'Backup, recovery, and data resilience. A sensible, low-drama foundation piece.'},
+     {name:'Tableau + CRM Analytics', old:'acquired 2019', verdict:'core', note:'Best-in-class analytics; also powers the Data 360 semantic layer.'}
+   ]},
+  {name:'Customer 360 apps', tag:'THE FORMER CLOUDS',
+   icon:'<rect x="4" y="5" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 9h8M8 13h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>',
+   blurb:'The role-based apps that used to be called Clouds, each now with agents embedded. This is where most day-to-day work still happens.',
+   items:[
+     {name:'Agentforce Sales', old:'was Sales Cloud', verdict:'core', note:'The original CRM system of record. Mature and dependable.'},
+     {name:'Agentforce Service', old:'was Service Cloud', verdict:'core', note:'Case management and support. Very widely deployed and proven.'},
+     {name:'Agentforce Marketing', old:'was Marketing Cloud', verdict:'care', note:'A family, not one product, with distinct B2C and B2B lineages. Scope carefully.'},
+     {name:'Agentforce Commerce', old:'was Commerce Cloud', verdict:'core', note:'Strong B2C and credible B2B ecommerce. Premium-priced.'},
+     {name:'Agentforce Revenue Management', old:'was Revenue Cloud / CPQ', verdict:'eval', note:'Quote-to-cash, CPQ, and now m3ter consumption billing. Historically consultant-heavy.'},
+     {name:'Agentforce Field Service', old:'was Field Service / ClickSoftware', verdict:'core', note:'Scheduling and mobile work. Solid in its niche, heavy to configure.'},
+     {name:'Salesforce Industries', old:'was Vlocity', verdict:'care', note:'Industry-specific models, now renaming to Agentforce Media, Communications, and more.'}
+   ]},
+  {name:'Slack', tag:'THE INTERFACE',
+   icon:'<rect x="4" y="4" width="16" height="13" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M7 8h10M7 12h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M9 17l-2 3 5-3" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>',
+   blurb:'Repositioned from a chat app into the front door of the platform, where humans and agents are meant to work side by side.',
+   items:[
+     {name:'Slack', old:'acquired 2021', verdict:'core', note:'A strong product in its own right, now the pitched home for agents.'},
+     {name:'Slack CRM', old:'launched 2026', verdict:'new', note:'CRM and Slack in one tab, AI on top with Salesforce underneath. New; the vision is still proving out.'},
+     {name:'Slack Canvas', old:'absorbed Quip tech', verdict:'care', note:'Collaborative docs inside Slack, carrying the Quip technology forward as Quip itself retires.'}
+   ]}
+];
+
+const MENUMAP = [
+  {l:'Customer 360', r:'The umbrella name for the whole application suite. Not a single product you buy.'},
+  {l:'Agentforce 360', r:'The current top-level platform brand: the agent platform plus the renamed apps, Data 360, and Slack.'},
+  {l:'Agentforce', r:'The AI agent platform itself, and now the prefix on the former Clouds (Agentforce Sales, Service, and so on).'},
+  {l:'Data Cloud', r:'Renamed Data 360 in 2025. Same product. Older docs and contracts still say Data Cloud.'},
+  {l:'Einstein', r:'The predictive and generative AI baked into the apps, distinct from the autonomous Agentforce agents.'},
+  {l:'Starter / Pro Suite', r:'Bundled, simplified editions aimed at smaller businesses, not separate products.'},
+  {l:'Foundations', r:'A free baseline that brings a slice of Data 360 and Agentforce into existing app licenses.'}
+];
+
 const LAYERS = [
   {n:'06', name:'Experience & content', cls:'', blurb:'Where the words, pages, and assets that customers see are assembled.',
    products:[
-    {name:'Experience Cloud', verdict:'care', note:'Portals, communities, and sites on the platform. Workable but dated for modern composable web; many teams pair or replace it.'},
+    {name:'Experience Cloud', verdict:'care', note:'Portals, communities, and sites on the platform. Workable but dated for modern composable web; also the surface abused in the 2026 guest-user breaches, so lock down its configuration.'},
     {name:'Contentful (pending)', verdict:'new', note:'Composable headless CMS being acquired to power Headless 360. Real capability, integration unproven.'},
     {name:'Salesforce CMS', verdict:'eval', note:'A lightweight native CMS. Fine for simple content reuse, not a true enterprise DXP on its own.'}
    ]},
@@ -671,8 +725,8 @@ const LAYERS = [
     {name:'Agentforce Service (Service Cloud)', verdict:'core', note:'Case management and support, very widely deployed and proven.'},
     {name:'Agentforce Marketing (Marketing Cloud)', verdict:'care', note:'A family, not one product. Powerful but complex, with distinct B2C and B2B lineages. Scope carefully.'},
     {name:'Agentforce Commerce (Commerce Cloud)', verdict:'core', note:'Strong B2C and credible B2B ecommerce. Premium-priced.'},
-    {name:'Revenue Cloud (CPQ)', verdict:'eval', note:'Quote-to-cash and CPQ. Capable but historically one of the hardest, most consultant-heavy implementations.'},
-    {name:'Field Service', verdict:'care', note:'Scheduling and mobile work for field teams. Solid in its niche, heavy to configure.'}
+    {name:'Agentforce Revenue Management (Revenue Cloud / CPQ)', verdict:'eval', note:'Quote-to-cash, CPQ, and now m3ter consumption billing. Capable but historically one of the hardest, most consultant-heavy implementations.'},
+    {name:'Agentforce Field Service (Field Service)', verdict:'core', note:'Scheduling and mobile work for field teams, from the ClickSoftware lineage. Solid in its niche, heavy to configure.'}
    ]},
   {n:'03', name:'Analytics & intelligence', cls:'', blurb:'Turning the data into insight for people and agents.',
    products:[
@@ -682,31 +736,31 @@ const LAYERS = [
    ]},
   {n:'02', name:'Collaboration', cls:'', blurb:'Where humans and, increasingly, agents do the work together.',
    products:[
-    {name:'Slack', verdict:'core', note:'A strong product in its own right, now pitched as the home for agents. Strategic value high.'},
-    {name:'Quip', verdict:'eval', note:'Collaborative docs, largely overshadowed by Slack since 2021.'}
+    {name:'Slack', verdict:'core', note:'A strong product in its own right, now pitched as the home for agents and the front door to the platform.'},
+    {name:'Quip', verdict:'eval', note:'Collaborative docs, now reaching end of life (no renewals after March 2027). The tech lives on in Slack Canvas.'}
    ]},
   {n:'01', name:'Data & integration foundation', cls:'foundation', blurb:'Everything above depends on this. Get it wrong and the agents hallucinate.',
    products:[
     {name:'Data 360 (Data Cloud)', verdict:'care', note:'The unified real-time data layer and the heart of the agent story. Zero-copy federation with Snowflake, Databricks, and BigQuery means you can avoid duplicating data. Powerful, but a major lift and an evolving product.'},
     {name:'MuleSoft', verdict:'core', note:'The integration and API backbone. Important and capable, expensive, needs expertise.'},
     {name:'Informatica (closed Nov 2025)', verdict:'care', note:'Enterprise data management, governance, and MDM. Strategically central, but integration is multi-year and overlaps with existing tooling.'},
+    {name:'Waii (text-to-SQL)', verdict:'care', note:'Natural-language-to-SQL and a semantic layer, so people and agents can query data without technical skill. Newly acquired.'},
     {name:'Own Company', verdict:'core', note:'Backup, recovery, and data resilience. A sensible, low-drama foundation piece.'}
    ]}
 ];
 
-/* ---- Name decoder ---- */
 const NAMES = [
   {current:'Agentforce Sales', cat:'CRM', verdict:'core', aliases:['sales cloud','sfa'],
    lineage:['Sales Cloud','Agentforce Sales (2025)'],
    note:'The original sales CRM, renamed at Dreamforce 2025. Your contract may still say Sales Cloud; the product and license are the same.'},
   {current:'Agentforce Service', cat:'CRM', verdict:'core', aliases:['service cloud','support'],
-   lineage:['Service Cloud','Agentforce Service (2025)'],
-   note:'Case management and support, renamed under the Agentforce brand. Same product, agents now embedded.'},
+   lineage:['Service Cloud (built on InStranet, 2008)','Agentforce Service (2025)'],
+   note:'Case management and support, renamed under the Agentforce brand. Same product, agents now embedded. Its knowledge roots trace to the 2008 InStranet acquisition.'},
   {current:'Agentforce Marketing', cat:'Marketing', verdict:'care', aliases:['marketing cloud','sfmc'],
    lineage:['Marketing Cloud','Agentforce Marketing (umbrella, 2025)'],
    note:'An umbrella over several distinct marketing tools rather than one product. See Engagement, Account Engagement, Personalization, and Intelligence below.'},
   {current:'Marketing Cloud Engagement', cat:'Marketing', verdict:'care', aliases:['exacttarget','et','email studio','journey builder','sfmc'],
-   lineage:['ExactTarget (2013)','Salesforce Marketing Cloud','Marketing Cloud Email Studio','Marketing Cloud Engagement'],
+   lineage:['ExactTarget (2013)','Salesforce Marketing Cloud (2014)','Marketing Cloud Email Studio','Marketing Cloud Engagement'],
    note:'The B2C email and journey engine that people still casually call "ExactTarget." Powerful and SQL-heavy. Now lives under the Agentforce Marketing umbrella.'},
   {current:'Marketing Cloud Account Engagement', cat:'Marketing', verdict:'care', aliases:['pardot','b2b marketing automation'],
    lineage:['Pardot (came with ExactTarget, 2013)','Marketing Cloud Account Engagement (2022)'],
@@ -717,46 +771,45 @@ const NAMES = [
   {current:'Marketing Cloud Intelligence', cat:'Marketing', verdict:'care', aliases:['datorama','marketing analytics'],
    lineage:['Datorama (2018)','Marketing Cloud Intelligence'],
    note:'Cross-channel marketing analytics and spend reporting.'},
-  {current:'Marketing Cloud Advertising', cat:'Marketing', verdict:'eval', aliases:['advertising studio'],
-   lineage:['Advertising Studio','Marketing Cloud Advertising'],
-   note:'Audience activation to ad platforms. A renamed module; its role shrank as the DMP era ended.'},
   {current:'Audience Studio (retired)', cat:'Data', verdict:'eval', aliases:['krux','salesforce dmp','dmp'],
    lineage:['Krux (2016)','Salesforce DMP','Audience Studio','Wound down'],
    note:'The advertising data management platform. The DMP category collapsed as third-party cookies declined; its role was absorbed into the CDP and Data 360 story.'},
   {current:'Social Studio (retired)', cat:'Marketing', verdict:'eval', aliases:['radian6','buddy media','social'],
    lineage:['Radian6 (2011) + Buddy Media (2012)','Social Studio','Retired 2024'],
-   note:'Social listening and publishing. Salesforce wound this down in 2024, so native social management is now a gap.'},
+   note:'Social listening and publishing. Salesforce wound this down in 2024 and now points to partners like Sprout Social, so native social management is a gap.'},
   {current:'Data 360', cat:'Data', verdict:'care', aliases:['data cloud','genie','salesforce cdp','customer data platform','customer 360 audiences','cdp'],
    lineage:['Customer 360 Audiences (2019)','Salesforce CDP (2021)','Marketing Cloud CDP (2022)','Salesforce Genie (2022)','Salesforce Data Cloud (2023)','Data 360 (2025)'],
    note:'The single most renamed product in the portfolio, on its sixth name. It is the unified, real-time data layer and the foundation for Agentforce. Same core product through every rename, now with zero-copy federation and "Intelligent Context."'},
-  {current:'Agentforce 360 Platform', cat:'AI', verdict:'eval', aliases:['agentforce','einstein gpt','einstein copilot','atlas'],
-   lineage:['Einstein','Einstein GPT','Agentforce 1 / 2 / 3 (2024–25)','Agentforce 360 Platform (2025)'],
-   note:'The AI agent builder and reasoning engine. Fast-moving naming; the underlying capability matured from predictive Einstein to generative to autonomous agents.'},
+  {current:'Agentforce 360 Platform', cat:'AI', verdict:'eval', aliases:['agentforce','einstein gpt','einstein copilot','atlas','metamind'],
+   lineage:['MetaMind / PredictionIO / BeyondCore (2016)','Einstein','Einstein GPT','Agentforce 1 / 2 / 3 (2024-25)','Agentforce 360 Platform (2025)'],
+   note:'The AI agent builder and reasoning engine. Its roots go back to the 2016 Einstein-founding acquisitions; the capability matured from predictive Einstein to generative to autonomous agents.'},
   {current:'CRM Analytics', cat:'Analytics', verdict:'care', aliases:['wave analytics','einstein analytics','tableau crm'],
    lineage:['Wave Analytics','Einstein Analytics','Tableau CRM','CRM Analytics'],
    note:'In-platform analytics and dashboards. Not the same as standalone Tableau, though the names have crossed over confusingly.'},
-  {current:'Salesforce Industries', cat:'Vertical', verdict:'care', aliases:['vlocity','industry cloud','industry clouds'],
-   lineage:['Vlocity (2020)','Salesforce Industries / Industry Clouds'],
-   note:'Industry-specific data models and processes for telecom, insurance, health, public sector, and more.'},
-  {current:'Agentforce Commerce', cat:'Commerce', verdict:'core', aliases:['demandware','commerce cloud'],
-   lineage:['Demandware (2016)','Commerce Cloud','Agentforce Commerce (2025)'],
-   note:'B2C and B2B ecommerce. The B2C side is the proven Demandware lineage; B2B traces to CloudCraze.'},
-  {current:'Revenue Cloud', cat:'CRM', verdict:'eval', aliases:['cpq','steelbrick','revenue lifecycle management','rlm'],
-   lineage:['SteelBrick CPQ (2015)','Salesforce CPQ','Revenue Cloud / Revenue Lifecycle Management'],
-   note:'Quote-to-cash, configure-price-quote, and billing. Capable but among the most complex and consultant-heavy implementations.'},
+  {current:'Salesforce Industries', cat:'Vertical', verdict:'care', aliases:['vlocity','industry cloud','industry clouds','media cloud','communications cloud'],
+   lineage:['Vlocity (2020)','Industries Cloud','Salesforce Industries','Agentforce Media / Communications / etc. (2025)'],
+   note:'Industry-specific data models and processes for telecom, insurance, health, utilities, and public sector. Now being renamed under the Agentforce umbrella.'},
+  {current:'Agentforce Commerce', cat:'Commerce', verdict:'core', aliases:['demandware','commerce cloud','cloudcraze','mobify'],
+   lineage:['Demandware (2016) + CloudCraze (2018) + Mobify (2020)','Commerce Cloud','Agentforce Commerce (2025)'],
+   note:'B2C and B2B ecommerce. The B2C side is the proven Demandware lineage; B2B traces to CloudCraze; headless roots to Mobify.'},
+  {current:'Agentforce Revenue Management', cat:'CRM', verdict:'eval', aliases:['cpq','steelbrick','revenue cloud','revenue lifecycle management','rlm','m3ter','billing'],
+   lineage:['SteelBrick CPQ (2016)','Salesforce CPQ','Revenue Cloud / Revenue Lifecycle Management','Agentforce Revenue Management (2026)'],
+   note:'Quote-to-cash, CPQ, and now m3ter consumption billing. Renamed to Agentforce Revenue Management in 2026. Capable but among the most complex, consultant-heavy implementations.'},
+  {current:'Agentforce Field Service', cat:'Service', verdict:'core', aliases:['clicksoftware','field service lightning','fsl','field service'],
+   lineage:['ClickSoftware (2019)','Field Service Lightning','Salesforce Field Service','Agentforce Field Service (2025)'],
+   note:'Scheduling and mobile work for field teams, built on the ClickSoftware acquisition. The go-to for mobile workforces.'},
   {current:'Salesforce Platform', cat:'Platform', verdict:'core', aliases:['force.com','lightning platform','lightning'],
    lineage:['Force.com','Lightning Platform','Salesforce Platform'],
    note:'The underlying low-code application platform and metadata engine that everything is built on.'},
   {current:'Salesforce Spiff', cat:'RevOps', verdict:'core', aliases:['spiff','commissions','incentive compensation'],
    lineage:['Spiff (2024)','Salesforce Spiff'],
    note:'Sales commission and incentive management. A focused, well-regarded tool.'},
-  {current:'Slack', cat:'Collaboration', verdict:'core', aliases:['slack','chatter'],
-   lineage:['Slack (2021)','positioned as the "agentic operating system" (2025)'],
-   note:'Collaboration, now pitched as the home where humans and agents work together. It largely superseded Chatter.'}
+  {current:'Slack', cat:'Collaboration', verdict:'core', aliases:['slack','chatter','slack crm','quip','slack canvas'],
+   lineage:['Chatter (2010, being retired)','Slack (2021)','Slack CRM (2026)'],
+   note:'Collaboration, now pitched as the front door where humans and agents work together. It is replacing Chatter, which is being faded out, and carries Quip forward as Slack Canvas.'}
 ];
 
-/* ---- Use cases ---- */
-const ROLES = ['All','Marketing','Sales','RevOps & Data'];
+const ROLES = ['All','Marketing','Sales','Service','Commerce','RevOps & Data'];
 const USECASES = [
   {role:'Marketing', goal:'Run B2B email nurture and lead scoring',
    recs:[{n:'Marketing Cloud Account Engagement (Pardot)', v:'care'}],
@@ -770,6 +823,9 @@ const USECASES = [
   {role:'Marketing', goal:'Turn website traffic into qualified pipeline',
    recs:[{n:'Qualified (Piper AI SDR)', v:'care'},{n:'Agentforce Marketing', v:'eval'}],
    watch:'Native and focused since the 2026 acquisition, but young as a Salesforce product. Pilot Piper against your real funnel and compare with established conversational tools before committing.'},
+  {role:'Marketing', goal:'Assemble headless content for web, app, and email',
+   recs:[{n:'Contentful (pending)', v:'new'},{n:'Experience Cloud', v:'care'}],
+   watch:'The Headless 360 vision is coherent but leans on a pending acquisition. If you already run a composable CMS, hold position and watch the integration roadmap before consolidating onto Salesforce.'},
   {role:'Sales', goal:'Manage the core sales pipeline and CRM',
    recs:[{n:'Agentforce Sales (Sales Cloud)', v:'core'}],
    watch:'This is the mature, dependable core. The main risk is over-customization and scope creep, not the product itself.'},
@@ -783,189 +839,231 @@ const USECASES = [
    recs:[{n:'Agentforce Sales', v:'core'},{n:'Bluebirds + partners (ZoomInfo, 6sense)', v:'new'}],
    watch:'Enrichment now mixes a new acquisition with third-party data partnerships. The native pieces are early; your existing intent-data contracts may still do more.'},
   {role:'Sales', goal:'Quote, price, and configure complex deals',
-   recs:[{n:'Revenue Cloud (CPQ)', v:'eval'}],
+   recs:[{n:'Agentforce Revenue Management (CPQ)', v:'eval'}],
    watch:'Functionally capable but historically one of the most painful, consultant-heavy implementations in the suite. Scope tightly and budget realistically.'},
+  {role:'Service', goal:'Run omnichannel case management',
+   recs:[{n:'Agentforce Service (Service Cloud)', v:'core'}],
+   watch:'Solid, proven core. The main risk is over-customization, not the product. Nail your data and routing before layering agents on top.'},
+  {role:'Service', goal:'Deflect support tickets with an AI agent',
+   recs:[{n:'Agentforce Service', v:'core'},{n:'Fin (pending)', v:'new'},{n:'Data 360', v:'care'}],
+   watch:'Service Cloud is solid; the autonomous agent layer is new and Fin is not yet closed. Pilot any resolution-rate claim on your own ticket volume rather than trusting the headline number.'},
+  {role:'Service', goal:'Stand up self-service knowledge and deflection',
+   recs:[{n:'Agentforce Service', v:'core'},{n:'Zoomin (knowledge)', v:'care'}],
+   watch:'Knowledge quality is everything here. Garbage in, garbage out: if your articles are stale or thin, an agent on top just answers wrong faster.'},
+  {role:'Service', goal:'Automate the voice and contact center',
+   recs:[{n:'Agentforce Service', v:'core'},{n:'Tenyx (voice)', v:'care'},{n:'Agentforce Contact Center', v:'new'}],
+   watch:'The voice-agent stack is newly assembled from acquisitions. Pilot on real call volume and measure containment honestly before scaling.'},
+  {role:'Service', goal:'Schedule and dispatch a mobile field workforce',
+   recs:[{n:'Agentforce Field Service', v:'core'}],
+   watch:'Mature (the ClickSoftware lineage) and the strongest option if you are already on Salesforce. It is heavy to configure, so budget implementation time.'},
+  {role:'Commerce', goal:'Launch a B2C storefront',
+   recs:[{n:'Agentforce Commerce (Demandware)', v:'core'}],
+   watch:'A proven, category-leading B2C platform. The trade-off is cost; it is premium-priced and rewards larger, complex retail operations.'},
+  {role:'Commerce', goal:'Enable B2B self-service buying',
+   recs:[{n:'Agentforce Commerce B2B (CloudCraze)', v:'care'}],
+   watch:'Capable for connected B2B buying, but it is a different lineage from the B2C side. Confirm your specific B2B flows are supported before assuming parity.'},
+  {role:'Commerce', goal:'Modernize product discovery and search',
+   recs:[{n:'Agentforce Commerce', v:'core'},{n:'Cimulate (agentic discovery)', v:'care'}],
+   watch:'Cimulate moves search from keywords to intent, but only closed in early 2026. Audit your product-data quality first; conversational discovery is only as good as the catalog behind it.'},
+  {role:'Commerce', goal:'Unify in-store and mobile commerce',
+   recs:[{n:'Agentforce Commerce', v:'core'},{n:'PredictSpring (mobile POS)', v:'care'}],
+   watch:'Good for omnichannel and store-associate scenarios. Integration with existing POS and inventory systems is where these projects get hard.'},
   {role:'RevOps & Data', goal:'Unify customer data across many systems',
    recs:[{n:'Data 360', v:'care'},{n:'MuleSoft', v:'core'},{n:'Informatica', v:'care'}],
    watch:'A real, heavy lift. If your source of truth already lives in Snowflake or Databricks, prefer zero-copy federation into Data 360 over re-platforming. Watch for overlap between Informatica, MuleSoft, and tools you already run.'},
+  {role:'RevOps & Data', goal:'Bill usage-based or consumption pricing',
+   recs:[{n:'Agentforce Revenue Management', v:'eval'},{n:'m3ter (metering)', v:'new'}],
+   watch:'m3ter brings real consumption-billing tech, but only closed in July 2026 and is still being woven into Revenue Cloud. Validate against your quote-to-cash and ERP flows before betting your billing on it.'},
   {role:'RevOps & Data', goal:'Protect and recover production org data',
    recs:[{n:'Own Company', v:'core'}],
    watch:'A sensible foundation purchase. Native backup is genuinely needed in large orgs; this is low-drama and worth it.'},
-  {role:'RevOps & Data', goal:'Deflect support tickets with an AI agent',
-   recs:[{n:'Agentforce Service', v:'core'},{n:'Fin (pending)', v:'new'},{n:'Data 360', v:'care'}],
-   watch:'Service Cloud is solid; the autonomous agent layer is new and Fin is not yet closed. Pilot any resolution-rate claim on your own ticket volume rather than trusting the headline number.'},
   {role:'RevOps & Data', goal:'Build a custom agent or internal AI workflow',
    recs:[{n:'Agentforce 360 Platform', v:'eval'},{n:'Data 360', v:'care'},{n:'Slack', v:'core'}],
    watch:'The flagship vision, and the least proven. Start with one contained, measurable use case. Make sure the data layer is clean first; agents are only as good as the context they get.'},
-  {role:'Marketing', goal:'Assemble headless content for web, app, and email',
-   recs:[{n:'Contentful (pending)', v:'new'},{n:'Experience Cloud', v:'care'}],
-   watch:'The Headless 360 vision is coherent but leans on a pending acquisition. If you already run a composable CMS, hold position and watch the integration roadmap before consolidating onto Salesforce.'},
-  {role:'RevOps & Data', goal:'Stand up an industry-specific solution',
-   recs:[{n:'Salesforce Industries (Vlocity)', v:'care'}],
-   watch:'Valuable if your vertical is well covered, but the industry clouds are opinionated and heavy. Confirm the pre-built model genuinely matches your processes before committing.'}
+  {role:'RevOps & Data', goal:'Query data in plain language',
+   recs:[{n:'Waii (text-to-SQL)', v:'care'},{n:'Data 360', v:'care'},{n:'Tableau', v:'core'}],
+   watch:'Natural-language querying is compelling but new inside Salesforce. Treat it as an accelerator over a governed semantic layer, not a replacement for one.'}
 ];
 
-/* ============================================================
-   RENDER
-   ============================================================ */
-const $ = s => document.querySelector(s);
-const chip = v => `<span class="chip ${v}"><span class="dot"></span>${VERDICT[v].label}</span>`;
+const BREACHES = [
+  {name:'Salesloft Drift', date:'August 2025', sev:'Widespread supply-chain theft',
+   vector:'Stolen OAuth tokens from the Drift chatbot integration',
+   who:'Threat actor UNC6395; stolen data later leaked by ShinyHunters',
+   scope:'700+ organizations, including Cloudflare, Google, Palo Alto Networks, Zscaler, Proofpoint, and Tanium',
+   detail:'Between roughly August 8 and 18, 2025, attackers used OAuth tokens tied to Salesloft Drift integration to query and export data from hundreds of Salesforce orgs, combing support-case text for embedded cloud keys and warehouse tokens. Salesforce revoked the Drift tokens and removed the app from AppExchange on August 20. It later refused a ransom demand. Security researchers described the blast radius as roughly ten times a direct attack.'},
+  {name:'Gainsight', date:'November 2025', sev:'Related OAuth wave',
+   vector:'Compromised Gainsight-published connected apps',
+   who:'Attributed to ShinyHunters, though not officially confirmed',
+   scope:'Salesforce customers using Gainsight integrations',
+   detail:'Three months after Drift, Salesforce disclosed a related incident involving Gainsight-published applications, following the same third-party OAuth-abuse pattern. Salesforce disabled the affected integrations. It reinforced that the risk was not the platform but the trusted apps connected to it.'},
+  {name:'Klue', date:'June 2026', sev:'Same pattern, again',
+   vector:'A dormant 2022 legacy credential, then stolen customer OAuth tokens',
+   who:'An extortion group calling itself Icarus (per Huntress); pattern matches earlier attacks',
+   scope:'At least a dozen downstream organizations',
+   detail:'Attackers used a forgotten 2022 credential (from an integration prototype that never shipped) to reach Klue backend, then stole customer OAuth tokens to pull data from downstream Salesforce orgs over about a day. ReliaQuest discovered it; Salesforce disabled the Klue Battlecards integration. The third such attack in under a year underlined that any top app vendor with enterprise integrations is now a target.'}
+];
 
-/* ---- Timeline ---- */
-function renderTimeline(filter='all'){
+const BREACH2026 = [
+  {d:'Jan 19', w:'<b>Grubhub</b> confirms a breach; ShinyHunters allegedly behind it.'},
+  {d:'Feb 16', w:'<b>Odido</b> (formerly T-Mobile NL) named as a victim of social-engineering attacks on Salesforce instances.'},
+  {d:'Mar 7-12', w:'Salesforce warns of a campaign exploiting "overly permissive" <b>Experience Cloud guest-user</b> configurations on public sites.'},
+  {d:'Mar 9', w:'<b>LexisNexis</b>: hackers allegedly exfiltrate 3.9M+ internal records tied to around 400,000 users.'},
+  {d:'Mar 10-18', w:'<b>Loblaw</b> (Canada) investigates a breach reportedly involving 75M+ Salesforce customer records.'},
+  {d:'Mar 24', w:'<b>Infinite Campus</b> warns of a breach after a Salesforce account was accessed; ShinyHunters claims it.'},
+  {d:'Mar 31', w:'<b>Axios</b> hit by a supply-chain malware injection; <b>Hallmark</b> (7.9M records) and <b>Cisco</b> named in extortion.'},
+  {d:'Apr 18', w:'ShinyHunters posts a pay-or-leak list: <b>7-Eleven</b>, <b>Canada Life</b>, <b>Pitney Bowes</b>, <b>Marcus &amp; Millichap</b>, <b>Aman Resorts</b>.'},
+  {d:'Apr 27', w:'<b>ADT</b> confirms a breach and an extortion attempt; attackers claim 10M+ Salesforce records.'},
+  {d:'Aug 4', w:'<b>Brinks Home</b> revealed as a victim; 4.9M+ Salesforce records with PII, first detected July 20.'}
+];
+
+const $ = s => document.querySelector(s);
+const chip = v => '<span class="chip '+v+'"><span class="dot"></span>'+VERDICT[v].label+'</span>';
+
+function renderPlaybook(){
+  $('#pbGrid').innerHTML = PLAYBOOK.map((p,i)=>
+    '<div class="pb"><div class="pn">0'+(i+1)+'</div><b>'+p.t+'</b><p>'+p.d+'</p></div>').join('');
+}
+
+function renderTimeline(filter){
+  filter = filter||'all';
   const fc = $('#tlFilters');
-  fc.innerHTML = `<button class="fchip ${filter==='all'?'active':''}" data-f="all">All eras</button>` +
-    ERAS.map(e=>`<button class="fchip ${filter===e.key?'active':''}" data-f="${e.key}">${e.title}</button>`).join('');
+  fc.innerHTML = '<button class="fchip '+(filter==='all'?'active':'')+'" data-f="all">All eras</button>' +
+    ERAS.map(e=>'<button class="fchip '+(filter===e.key?'active':'')+'" data-f="'+e.key+'">'+e.title+'</button>').join('');
   fc.querySelectorAll('.fchip').forEach(b=>b.onclick=()=>renderTimeline(b.dataset.f));
 
   const cont = $('#tlContainer');
   const eras = filter==='all'?ERAS:ERAS.filter(e=>e.key===filter);
   cont.innerHTML = eras.map(e=>{
     const items = ACQ.filter(a=>a.era===e.key);
-    return `<div class="era">
-      <div class="era-head">
-        <span class="yr">${e.yr}</span>
-        <div><div class="et">${e.title}</div><div class="ed">${e.desc}</div></div>
-        <div class="line"></div>
-      </div>
-      <div class="tl-grid">
-        ${items.map((a,i)=>`<div class="acq ${a.verdict}" data-acq="${ACQ.indexOf(a)}">
-          <div class="top"><span class="nm">${a.name}</span><span class="pr">${a.price}</span></div>
-          <div class="cat">${a.year} · ${a.cat}</div>
-          <div class="bc"><b>Now:</b> ${a.became}</div>
-        </div>`).join('')}
-      </div>
-    </div>`;
+    return '<div class="era"><div class="era-head"><span class="yr">'+e.yr+'</span>'+
+      '<div><div class="et">'+e.title+'</div><div class="ed">'+e.desc+'</div></div><div class="line"></div></div>'+
+      '<div class="tl-grid">'+items.map(a=>
+        '<div class="acq '+a.verdict+'" data-acq="'+ACQ.indexOf(a)+'">'+
+        '<div class="top"><span class="nm">'+a.name+'</span><span class="pr">'+a.price+'</span></div>'+
+        '<div class="cat">'+a.year+' &middot; '+a.cat+'</div>'+
+        '<div class="bc"><b>Now:</b> '+a.became+'</div></div>').join('')+'</div></div>';
   }).join('');
 
   cont.querySelectorAll('.acq').forEach(c=>c.onclick=()=>{
     const a = ACQ[c.dataset.acq];
-    openDrawer({
-      eyebrow:`${a.year} · ${a.cat}`,
-      title:a.name,
-      badges:[chip(a.verdict), `<span class="chip" style="border-color:var(--line-2);color:var(--primary);background:var(--primary-wash)">${a.price}</span>`],
-      sections:[
-        {h:'What it became', p:a.became},
-        {h:'The practitioner read', p:a.detail},
-        {verdict:a.verdict}
-      ]
-    });
+    openDrawer({eyebrow:a.year+' &middot; '+a.cat, title:a.name,
+      badges:[chip(a.verdict), '<span class="chip" style="border-color:var(--line-2);color:var(--primary);background:var(--primary-wash)">'+a.price+'</span>'],
+      sections:[{h:'What it became', p:a.became},{h:'The practitioner read', p:a.detail},{verdict:a.verdict}]});
   });
 }
 
-/* ---- Architecture ---- */
+function renderPlatform(){
+  $('#pillars').innerHTML = PILLARS.map((p,pi)=>
+    '<div class="pillar"><div class="pillar-head"><div class="pico"><svg viewBox="0 0 24 24" fill="none">'+p.icon+'</svg></div>'+
+    '<div class="pt"><span class="tag">'+p.tag+'</span><b>'+p.name+'</b><p>'+p.blurb+'</p></div></div>'+
+    '<div class="pillar-body"><div class="tax-row">'+
+    p.items.map((it,ii)=>'<div class="taxitem" data-pil="'+pi+'" data-it="'+ii+'"><div class="th"><b>'+it.name+'</b>'+chip(it.verdict)+'</div><div class="old">'+it.old+'</div></div>').join('')+
+    '</div></div></div>').join('');
+
+  $('#pillars').querySelectorAll('.taxitem').forEach(t=>t.onclick=()=>{
+    const p = PILLARS[t.dataset.pil], it = p.items[t.dataset.it];
+    openDrawer({eyebrow:p.name, title:it.name, badges:[chip(it.verdict), '<span class="chip" style="border-color:var(--line-2);color:var(--muted);background:#fff">'+it.old+'</span>'],
+      sections:[{h:'Where it sits', p:'Part of the '+p.name+' pillar. '+p.blurb},{h:'The practitioner read', p:it.note},{verdict:it.verdict}]});
+  });
+
+  $('#menuMap').innerHTML = MENUMAP.map(m=>'<div class="mm"><div class="ml">'+m.l+'</div><div class="mr">'+m.r+'</div></div>').join('');
+}
+
 function renderArchitecture(){
-  $('#stack').innerHTML = LAYERS.map((l,i)=>`
-    <div class="layer ${l.cls} ${i===LAYERS.length-1?'open':''}">
-      <div class="layer-head">
-        <span class="lnum">${l.n}</span>
-        <div class="ltxt"><b>${l.name}</b><span>${l.blurb}</span></div>
-        <svg class="caret" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-      <div class="layer-body">
-        <div class="prod-row">
-          ${l.products.map((p,pi)=>`<div class="prod" data-layer="${i}" data-prod="${pi}">
-            <div class="ph"><b>${p.name}</b>${chip(p.verdict)}</div>
-            <div class="pn">${p.note}</div>
-          </div>`).join('')}
-        </div>
-      </div>
-    </div>`).join('');
+  $('#stack').innerHTML = LAYERS.map((l,i)=>
+    '<div class="layer '+l.cls+' '+(i===LAYERS.length-1?'open':'')+'">'+
+    '<div class="layer-head"><span class="lnum">'+l.n+'</span>'+
+    '<div class="ltxt"><b>'+l.name+'</b><span>'+l.blurb+'</span></div>'+
+    '<svg class="caret" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="m9 6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
+    '<div class="layer-body"><div class="prod-row">'+
+    l.products.map((p,pi)=>'<div class="prod" data-layer="'+i+'" data-prod="'+pi+'"><div class="ph"><b>'+p.name+'</b>'+chip(p.verdict)+'</div><div class="pn">'+p.note+'</div></div>').join('')+
+    '</div></div></div>').join('');
 
   $('#stack').querySelectorAll('.layer-head').forEach(h=>h.onclick=()=>h.parentElement.classList.toggle('open'));
   $('#stack').querySelectorAll('.prod').forEach(pc=>pc.onclick=e=>{
     e.stopPropagation();
-    const p = LAYERS[pc.dataset.layer].products[pc.dataset.prod];
-    const L = LAYERS[pc.dataset.layer];
-    openDrawer({
-      eyebrow:`${L.name} layer`,
-      title:p.name,
-      badges:[chip(p.verdict)],
-      sections:[
-        {h:'Where it sits', p:`This sits in the ${L.name.toLowerCase()} layer. ${L.blurb}`},
-        {h:'The practitioner read', p:p.note},
-        {verdict:p.verdict}
-      ]
-    });
+    const L = LAYERS[pc.dataset.layer], p = L.products[pc.dataset.prod];
+    openDrawer({eyebrow:L.name+' layer', title:p.name, badges:[chip(p.verdict)],
+      sections:[{h:'Where it sits', p:'This sits in the '+L.name.toLowerCase()+' layer. '+L.blurb},{h:'The practitioner read', p:p.note},{verdict:p.verdict}]});
   });
 }
 
-/* ---- Decoder ---- */
-function renderDecoder(q=''){
-  q = q.trim().toLowerCase();
+function renderDecoder(q){
+  q = (q||'').trim().toLowerCase();
   const list = NAMES.filter(n=>{
     if(!q) return true;
-    const hay = (n.current+' '+n.cat+' '+n.aliases.join(' ')+' '+n.lineage.join(' ')).toLowerCase();
-    return hay.includes(q);
+    return (n.current+' '+n.cat+' '+n.aliases.join(' ')+' '+n.lineage.join(' ')).toLowerCase().includes(q);
   });
   const grid = $('#decoderGrid');
-  if(!list.length){ grid.innerHTML = `<div class="infocard" style="grid-column:1/-1"><h3>No match</h3><p>Try a shorter term, like "data", "marketing", or "cloud".</p></div>`; return; }
-  grid.innerHTML = list.map((n,i)=>`
-    <div class="acq ${n.verdict}" data-name="${NAMES.indexOf(n)}">
-      <div class="cat">${n.cat} · ${n.lineage.length} names</div>
-      <div class="bc" style="margin-bottom:6px"><span style="text-decoration:line-through;color:var(--faint)">${n.aliases[0]?n.aliases[0].replace(/\b\w/g,c=>c.toUpperCase()):n.lineage[0]}</span></div>
-      <div class="top"><span class="nm" style="font-size:15px">${n.current}</span></div>
-    </div>`).join('');
+  if(!list.length){ grid.innerHTML = '<div class="infocard" style="grid-column:1/-1"><h3>No match</h3><p>Try a shorter term, like "data", "marketing", or "cloud".</p></div>'; return; }
+  grid.innerHTML = list.map(n=>{
+    const first = n.aliases[0] ? n.aliases[0].replace(/\b\w/g,c=>c.toUpperCase()) : n.lineage[0];
+    return '<div class="acq '+n.verdict+'" data-name="'+NAMES.indexOf(n)+'">'+
+      '<div class="cat">'+n.cat+' &middot; '+n.lineage.length+' names</div>'+
+      '<div class="bc" style="margin-bottom:6px"><span style="text-decoration:line-through;color:var(--faint)">'+first+'</span></div>'+
+      '<div class="top"><span class="nm" style="font-size:15px">'+n.current+'</span></div></div>';
+  }).join('');
 
   grid.querySelectorAll('.acq').forEach(c=>c.onclick=()=>{
     const n = NAMES[c.dataset.name];
     const lin = n.lineage.map((step,idx)=>{
       const cur = idx===n.lineage.length-1;
-      return `<div class="ln ${cur?'cur':''}"><span class="lyr">${cur?'now':'then'}</span><span class="lnm">${step}</span></div>`;
+      return '<div class="ln '+(cur?'cur':'')+'"><span class="lyr">'+(cur?'now':'then')+'</span><span class="lnm">'+step+'</span></div>';
     }).join('');
-    openDrawer({
-      eyebrow:`${n.cat} · name lineage`,
-      title:n.current,
-      badges:[chip(n.verdict)],
+    openDrawer({eyebrow:n.cat+' &middot; name lineage', title:n.current, badges:[chip(n.verdict)],
       sections:[
         {h:'If you hear any of these', p:n.aliases.map(a=>a.replace(/\b\w/g,c=>c.toUpperCase())).join(', ')},
-        {h:'Full naming trail', html:`<div class="lineage">${lin}</div>`},
-        {h:'What it does', p:n.note},
-        {verdict:n.verdict}
-      ]
-    });
+        {h:'Full naming trail', html:'<div class="lineage">'+lin+'</div>'},
+        {h:'What it does', p:n.note},{verdict:n.verdict}]});
   });
 }
 
-/* ---- Use cases ---- */
-function renderUsecases(role='All'){
+function renderUsecases(role){
+  role = role||'All';
   const fc = $('#ucFilters');
-  fc.innerHTML = ROLES.map(r=>`<button class="fchip ${role===r?'active':''}" data-r="${r}">${r}</button>`).join('');
+  fc.innerHTML = ROLES.map(r=>'<button class="fchip '+(role===r?'active':'')+'" data-r="'+r+'">'+r+'</button>').join('');
   fc.querySelectorAll('.fchip').forEach(b=>b.onclick=()=>renderUsecases(b.dataset.r));
 
   const list = role==='All'?USECASES:USECASES.filter(u=>u.role===role);
-  $('#ucGrid').innerHTML = list.map((u,i)=>`
-    <div class="uc" data-uc="${USECASES.indexOf(u)}">
-      <div class="role">${u.role}</div>
-      <h3>${u.goal}</h3>
-      <div class="recs">${u.recs.map(r=>`<span class="pill ${r.v}"><span class="dot"></span>${r.n}</span>`).join('')}</div>
-      <div class="watch"><b>Watch out:</b> ${u.watch}</div>
-    </div>`).join('');
+  $('#ucGrid').innerHTML = list.map(u=>
+    '<div class="uc" data-uc="'+USECASES.indexOf(u)+'"><div class="role">'+u.role+'</div><h3>'+u.goal+'</h3>'+
+    '<div class="recs">'+u.recs.map(r=>'<span class="pill '+r.v+'"><span class="dot"></span>'+r.n+'</span>').join('')+'</div>'+
+    '<div class="watch"><b>Watch out:</b> '+u.watch+'</div></div>').join('');
 
   $('#ucGrid').querySelectorAll('.uc').forEach(c=>c.onclick=()=>{
     const u = USECASES[c.dataset.uc];
-    openDrawer({
-      eyebrow:`${u.role} use case`,
-      title:u.goal,
-      badges:u.recs.map(r=>`<span class="chip ${r.v}"><span class="dot"></span>${r.n}</span>`),
+    openDrawer({eyebrow:u.role+' use case', title:u.goal, badges:u.recs.map(r=>'<span class="chip '+r.v+'"><span class="dot"></span>'+r.n+'</span>'),
       sections:[
-        {h:'What Salesforce points you to', html:`<div style="display:flex;flex-direction:column;gap:8px">${u.recs.map(r=>`<div class="dr-verdict"><div class="vt">${chip(r.v)}<b>${r.n}</b></div><p>${VERDICT[r.v].note}</p></div>`).join('')}</div>`},
-        {h:'Before you commit', p:u.watch}
-      ]
-    });
+        {h:'What Salesforce points you to', html:'<div style="display:flex;flex-direction:column;gap:8px">'+u.recs.map(r=>'<div class="dr-verdict"><div class="vt">'+chip(r.v)+'<b>'+r.n+'</b></div><p>'+VERDICT[r.v].note+'</p></div>').join('')+'</div>'},
+        {h:'Before you commit', p:u.watch}]});
   });
 }
 
-/* ---- Drawer ---- */
-function openDrawer({eyebrow,title,badges=[],sections=[]}){
-  $('#drEyebrow').textContent = eyebrow;
-  $('#drTitle').textContent = title;
-  $('#drBadges').innerHTML = badges.join('');
-  $('#drBody').innerHTML = sections.map(s=>{
-    if(s.verdict){
-      return `<div class="dr-sec"><h4>Verdict</h4><div class="dr-verdict"><div class="vt">${chip(s.verdict)}</div><p>${VERDICT[s.verdict].note}</p></div></div>`;
-    }
-    return `<div class="dr-sec"><h4>${s.h}</h4>${s.html?s.html:`<p>${s.p}</p>`}</div>`;
+function renderRisk(){
+  $('#breachGrid').innerHTML = BREACHES.map(b=>
+    '<div class="breach" data-b="'+BREACHES.indexOf(b)+'">'+
+    '<div class="bt"><b>'+b.name+'</b><span class="dt">'+b.date+'</span></div>'+
+    '<div class="sev">'+b.sev+'</div>'+
+    '<div class="field"><div class="fl">How</div><div class="fv">'+b.vector+'</div></div>'+
+    '<div class="field"><div class="fl">Scope</div><div class="fv">'+b.scope+'</div></div></div>').join('');
+
+  $('#breachGrid').querySelectorAll('.breach').forEach(c=>c.onclick=()=>{
+    const b = BREACHES[c.dataset.b];
+    openDrawer({eyebrow:b.date+' &middot; integration breach', title:b.name,
+      badges:['<span class="chip eval"><span class="dot"></span>'+b.sev+'</span>'],
+      sections:[{h:'How it happened', p:b.detail},{h:'Attribution', p:b.who},{h:'Scope', p:b.scope}]});
+  });
+
+  $('#btTimeline').innerHTML = BREACH2026.map(r=>'<div class="bt-row"><div class="bd">'+r.d+'</div><div class="bw">'+r.w+'</div></div>').join('');
+}
+
+function openDrawer(o){
+  $('#drEyebrow').innerHTML = o.eyebrow;
+  $('#drTitle').textContent = o.title;
+  $('#drBadges').innerHTML = (o.badges||[]).join('');
+  $('#drBody').innerHTML = (o.sections||[]).map(s=>{
+    if(s.verdict) return '<div class="dr-sec"><h4>Verdict</h4><div class="dr-verdict"><div class="vt">'+chip(s.verdict)+'</div><p>'+VERDICT[s.verdict].note+'</p></div></div>';
+    return '<div class="dr-sec"><h4>'+s.h+'</h4>'+(s.html?s.html:'<p>'+s.p+'</p>')+'</div>';
   }).join('');
   $('#overlay').classList.add('show');
   $('#drawer').classList.add('show');
@@ -975,14 +1073,15 @@ $('#drClose').onclick = closeDrawer;
 $('#overlay').onclick = closeDrawer;
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeDrawer(); });
 
-/* ---- Navigation ---- */
 const TBINFO = {
   start:{e:'Orientation', t:'Start here', s:'A neutral, practitioner-first map of the Salesforce platform: what they bought, what it is called now, how the pieces fit, and what is actually worth using.'},
-  timeline:{e:'01 · Acquisition timeline', t:'Twenty-five years of buying', s:'Every meaningful acquisition grouped into eras. Each deal closed a gap in the Customer 360 promise. The color stripe is the verdict; click any card for the full read.'},
-  architecture:{e:'02 · Architecture', t:'How the stack fits together', s:'Where each product lives, from the data foundation to the experience layer, with an honest signal on what is genuinely strong versus a bolt-on.'},
-  decoder:{e:'03 · Name decoder', t:'What is it called now?', s:'Salesforce renames relentlessly. Type any name you have heard and get the current name, the full lineage, and what it actually does.'},
-  usecases:{e:'04 · Use cases', t:'Match the job to the product', s:'Start from what you are trying to accomplish. See the recommended products, the verdict on each, and the watch-outs before you buy.'},
-  headless:{e:'05 · The headless era', t:'Agentforce 360 and the headless turn', s:'The 2025 rebrand away from "Cloud," the four ingredients of the agentic enterprise, and what the headless vision means for how you architect now.'}
+  timeline:{e:'01 - Acquisition timeline', t:'Twenty-five years of buying', s:'Every meaningful acquisition grouped into eras, plus the six patterns behind the deals. The color stripe is the verdict; click any card for the full read.'},
+  platform:{e:'02 - Platform map', t:'The new taxonomy and product scope', s:'The Clouds are retired. See how the whole portfolio now hangs off Agentforce 360 and Data 360, and cut through the confusing website menu.'},
+  architecture:{e:'03 - Architecture', t:'How the stack fits together', s:'Where each product lives, from the data foundation to the experience layer, with an honest signal on what is genuinely strong versus a bolt-on.'},
+  decoder:{e:'04 - Name decoder', t:'What is it called now?', s:'Salesforce renames relentlessly. Type any name you have heard and get the current name, the full lineage, and what it actually does.'},
+  usecases:{e:'05 - Use cases', t:'Match the job to the product', s:'Start from what you are trying to accomplish, by team. See the recommended products, the verdict on each, and the watch-outs before you buy.'},
+  headless:{e:'06 - The headless era', t:'Agentforce 360 and the headless turn', s:'The 2025 rebrand away from "Cloud," the four ingredients of the agentic enterprise, and what the headless vision means for how you architect now.'},
+  risk:{e:'07 - Risk & breaches', t:'Third-party integration risk & hacks', s:'The 2025-2026 breach wave, why the connected-app attack surface matters more than the platform itself, and what to do about it.'}
 };
 function go(view){
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===view));
@@ -998,11 +1097,13 @@ function go(view){
 document.querySelectorAll('.nav-item').forEach(n=>n.onclick=()=>go(n.dataset.view));
 $('#menuBtn').onclick=()=>$('#sidebar').classList.toggle('open');
 
-/* ---- Init ---- */
+renderPlaybook();
 renderTimeline();
+renderPlatform();
 renderArchitecture();
 renderDecoder();
 renderUsecases();
+renderRisk();
 $('#decoderSearch').addEventListener('input', e=>renderDecoder(e.target.value));
 </script>
 </body>
